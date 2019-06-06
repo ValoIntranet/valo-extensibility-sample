@@ -1,0 +1,18 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "extend-valo-ui-application-customizer": {
+      "components": [
+        {
+          "entrypoint": "./lib/extensions/extendValoUi/ExtendValoUiApplicationCustomizer.js",
+          "manifest": "./src/extensions/extendValoUi/ExtendValoUiApplicationCustomizer.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "ExtendValoUiApplicationCustomizerStrings": "lib/extensions/extendValoUi/loc/{locale}.js"
+  }
+}

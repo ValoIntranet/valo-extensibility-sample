@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">
+    <CustomAction
+        Title="ExtendValoUi"
+        Location="ClientSideExtension.ApplicationCustomizer"
+        ClientSideComponentId="7d190fa2-c4ae-42b2-8537-431bf7bb8b41"
+        ClientSideComponentProperties="{&quot;testMessage&quot;:&quot;Test message&quot;}">
+    </CustomAction>
+</Elements>
