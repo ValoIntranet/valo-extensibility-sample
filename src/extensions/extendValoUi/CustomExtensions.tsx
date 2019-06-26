@@ -3,7 +3,6 @@ import { IntranetLocation, IntranetTrigger, IntranetProvider, ExtensionService, 
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import Clock from './clock';
-import Weather from './weather';
 import { NoPagingDataSource } from './datasource/NoPagingDataSource';
 import { DynamicPagingDataSource } from './datasource/DynamicPagingDataSource';
 import { StaticDataSource } from './datasource/StaticDataSource';
@@ -70,8 +69,6 @@ export default class CustomExtensions {
       element: (
         <React.Fragment>
           <Clock />
-          {/* <span style={{width:"25px",textAlign:"center"}}>-</span
-          <Weather /> */}
         </React.Fragment>
       )
     });
