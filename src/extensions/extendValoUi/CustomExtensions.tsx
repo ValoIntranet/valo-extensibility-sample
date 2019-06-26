@@ -52,15 +52,14 @@ export default class CustomExtensions {
 
     this.providerService.registerProvider(IntranetProvider.UserProfile, async (userProfileService: ExtensionProvider<IUserProfileProvider>) => {
       if (userProfileService && userProfileService.instance) {
-        debugger;
         console.log("Department:", await userProfileService.instance.getUserProperty("Department"));
       }
     });
 
     // this.extensionService.registerExtension({
-    //   id: Guid.newGuid().toString(),
-    //   location: Location.NavigationLeft,
-    //   element: <div style={{lineHeight: '60px', display: 'inline-block', marginRight: 'auto'}}>👉 <style>{`.valo-site-logo{display:flex}.valo-site-logo__link{margin-right:15px !important}`}</style></div>
+    //   id: "NavigationLeft",
+    //   location: IntranetLocation.NavigationLeft,
+    //   element: <div style={{lineHeight: '60px'}}>👉 <style>{`.valo-site-logo{display:flex}.valo-site-logo__link{margin-right:15px !important}`}</style></div>
     // });
 
     this.extensionService.registerExtension({
@@ -79,17 +78,17 @@ export default class CustomExtensions {
       element: <div style={{lineHeight: '60px', marginLeft: 'auto'}}>👈 <style>{`.valo-language-switcher-container{margin-left:7px}`}</style></div>
     });
 
-    // this.extensionService.registerExtension({
-    //   id: "NavigationTop",
-    //   location: IntranetLocation.NavigationTop,
-    //   element: <div style={{textAlign: "center", height: "20px"}}>👆</div>
-    // });
+    this.extensionService.registerExtension({
+      id: "NavigationTop",
+      location: IntranetLocation.NavigationTop,
+      element: <div style={{textAlign: "center", height: "20px"}}>👆</div>
+    });
 
-    // this.extensionService.registerExtension({
-    //   id: "NavigationBottom",
-    //   location: IntranetLocation.NavigationBottom,
-    //   element: <div style={{textAlign: "center", height: "20px"}}>👇</div>
-    // });
+    this.extensionService.registerExtension({
+      id: "NavigationBottom",
+      location: IntranetLocation.NavigationBottom,
+      element: <div style={{textAlign: "center", height: "20px"}}>👇</div>
+    });
 
     this.extensionService.registerExtension({
       id: "Footer",
