@@ -21,41 +21,7 @@ export default class CustomExtensions {
   }
 
   public register() {
-    const dynamicDs = new DynamicPagingDataSource();
-    this.dataSourceService.registerDataSource({
-      dataSource: dynamicDs,
-      id: "DynamicDataSource",
-      name: "Custom dynamic data source"
-    });
-
-    const staticDs = new StaticDataSource();
-    this.dataSourceService.registerDataSource({
-      dataSource: staticDs,
-      id: "StaticDataSource",
-      name: "Custom static data source"
-    });
-
-    const noPaging = new NoPagingDataSource();
-    this.dataSourceService.registerDataSource({
-      dataSource: noPaging,
-      id: "NoPagingDataSource",
-      name: "Custom data source"
-    });
-
-    this.providerService.registerProvider(IntranetProvider.Config, (config) => {
-      if (config && config.instance) {
-        console.log(`Config retrieved: ${JSON.stringify(config.instance)}`);
-      } else {
-        console.log(`Config not retrieved`);
-      }
-    });
-
-    this.providerService.registerProvider(IntranetProvider.UserProfile, async (userProfileService: ExtensionProvider<IUserProfileProvider>) => {
-      if (userProfileService && userProfileService.instance) {
-        console.log("Department:", await userProfileService.instance.getUserProperty("Department"));
-      }
-    });
-
+    this.fetchProviders();
     // this.extensionService.registerExtension({
     //   id: "NavigationLeft",
     //   location: IntranetLocation.NavigationLeft,
@@ -87,31 +53,63 @@ export default class CustomExtensions {
     this.extensionService.registerExtension({
       id: "NavigationBottom",
       location: IntranetLocation.NavigationBottom,
-      element: <div style={{textAlign: "center", height: "20px"}}>👇</div>
+      element: <div style={{textAlign: "center", height: "20px"}}>
+        👇
+        <button type="button"
+                onClick={async () => {
+          const trigger = await this.triggerService.registerTrigger(IntranetTrigger.OpenPageCreationPanel);
+          if (trigger) {
+            trigger.invokeTrigger();
+          }
+        }}>Click to open a panel</button>
+      </div>
     });
 
     this.extensionService.registerExtension({
       id: "Footer",
       location: IntranetLocation.Footer,
-      element: <div style={{background:"#1e6268",height:"400px",textAlign:"center",lineHeight:"400px"}}>This is the custom footer</div>
+      element: <div style={{background:"#1e6268",height:"400px",textAlign:"center",lineHeight:"400px"}}>
+        This is the custom footer
+      </div>
     });
 
 
-    this.extensionService.registerExtension({
-      id: "ToolboxAction",
-      location: IntranetLocation.ToolboxAction,
-      element: (
-        <Link onClick={() => {
-                this.triggerService.registerTrigger(IntranetTrigger.OpenPageCreationPanel, (listener) => {
-                  listener.invokeTrigger();
-                });
-              }}
-              title={"Custom action"}
-              className={`valo-toolbox__tool-menu-item`}>
-          <span className="valo-toolbox__tool-menu-item__name">Our custom action</span>
-          <Icon className={`valo-toolbox__tool-menu-item__icon fabIconSmall_b61ca341`} iconName={"HeartFill"} />
-        </Link>
-      )
+
+
+    const dynamicDs = new DynamicPagingDataSource();
+    this.dataSourceService.registerDataSource({
+      dataSource: dynamicDs,
+      id: "DynamicDataSource",
+      name: "Custom dynamic data source"
     });
+
+    const staticDs = new StaticDataSource();
+    this.dataSourceService.registerDataSource({
+      dataSource: staticDs,
+      id: "StaticDataSource",
+      name: "Custom static data source"
+    });
+
+    const noPaging = new NoPagingDataSource();
+    this.dataSourceService.registerDataSource({
+      dataSource: noPaging,
+      id: "NoPagingDataSource",
+      name: "Custom data source"
+    });
+  }
+
+  private async fetchProviders() {
+    const configProvider = await this.providerService.getProvider<any>(IntranetProvider.Config);
+    if (configProvider && configProvider.instance) {
+      console.log(`Config retrieved: ${JSON.stringify(configProvider.instance)}`);
+    } else {
+      console.log(`Config not retrieved`);
+    }
+
+    const userProfileProvider = await this.providerService.getProvider<IUserProfileProvider>(IntranetProvider.UserProfile);
+    if (userProfileProvider && userProfileProvider.instance) {
+      console.log("Department:", await userProfileProvider.instance.getUserProperty("Department"));
+      console.log("All properties:", await userProfileProvider.instance.getUserProperties());
+    }
   }
 }
