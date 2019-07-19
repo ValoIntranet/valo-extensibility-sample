@@ -28,15 +28,15 @@ export default class CustomExtensions {
     //   element: <div style={{lineHeight: '60px'}}>👉 <style>{`.valo-site-logo{display:flex}.valo-site-logo__link{margin-right:15px !important}`}</style></div>
     // });
 
-    this.extensionService.registerExtension({
-      id: "NavigationLeft",
-      location: IntranetLocation.NavigationLeft,
-      element: (
-        <React.Fragment>
-          <Clock />
-        </React.Fragment>
-      )
-    });
+    // this.extensionService.registerExtension({
+    //   id: "NavigationLeft",
+    //   location: IntranetLocation.NavigationLeft,
+    //   element: (
+    //     <React.Fragment>
+    //       <Clock />
+    //     </React.Fragment>
+    //   )
+    // });
 
     this.extensionService.registerExtension({
       id: "NavigationRight",
@@ -44,17 +44,26 @@ export default class CustomExtensions {
       element: <div style={{lineHeight: '60px', marginLeft: 'auto'}}>👈 <style>{`.valo-language-switcher-container{margin-left:7px}`}</style></div>
     });
 
-    this.extensionService.registerExtension({
-      id: "NavigationTop",
-      location: IntranetLocation.NavigationTop,
-      element: <div style={{textAlign: "center", height: "20px"}}>👆</div>
-    });
+    // this.extensionService.registerExtension({
+    //   id: "NavigationTop",
+    //   location: IntranetLocation.NavigationTop,
+    //   element: <div style={{textAlign: "center", height: "20px"}}>👆</div>
+    // });
+
+    // this.extensionService.registerExtension({
+    //   id: "NavigationBottom",
+    //   location: IntranetLocation.NavigationBottom,
+    //   element: <div style={{textAlign: "center", height: "20px"}}>
+    //     👇
+
+    //   </div>
+    // });
 
     this.extensionService.registerExtension({
-      id: "NavigationBottom",
-      location: IntranetLocation.NavigationBottom,
-      element: <div style={{textAlign: "center", height: "20px"}}>
-        👇
+      id: "Footer",
+      location: IntranetLocation.Footer,
+      element: <div style={{background:"#1e6268",height:"400px",textAlign:"center",lineHeight:"400px"}}>
+        <p>This is the custom footer</p>
         <button type="button"
                 onClick={async () => {
           const trigger = await this.triggerService.registerTrigger(IntranetTrigger.OpenPageCreationPanel);
@@ -62,14 +71,6 @@ export default class CustomExtensions {
             trigger.invokeTrigger();
           }
         }}>Click to open a panel</button>
-      </div>
-    });
-
-    this.extensionService.registerExtension({
-      id: "Footer",
-      location: IntranetLocation.Footer,
-      element: <div style={{background:"#1e6268",height:"400px",textAlign:"center",lineHeight:"400px"}}>
-        This is the custom footer
       </div>
     });
 
