@@ -1,7 +1,7 @@
-import { BaseDataSourceProvider, PagingType } from "@valo/extensibility";
+import { BaseDataSourceProvider, PagingType, IDataSourceData } from "@valo/extensibility";
 import { IPropertyPaneGroup, PropertyPaneSlider } from '@microsoft/sp-webpart-base';
 
-export class StaticDataSource extends BaseDataSourceProvider {
+export class StaticDataSource extends BaseDataSourceProvider<IDataSourceData> {
   private nrOfItems: number = 30;
 
   public getConfigProperties(): IPropertyPaneGroup[] {
@@ -23,7 +23,7 @@ export class StaticDataSource extends BaseDataSourceProvider {
     ];
   }
 
-  public async getData(lastUpdated: string) {
+  public async getData() {
     let newArray = [];
     for (let i = 1; i <= this.nrOfItems; i++) {
       newArray.push(`Item ${i}`);

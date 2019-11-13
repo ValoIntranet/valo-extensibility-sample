@@ -1,10 +1,10 @@
-import { BaseDataSourceProvider } from "@valo/extensibility";
+import { BaseDataSourceProvider, IDataSourceData } from "@valo/extensibility";
 
 
-export class NoPagingDataSource extends BaseDataSourceProvider {
+export class NoPagingDataSource extends BaseDataSourceProvider<IDataSourceData> {
   private defaultArray: number[] = [1, 2, 3, 4, 5];
 
-  public async getData(lastUpdated: string) {
+  public async getData() {
     const newArray = this.defaultArray.map(i => `Item ${i}`);
     console.log(newArray);
     return {

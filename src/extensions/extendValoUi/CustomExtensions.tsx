@@ -22,11 +22,11 @@ export default class CustomExtensions {
 
   public register() {
     this.fetchProviders();
-    // this.extensionService.registerExtension({
-    //   id: "NavigationLeft",
-    //   location: IntranetLocation.NavigationLeft,
-    //   element: <div style={{lineHeight: '60px'}}>👉 <style>{`.valo-site-logo{display:flex}.valo-site-logo__link{margin-right:15px !important}`}</style></div>
-    // });
+    this.extensionService.registerExtension({
+      id: "NavigationLeft",
+      location: IntranetLocation.NavigationLeft,
+      element: <div style={{lineHeight: '60px'}}>👉 <style>{`.valo-site-logo{display:flex}.valo-site-logo__link{margin-right:15px !important}`}</style></div>
+    });
 
     // this.extensionService.registerExtension({
     //   id: "NavigationLeft",
@@ -44,20 +44,20 @@ export default class CustomExtensions {
       element: <div style={{lineHeight: '60px', marginLeft: 'auto'}}>👈 <style>{`.valo-language-switcher-container{margin-left:7px}`}</style></div>
     });
 
-    // this.extensionService.registerExtension({
-    //   id: "NavigationTop",
-    //   location: IntranetLocation.NavigationTop,
-    //   element: <div style={{textAlign: "center", height: "20px"}}>👆</div>
-    // });
+    this.extensionService.registerExtension({
+      id: "NavigationTop",
+      location: IntranetLocation.NavigationTop,
+      element: <div style={{textAlign: "center", height: "20px"}}>👆</div>
+    });
 
-    // this.extensionService.registerExtension({
-    //   id: "NavigationBottom",
-    //   location: IntranetLocation.NavigationBottom,
-    //   element: <div style={{textAlign: "center", height: "20px"}}>
-    //     👇
+    this.extensionService.registerExtension({
+      id: "NavigationBottom",
+      location: IntranetLocation.NavigationBottom,
+      element: <div style={{textAlign: "center", height: "20px"}}>
+        👇
 
-    //   </div>
-    // });
+      </div>
+    });
 
     this.extensionService.registerExtension({
       id: "Footer",
