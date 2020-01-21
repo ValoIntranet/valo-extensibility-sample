@@ -76,7 +76,13 @@ export default class CustomExtensions {
 
 
 
-
+    /**
+     * Single reference
+     *
+     * Important: If the custom data source is registered like this, you can only make use of it once per page.
+     * Otherwise web parts share the same properties. If you want to make use of multiple instances, use: `dataSourcePrototype` instead.
+     *
+     */
     const dynamicDs = new DynamicPagingDataSource();
     this.dataSourceService.registerDataSource({
       dataSource: dynamicDs,
@@ -91,13 +97,30 @@ export default class CustomExtensions {
       name: "Custom static data source"
     });
 
-    const noPaging = new NoPagingDataSource();
+    // const noPaging = new NoPagingDataSource();
+    // this.dataSourceService.registerDataSource({
+    //   dataSource: noPaging,
+    //   id: "NoPagingDataSource",
+    //   name: "Custom data source"
+    // });
+
+     /**
+      *
+      * Multi data source reference
+      *
+      * Important: This will be supported as of version 1.6.0
+      *
+      */
     this.dataSourceService.registerDataSource({
-      dataSource: noPaging,
+      dataSourcePrototype: NoPagingDataSource.prototype,
       id: "NoPagingDataSource",
       name: "Custom data source"
     });
   }
+
+
+
+
 
   private async fetchProviders() {
     const configProvider = await this.providerService.getProvider<any>(IntranetProvider.Config);
