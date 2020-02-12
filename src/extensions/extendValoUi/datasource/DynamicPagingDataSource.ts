@@ -1,4 +1,4 @@
-import { BaseDataSourceProvider, PagingType, IDataSourceData } from "@valo/extensibility";
+import { BaseDataSourceProvider, PagingType, IDataSourceData, IPagingSettings, PagingOption } from "@valo/extensibility";
 
 
 export class DynamicPagingDataSource extends BaseDataSourceProvider<IDataSourceData> {
@@ -10,7 +10,8 @@ export class DynamicPagingDataSource extends BaseDataSourceProvider<IDataSourceD
         const newArray = this.defaultArray.map(i => `Item ${i}`);
         console.log(newArray);
         resolve({
-          items: newArray
+          items: newArray,
+          totalResults: this.defaultArray.length * this.getPageCount()
         } as IDataSourceData);
       }, 2000);
     });
@@ -26,17 +27,24 @@ export class DynamicPagingDataSource extends BaseDataSourceProvider<IDataSourceD
         const newArray = this.defaultArray.map(i => `Item ${i+(this.defaultArray.length * pageNr)}`);
         console.log(newArray);
         resolve({
-          items: newArray
+          items: newArray,
+          totalResults: this.defaultArray.length * this.getPageCount()
         } as IDataSourceData);
       }, 500 * pageNr);
     });
   }
 
-  public getPagingType() {
-    return PagingType.dynamic;
+  public getPagingSettings(): IPagingSettings {
+    return {
+      pagingType: PagingType.dynamic,
+      pagingOptions: [
+        { key: PagingOption.Top, text: "Top" },
+        { key: PagingOption.Bottom, text: "Bottom" },
+      ]
+    };
   }
 
-  public getNumberOfPages(): number {
+  public getPageCount(): number {
     return 5;
   }
 }

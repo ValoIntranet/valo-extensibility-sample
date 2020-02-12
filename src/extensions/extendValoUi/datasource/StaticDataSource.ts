@@ -1,4 +1,4 @@
-import { BaseDataSourceProvider, PagingType, IDataSourceData } from "@valo/extensibility";
+import { BaseDataSourceProvider, PagingType, IDataSourceData, IPagingSettings, PagingOption } from "@valo/extensibility";
 import { IPropertyPaneGroup, PropertyPaneSlider } from '@microsoft/sp-webpart-base';
 
 export class StaticDataSource extends BaseDataSourceProvider<IDataSourceData> {
@@ -29,11 +29,18 @@ export class StaticDataSource extends BaseDataSourceProvider<IDataSourceData> {
       newArray.push(`Item ${i}`);
     }
     return {
-      items: newArray
+      items: newArray,
+      totalResults: this.nrOfItems
     };
   }
 
-  public getPagingType() {
-    return PagingType.static;
+  public getPagingSettings(): IPagingSettings {
+    return {
+      pagingType: PagingType.static,
+      pagingOptions: [
+        { key: PagingOption.Top, text: "Top" },
+        { key: PagingOption.Bottom, text: "Bottom" },
+      ]
+    };
   }
 }

@@ -22,21 +22,21 @@ export default class CustomExtensions {
 
   public register() {
     this.fetchProviders();
-    this.extensionService.registerExtension({
-      id: "NavigationLeft",
-      location: IntranetLocation.NavigationLeft,
-      element: <div style={{lineHeight: '60px'}}>👉 <style>{`.valo-site-logo{display:flex}.valo-site-logo__link{margin-right:15px !important}`}</style></div>
-    });
-
     // this.extensionService.registerExtension({
     //   id: "NavigationLeft",
     //   location: IntranetLocation.NavigationLeft,
-    //   element: (
-    //     <React.Fragment>
-    //       <Clock />
-    //     </React.Fragment>
-    //   )
+    //   element: <div style={{lineHeight: '60px'}}>👉 <style>{`.valo-site-logo{display:flex}.valo-site-logo__link{margin-right:15px !important}`}</style></div>
     // });
+
+    this.extensionService.registerExtension({
+      id: "NavigationLeft",
+      location: IntranetLocation.NavigationLeft,
+      element: (
+        <React.Fragment>
+          <Clock />
+        </React.Fragment>
+      )
+    });
 
     this.extensionService.registerExtension({
       id: "NavigationRight",
@@ -47,7 +47,7 @@ export default class CustomExtensions {
     this.extensionService.registerExtension({
       id: "NavigationTop",
       location: IntranetLocation.NavigationTop,
-      element: <div style={{textAlign: "center", height: "20px"}}>👆</div>
+      element: <div style={{textAlign: "center", height: "20px"}}>👆 APAC Meetup</div>
     });
 
     this.extensionService.registerExtension({
@@ -63,14 +63,13 @@ export default class CustomExtensions {
       id: "Footer",
       location: IntranetLocation.Footer,
       element: <div style={{background:"#1e6268",height:"400px",textAlign:"center",lineHeight:"400px"}}>
-        <p>This is the custom footer</p>
-        <button type="button"
-                onClick={async () => {
-          const trigger = await this.triggerService.registerTrigger(IntranetTrigger.OpenPageCreationPanel);
-          if (trigger) {
-            trigger.invokeTrigger();
-          }
-        }}>Click to open a panel</button>
+        {
+          location.href === "https://valomodern.sharepoint.com/sites/tea-point" ? (
+            <p>HOME</p>
+          ) : (
+            <p>Other page</p>
+          )
+        }
       </div>
     });
 
