@@ -7,6 +7,22 @@ import { NoPagingDataSource } from './datasource/NoPagingDataSource';
 import { DynamicPagingDataSource } from './datasource/DynamicPagingDataSource';
 import { StaticDataSource } from './datasource/StaticDataSource';
 
+export const CustomGroupHeader: React.SFC<any> = (props: any) => {
+  return (
+    <span>
+      {props && props.title}
+    </span>
+  );
+};
+
+export const CustomNavigationItem: React.SFC<any> = (props: any) => {
+  return (
+    <span>
+      {props && props.title} - {props && props.isLinkActive ? "true" : "false"}
+    </span>
+  );
+};
+
 export default class CustomExtensions {
   private extensionService: ExtensionService = null;
   private triggerService: TriggerService = null;
@@ -47,7 +63,7 @@ export default class CustomExtensions {
     this.extensionService.registerExtension({
       id: "NavigationTop",
       location: IntranetLocation.NavigationTop,
-      element: <div style={{textAlign: "center", height: "20px"}}>👆 APAC Meetup</div>
+      element: <div style={{textAlign: "center", height: "20px"}}>👆</div>
     });
 
     this.extensionService.registerExtension({
@@ -71,6 +87,21 @@ export default class CustomExtensions {
           )
         }
       </div>
+    });
+
+    /**
+     * New extension points available in version TBD
+     */
+    this.extensionService.registerExtension({
+      id: "OverwriteNavigationGroupHeader",
+      location: IntranetLocation.OverwriteNavigationGroupHeader,
+      element: CustomGroupHeader
+    });
+
+    this.extensionService.registerExtension({
+      id: "OverwriteNavigationItemLink",
+      location: IntranetLocation.OverwriteNavigationItemLink,
+      element: CustomNavigationItem
     });
 
 
@@ -107,7 +138,7 @@ export default class CustomExtensions {
       *
       * Multi data source reference
       *
-      * Important: This will be supported as of version 1.6.0
+      * Important: This will be supported as of version TBD
       *
       */
     this.dataSourceService.registerDataSource({
