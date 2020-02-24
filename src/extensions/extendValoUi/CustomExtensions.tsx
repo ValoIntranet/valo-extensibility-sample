@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IntranetLocation, IntranetTrigger, IntranetProvider, ExtensionService, TriggerService, ProviderService, ExtensionProvider, IUserProfileProvider, DataSourceService } from '@valo/extensibility';
+import { IntranetLocation, IntranetTrigger, IntranetProvider, ExtensionService, TriggerService, ProviderService, ExtensionProvider, IUserProfileProvider, DataSourceService, ExtensionPointToolboxAction, ExtensionPointToolboxPanelCreationAction } from '@valo/extensibility';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import Clock from './clock';
@@ -44,53 +44,53 @@ export default class CustomExtensions {
     //   element: <div style={{lineHeight: '60px'}}>👉 <style>{`.valo-site-logo{display:flex}.valo-site-logo__link{margin-right:15px !important}`}</style></div>
     // });
 
-    this.extensionService.registerExtension({
-      id: "NavigationLeft",
-      location: IntranetLocation.NavigationLeft,
-      element: (
-        <React.Fragment>
-          <Clock />
-        </React.Fragment>
-      )
-    });
+    // this.extensionService.registerExtension({
+    //   id: "NavigationLeft",
+    //   location: IntranetLocation.NavigationLeft,
+    //   element: (
+    //     <React.Fragment>
+    //       <Clock />
+    //     </React.Fragment>
+    //   )
+    // });
 
-    this.extensionService.registerExtension({
-      id: "NavigationRight",
-      location: IntranetLocation.NavigationRight,
-      element: <div style={{lineHeight: '60px', marginLeft: 'auto'}}>👈 <style>{`.valo-language-switcher-container{margin-left:7px}`}</style></div>
-    });
+    // this.extensionService.registerExtension({
+    //   id: "NavigationRight",
+    //   location: IntranetLocation.NavigationRight,
+    //   element: <div style={{lineHeight: '60px', marginLeft: 'auto'}}>👈 <style>{`.valo-language-switcher-container{margin-left:7px}`}</style></div>
+    // });
 
-    this.extensionService.registerExtension({
-      id: "NavigationTop",
-      location: IntranetLocation.NavigationTop,
-      element: <div style={{textAlign: "center", height: "20px"}}>👆</div>
-    });
+    // this.extensionService.registerExtension({
+    //   id: "NavigationTop",
+    //   location: IntranetLocation.NavigationTop,
+    //   element: <div style={{textAlign: "center", height: "20px"}}>👆</div>
+    // });
 
-    this.extensionService.registerExtension({
-      id: "NavigationBottom",
-      location: IntranetLocation.NavigationBottom,
-      element: <div style={{textAlign: "center", height: "20px"}}>
-        👇
+    // this.extensionService.registerExtension({
+    //   id: "NavigationBottom",
+    //   location: IntranetLocation.NavigationBottom,
+    //   element: <div style={{textAlign: "center", height: "20px"}}>
+    //     👇
 
-      </div>
-    });
+    //   </div>
+    // });
 
-    this.extensionService.registerExtension({
-      id: "Footer",
-      location: IntranetLocation.Footer,
-      element: <div style={{background:"#1e6268",height:"400px",textAlign:"center",lineHeight:"400px"}}>
-        {
-          location.href === "https://valomodern.sharepoint.com/sites/tea-point" ? (
-            <p>HOME</p>
-          ) : (
-            <p>Other page</p>
-          )
-        }
-      </div>
-    });
+    // this.extensionService.registerExtension({
+    //   id: "Footer",
+    //   location: IntranetLocation.Footer,
+    //   element: <div style={{background:"#1e6268",height:"400px",textAlign:"center",lineHeight:"400px"}}>
+    //     {
+    //       location.href === "https://valomodern.sharepoint.com/sites/tea-point" ? (
+    //         <p>HOME</p>
+    //       ) : (
+    //         <p>Other page</p>
+    //       )
+    //     }
+    //   </div>
+    // });
 
     /**
-     * New extension points available in version TBD
+     * New extension points available in version 1.6
      */
     this.extensionService.registerExtension({
       id: "OverwriteNavigationGroupHeader",
@@ -102,6 +102,44 @@ export default class CustomExtensions {
       id: "OverwriteNavigationItemLink",
       location: IntranetLocation.OverwriteNavigationItemLink,
       element: CustomNavigationItem
+    });
+
+    this.extensionService.registerExtension({
+      id: "ToolboxAction",
+      location: IntranetLocation.ToolboxAction,
+      element: [
+        {
+          title: "Extension 1",
+          icon: "Code",
+          description: "Extension 1 description",
+          onClick: () => alert('You clicked on the extension 1 toolbox action.')
+        } as ExtensionPointToolboxAction,
+        {
+          title: "Extension 2",
+          icon: "QRCode",
+          description: "Extension 2 description",
+          onClick: () => alert('You clicked on the extension 2 toolbox action.')
+        } as ExtensionPointToolboxAction
+      ]
+    });
+
+    this.extensionService.registerExtension({
+      id: "ToolboxPanelCreationAction",
+      location: IntranetLocation.ToolboxPanelCreationAction,
+      element: [
+        {
+          title: "Creation Extension 1",
+          icon: "Code",
+          description: "Creation extension 1 description",
+          onClick: () => alert('You clicked on the creation extension 1 toolbox action.')
+        } as ExtensionPointToolboxPanelCreationAction,
+        {
+          title: "Creation Extension 2",
+          icon: "QRCode",
+          description: "Creation extension 2 description",
+          onClick: () => alert('You clicked on the creation extension 2 toolbox action.')
+        } as ExtensionPointToolboxPanelCreationAction
+      ]
     });
 
 
@@ -138,7 +176,7 @@ export default class CustomExtensions {
       *
       * Multi data source reference
       *
-      * Important: This will be supported as of version TBD
+      * Important: This will be supported as of version 1.6
       *
       */
     this.dataSourceService.registerDataSource({
