@@ -4,7 +4,7 @@ This is a sample of how you can use the Valo Extensibility Framework [@valo/exte
 
 ## Documentation
 
-Documentation about the framework can be found here: [Modern Valo Extensibility Documenation](https://valomoderndocumentation.azurewebsites.net/extend/extensibility/).
+Documentation about the framework can be found here: [Modern Valo Extensibility Documentation](https://valomoderndocumentation.azurewebsites.net/intranet/extend/extensibility/).
 
 
 ## Adding this sample to your site
