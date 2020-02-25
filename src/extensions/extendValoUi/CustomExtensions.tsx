@@ -1,11 +1,13 @@
 import * as React from 'react';
-import { IntranetLocation, IntranetTrigger, IntranetProvider, ExtensionService, TriggerService, ProviderService, ExtensionProvider, IUserProfileProvider, DataSourceService, ExtensionPointToolboxAction, ExtensionPointToolboxPanelCreationAction } from '@valo/extensibility';
+import { IntranetLocation, IntranetTrigger, IntranetProvider, ExtensionService, TriggerService, ProviderService, ExtensionProvider, IUserProfileProvider, DataSourceService, ExtensionPointToolboxAction, ExtensionPointToolboxPanelCreationAction, MegaMenuItem, IClientStorageService, StorageType } from '@valo/extensibility';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import Clock from './clock';
 import { NoPagingDataSource } from './datasource/NoPagingDataSource';
 import { DynamicPagingDataSource } from './datasource/DynamicPagingDataSource';
 import { StaticDataSource } from './datasource/StaticDataSource';
+import { ApplicationCustomizerContext } from '@microsoft/sp-application-base';
+import { SPHttpClient } from "@microsoft/sp-http";
 
 export const CustomGroupHeader: React.SFC<any> = (props: any) => {
   return (
@@ -36,7 +38,7 @@ export default class CustomExtensions {
     this.dataSourceService = DataSourceService.getInstance();
   }
 
-  public register() {
+  public register(ctx: ApplicationCustomizerContext) {
     this.fetchProviders();
     // this.extensionService.registerExtension({
     //   id: "NavigationLeft",
@@ -142,6 +144,8 @@ export default class CustomExtensions {
       ]
     });
 
+    // Navigation items
+    this.extraNavigationItems(ctx);
 
 
     /**
@@ -186,8 +190,63 @@ export default class CustomExtensions {
     });
   }
 
+  /**
+   * Retrieve a navigation file from another site and provide it to get rendered to the navigation
+   *
+   * IMPORTANT: Be sure to cache
+   *
+   * @param ctx
+   */
+  private async extraNavigationItems(ctx: ApplicationCustomizerContext) {
+    const clientStorage = await this.providerService.getProvider<IClientStorageService>(IntranetProvider.ClientStorage);
+    if (clientStorage && clientStorage.instance) {
+      const csService = clientStorage.instance as IClientStorageService;
+      const storageKey = "Client:Extensibility:Navigation";
+      let navigationItems = csService.get<MegaMenuItem[]>(storageKey);
+      if (!navigationItems) {
+        navigationItems = await this.fetchNavigation(ctx);
+        const crntDate = new Date(Date.now());
+        crntDate.setMinutes(crntDate.getMinutes() + 30);
+        // 30 minutes caching
+        csService.put(storageKey, navigationItems, StorageType.localStorage, crntDate);
+      }
 
+      if (navigationItems) {
+        this.extensionService.registerExtension({
+          id: "MegaMenuBeforeNavigationItems",
+          location: IntranetLocation.MegaMenuAfterNavigationItems,
+          element: navigationItems as MegaMenuItem[]
+        });
+      }
+    }
+  }
 
+  private async fetchNavigation(ctx: ApplicationCustomizerContext) {
+    try {
+      const intranetUrl = "https://valointranetdev.sharepoint.com/sites/coffee-point";
+      const navUrl = new URL(intranetUrl);
+      let pathName = navUrl.pathname;
+      // Check if the pathName starts with a slash (issue on IE11)
+      if (pathName.indexOf("/") > 0) {
+        pathName = `/${pathName}`;
+      }
+      const navUrlApi = `${intranetUrl}/_api/web/GetFileByServerRelativeUrl('${pathName}/config/navigation.json')/$value`;
+      const data = await ctx.spHttpClient.get(navUrlApi, SPHttpClient.configurations.v1);
+      // Check if footer html was retrieved
+      if (data.ok) {
+        const txtData = await data.text();
+        if (txtData && typeof txtData === "string") {
+          const navigation = JSON.parse(txtData);
+          if (navigation && navigation.valoHubData && navigation.valoHubData.menubar) {
+            return navigation.valoHubData.menubar;
+          }
+        }
+      }
+      return null;
+    } catch (e) {
+      return null;
+    }
+  }
 
 
   private async fetchProviders() {

@@ -8,7 +8,7 @@ export default class ExtendValoUiApplicationCustomizer extends BaseApplicationCu
 
   public async onInit(): Promise<void> {
     const customExt = new CustomExtensions();
-    customExt.register();
+    customExt.register(this.context);
 
     return;
   }
