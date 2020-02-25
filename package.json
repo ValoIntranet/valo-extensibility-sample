@@ -17,7 +17,7 @@
     "@microsoft/sp-dialog": "1.8.0",
     "@types/es6-promise": "0.0.33",
     "@types/webpack-env": "1.13.1",
-    "@valo/extensibility": "1.4.0-a53bb1494a4b070a402d4322ed19412542519e78",
+    "@valo/extensibility": "1.4.0-23ca1150ad8d40f0b37bec88b04118e3d6193d98",
     "date-fns": "1.30.1"
   },
   "devDependencies": {
