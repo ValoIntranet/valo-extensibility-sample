@@ -6,7 +6,6 @@ export class NoPagingDataSource extends BaseDataSourceProvider<IDataSourceData> 
 
   public async getData() {
     const newArray = this.defaultArray.map(i => `Item ${i}`);
-    console.log(newArray);
     return {
       items: newArray
     };

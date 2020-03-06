@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { IntranetLocation, IntranetTrigger, IntranetProvider, ExtensionService, TriggerService, ProviderService, ExtensionProvider, IUserProfileProvider, DataSourceService, ExtensionPointToolboxAction, ExtensionPointToolboxPanelCreationAction, MegaMenuItem, IClientStorageService, StorageType } from '@valo/extensibility';
-import { Link } from 'office-ui-fabric-react/lib/Link';
+import { IntranetLocation, IntranetTrigger, IntranetProvider, ExtensionService, TriggerService, ProviderService, ExtensionProvider, IUserProfileProvider, DataSourceService, ExtensionPointToolboxAction, ExtensionPointToolboxPanelCreationAction, MegaMenuItem, StorageType, IClientStorageProvider } from '@valo/extensibility';
+import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import Clock from './clock';
 import { NoPagingDataSource } from './datasource/NoPagingDataSource';
@@ -68,14 +68,20 @@ export default class CustomExtensions {
     //   element: <div style={{textAlign: "center", height: "20px"}}>👆</div>
     // });
 
-    // this.extensionService.registerExtension({
-    //   id: "NavigationBottom",
-    //   location: IntranetLocation.NavigationBottom,
-    //   element: <div style={{textAlign: "center", height: "20px"}}>
-    //     👇
-
-    //   </div>
-    // });
+    this.extensionService.registerExtension({
+      id: "NavigationBottom",
+      location: IntranetLocation.NavigationBottom,
+      element: (
+        <div style={{textAlign: "center", padding: "15px"}}>
+          <PrimaryButton onClick={async () => {
+            const trigger = await this.triggerService.registerTrigger(IntranetTrigger.OpenPageCreationPanel);
+            if (trigger) {
+              trigger.invokeTrigger();
+            }
+          }}>Open page creation</PrimaryButton>
+        </div>
+      )
+    });
 
     // this.extensionService.registerExtension({
     //   id: "Footer",
@@ -198,9 +204,9 @@ export default class CustomExtensions {
    * @param ctx
    */
   private async extraNavigationItems(ctx: ApplicationCustomizerContext) {
-    const clientStorage = await this.providerService.getProvider<IClientStorageService>(IntranetProvider.ClientStorage);
+    const clientStorage = await this.providerService.getProvider<IClientStorageProvider>(IntranetProvider.ClientStorage);
     if (clientStorage && clientStorage.instance) {
-      const csService = clientStorage.instance as IClientStorageService;
+      const csService = clientStorage.instance as IClientStorageProvider;
       const storageKey = "Client:Extensibility:Navigation";
       let navigationItems = csService.get<MegaMenuItem[]>(storageKey);
       if (!navigationItems) {
