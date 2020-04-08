@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { IntranetLocation, IntranetTrigger, IntranetProvider, ExtensionService, TriggerService, ProviderService, ExtensionProvider, IUserProfileProvider, DataSourceService, ExtensionPointToolboxAction, ExtensionPointToolboxPanelCreationAction, MegaMenuItem, StorageType, IClientStorageProvider } from '@valo/extensibility';
+import { IMultilingualProvider } from '@valo/extensibility/lib/providerTypes/IMultilingualProvider';
 import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import Clock from './clock';
@@ -9,20 +10,50 @@ import { StaticDataSource } from './datasource/StaticDataSource';
 import { ApplicationCustomizerContext } from '@microsoft/sp-application-base';
 import { SPHttpClient } from "@microsoft/sp-http";
 
-export const CustomGroupHeader: React.SFC<any> = (props: any) => {
-  return (
-    <span>
-      {props && props.title}
-    </span>
+
+const renderLinkIcon = (props: any) => {
+  return (props.properties && props.properties.iconName) ? (
+    <Icon iconName={props.properties.iconName} />
+  ) : (
+    <Icon iconName="GenericScan" />
   );
 };
 
+export const CustomGroupHeader: React.SFC<any> = (props: any) => {
+  if (props.link) {
+    return (
+      <a href={props.link} title={props.title} style={{
+        backgroundColor: "#efefef",
+        color: "pink",
+        fontWeight: 600,
+        textTransform: "capitalize"
+      }}>{props.title}</a>
+    );
+  } else {
+    return (
+      <span style={{
+        backgroundColor: "#efefef",
+        color: "#471527",
+        fontWeight: 600,
+        textTransform: "capitalize"
+      }}>{props.title}</span>
+    );
+  }
+};
+
 export const CustomNavigationItem: React.SFC<any> = (props: any) => {
-  return (
-    <span>
-      {props && props.title} - {props && props.isLinkActive ? "true" : "false"}
-    </span>
-  );
+  if (props.link) {
+    return (
+      <a href={props.link} title={props.title} style={{
+        color: "#006494",
+        fontWeight: props.isLinkActive ? "bold" : "normal"
+      }}>{renderLinkIcon(props)} {props.title}</a>
+    );
+  } else {
+    return (
+      <span>{renderLinkIcon(props)} {props.title}</span>
+    );
+  }
 };
 
 export default class CustomExtensions {
@@ -74,7 +105,7 @@ export default class CustomExtensions {
       element: (
         <div style={{textAlign: "center", padding: "15px"}}>
           <PrimaryButton onClick={async () => {
-            const trigger = await this.triggerService.registerTrigger(IntranetTrigger.OpenPageCreationPanel);
+            const trigger = await this.triggerService.registerTrigger(IntranetTrigger.OpenEventCreationPanel);
             if (trigger) {
               trigger.invokeTrigger();
             }
@@ -83,75 +114,73 @@ export default class CustomExtensions {
       )
     });
 
-    // this.extensionService.registerExtension({
-    //   id: "Footer",
-    //   location: IntranetLocation.Footer,
-    //   element: <div style={{background:"#1e6268",height:"400px",textAlign:"center",lineHeight:"400px"}}>
-    //     {
-    //       location.href === "https://valomodern.sharepoint.com/sites/tea-point" ? (
-    //         <p>HOME</p>
-    //       ) : (
-    //         <p>Other page</p>
-    //       )
-    //     }
-    //   </div>
-    // });
+    this.extensionService.registerExtension({
+      id: "Footer",
+      location: IntranetLocation.Footer,
+      element: <div style={{background:"#1e6268",height:"400px",textAlign:"center",lineHeight:"400px"}}>
+        Custom footer
+      </div>
+    });
 
     /**
      * New extension points available in version 1.6
      */
-    this.extensionService.registerExtension({
-      id: "OverwriteNavigationGroupHeader",
-      location: IntranetLocation.OverwriteNavigationGroupHeader,
-      element: CustomGroupHeader
-    });
+    // this.extensionService.registerExtension({
+    //   id: "OverwriteNavigationGroupHeader",
+    //   location: IntranetLocation.OverwriteNavigationGroupHeader,
+    //   element: CustomGroupHeader
+    // });
 
-    this.extensionService.registerExtension({
-      id: "OverwriteNavigationItemLink",
-      location: IntranetLocation.OverwriteNavigationItemLink,
-      element: CustomNavigationItem
-    });
+    // this.extensionService.registerExtension({
+    //   id: "OverwriteNavigationItemLink",
+    //   location: IntranetLocation.OverwriteNavigationItemLink,
+    //   element: CustomNavigationItem
+    // });
 
-    this.extensionService.registerExtension({
-      id: "ToolboxAction",
-      location: IntranetLocation.ToolboxAction,
-      element: [
-        {
-          title: "Extension 1",
-          icon: "Code",
-          description: "Extension 1 description",
-          onClick: () => alert('You clicked on the extension 1 toolbox action.')
-        } as ExtensionPointToolboxAction,
-        {
-          title: "Extension 2",
-          icon: "QRCode",
-          description: "Extension 2 description",
-          onClick: () => alert('You clicked on the extension 2 toolbox action.')
-        } as ExtensionPointToolboxAction
-      ]
-    });
+    // this.extensionService.registerExtension({
+    //   id: "ToolboxAction",
+    //   location: IntranetLocation.ToolboxAction,
+    //   element: [
+    //     {
+    //       title: "Extension 1",
+    //       icon: "Code",
+    //       description: "Extension 1 description",
+    //       onClick: () => alert('You clicked on the extension 1 toolbox action.')
+    //     } as ExtensionPointToolboxAction,
+    //     {
+    //       title: "Extension 2",
+    //       icon: "QRCode",
+    //       description: "Extension 2 description",
+    //       onClick: () => alert('You clicked on the extension 2 toolbox action.')
+    //     } as ExtensionPointToolboxAction
+    //   ]
+    // });
 
-    this.extensionService.registerExtension({
-      id: "ToolboxPanelCreationAction",
-      location: IntranetLocation.ToolboxPanelCreationAction,
-      element: [
-        {
-          title: "Creation Extension 1",
-          icon: "Code",
-          description: "Creation extension 1 description",
-          onClick: () => alert('You clicked on the creation extension 1 toolbox action.')
-        } as ExtensionPointToolboxPanelCreationAction,
-        {
-          title: "Creation Extension 2",
-          icon: "QRCode",
-          description: "Creation extension 2 description",
-          onClick: () => alert('You clicked on the creation extension 2 toolbox action.')
-        } as ExtensionPointToolboxPanelCreationAction
-      ]
-    });
+    // this.extensionService.registerExtension({
+    //   id: "ToolboxPanelCreationAction",
+    //   location: IntranetLocation.ToolboxPanelCreationAction,
+    //   element: [
+    //     {
+    //       title: "Creation Extension 1",
+    //       icon: "Code",
+    //       description: "Creation extension 1 description",
+    //       onClick: () => alert('You clicked on the creation extension 1 toolbox action.')
+    //     } as ExtensionPointToolboxPanelCreationAction,
+    //     {
+    //       title: "Creation Extension 2",
+    //       icon: "QRCode",
+    //       description: "Creation extension 2 description",
+    //       onClick: () => alert('You clicked on the creation extension 2 toolbox action.')
+    //     } as ExtensionPointToolboxPanelCreationAction
+    //   ]
+    // });
 
     // Navigation items
     this.extraNavigationItems(ctx);
+
+
+    // Multilingual (beta)
+    this.fetchMultilingualInformation();
 
 
     /**
@@ -267,6 +296,19 @@ export default class CustomExtensions {
     if (userProfileProvider && userProfileProvider.instance) {
       console.log("Department:", await userProfileProvider.instance.getUserProperty("Department"));
       console.log("All properties:", await userProfileProvider.instance.getUserProperties());
+    }
+  }
+
+
+  private async fetchMultilingualInformation() {
+    const multilingualProvider = await this.providerService.getProvider<IMultilingualProvider>(IntranetProvider.Multilingual);
+    if (multilingualProvider && multilingualProvider.instance) {
+      const crntPage = await multilingualProvider.instance.getCurrentPage();
+      if (crntPage && crntPage.UniqueId) {
+        const pages = await multilingualProvider.instance.getPageConnections(crntPage.UniqueId);
+        const sites = await multilingualProvider.instance.getSiteConnections();
+        const languageTerms = await multilingualProvider.instance.getLanguageTerms();
+      }
     }
   }
 }
