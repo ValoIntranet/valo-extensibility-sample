@@ -56,6 +56,17 @@ export const CustomNavigationItem: React.SFC<any> = (props: any) => {
   }
 };
 
+export const CustomBreadcrumb: React.SFC<any> = (props: any) => {
+  console.log('CustomBreadcrumb', props);
+  return (
+    <div>
+      {
+        Object.keys(props).map(key => <span>{key}: {props[key]}</span>)
+      }
+    </div>
+  );
+};
+
 export default class CustomExtensions {
   private extensionService: ExtensionService = null;
   private triggerService: TriggerService = null;
@@ -136,6 +147,12 @@ export default class CustomExtensions {
     //   location: IntranetLocation.OverwriteNavigationItemLink,
     //   element: CustomNavigationItem
     // });
+
+    this.extensionService.registerExtension({
+      id: "OverwriteBreadcrumb",
+      location: IntranetLocation.OverwriteBreadcrumb,
+      element: CustomBreadcrumb
+    });
 
     // this.extensionService.registerExtension({
     //   id: "ToolboxAction",
