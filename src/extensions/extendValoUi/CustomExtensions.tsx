@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IntranetLocation, IntranetTrigger, IntranetProvider, ExtensionService, TriggerService, ProviderService, ExtensionProvider, IUserProfileProvider, DataSourceService, ExtensionPointToolboxAction, ExtensionPointToolboxPanelCreationAction, MegaMenuItem, StorageType, IClientStorageProvider } from '@valo/extensibility';
+import { IntranetLocation, IntranetTrigger, IntranetProvider, ExtensionService, TriggerService, ProviderService, ExtensionProvider, IUserProfileProvider, DataSourceService, ExtensionPointToolboxAction, ExtensionPointToolboxPanelCreationAction, MegaMenuItem, StorageType, IClientStorageProvider, IMyToolsProvider } from '@valo/extensibility';
 import { IMultilingualProvider } from '@valo/extensibility/lib/providerTypes/IMultilingualProvider';
 import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import Clock from './clock';
@@ -141,8 +141,11 @@ export default class CustomExtensions {
     // StaticNavigation.create(this.extensionService);
     // PersonalNavigation.create(ctx, this.providerService, this.extensionService);
 
-    // Multilingual (beta)
+    // Multilingual (1.6 beta)
     // this.fetchMultilingualInformation();
+
+    // My Tools (1.7 beta)
+    this.fetchMyTools();
 
     /**
      * Single reference
@@ -214,6 +217,16 @@ export default class CustomExtensions {
 
         console.log(pages, sites, languageTerms);
       }
+    }
+  }
+
+  private async fetchMyTools() {
+    const myToolsProvider = await this.providerService.getProvider<IMyToolsProvider>(IntranetProvider.MyTools);
+
+    if (myToolsProvider && myToolsProvider.instance) {
+      const myToolsInstance = myToolsProvider.instance;
+      console.log(myToolsInstance.getMyLinks(25, 0));
+      console.log(myToolsInstance.getOurLinks(25, 0));
     }
   }
 }
