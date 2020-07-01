@@ -225,8 +225,8 @@ export default class CustomExtensions {
 
     if (myToolsProvider && myToolsProvider.instance) {
       const myToolsInstance = myToolsProvider.instance;
-      console.log(myToolsInstance.getMyLinks(25, 0));
-      console.log(myToolsInstance.getOurLinks(25, 0));
+      console.log(await myToolsInstance.getMyLinks(25, 0));
+      console.log(await myToolsInstance.getOurLinks(25, 0));
     }
   }
 }
