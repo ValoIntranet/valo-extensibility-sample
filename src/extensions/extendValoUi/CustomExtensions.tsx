@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IntranetLocation, IntranetTrigger, IntranetProvider, ExtensionService, TriggerService, ProviderService, ExtensionProvider, IUserProfileProvider, DataSourceService, ExtensionPointToolboxAction, ExtensionPointToolboxPanelCreationAction, MegaMenuItem, StorageType, IClientStorageProvider, IMyToolsProvider } from '@valo/extensibility';
+import { IntranetLocation, IntranetTrigger, IntranetProvider, ExtensionService, TriggerService, ProviderService, ExtensionProvider, IUserProfileProvider, DataSourceService, ExtensionPointToolboxAction, ExtensionPointToolboxPanelCreationAction, MegaMenuItem, StorageType, IClientStorageProvider, IMyToolsProvider, INavigationHierarchyProvider, MegaMenuNavigationItem } from '@valo/extensibility';
 import { IMultilingualProvider } from '@valo/extensibility/lib/providerTypes/IMultilingualProvider';
 import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import Clock from './clock';
@@ -147,6 +147,9 @@ export default class CustomExtensions {
     // My Tools (1.7 beta)
     this.fetchMyTools();
 
+    // Navigation Hierarchy (1.7 beta)
+    this.fetchNavigation();
+
     /**
      * Single reference
      *
@@ -227,6 +230,18 @@ export default class CustomExtensions {
       const myToolsInstance = myToolsProvider.instance;
       console.log(await myToolsInstance.getMyLinks(25, 0));
       console.log(await myToolsInstance.getOurLinks(25, 0));
+    }
+  }
+
+  private async fetchNavigation() {
+    const navProvider = await this.providerService.getProvider<INavigationHierarchyProvider>(IntranetProvider.NavigationHierarchy);
+
+    if (navProvider && navProvider.instance) {
+      const navInstance = navProvider.instance;
+      // The navigation provider - provides changes via event emitting. In order to get the new changes, you have to provide the `getHierarchy` method a callback function.
+      navInstance.getHierarchy("ExtensibilitySample", (hierarchy: MegaMenuNavigationItem[]) => {
+        console.log(hierarchy);
+      });
     }
   }
 }
