@@ -56,12 +56,12 @@ export default class ToolboxComponent extends React.Component<IToolboxComponentP
              type={PanelType.medium}
              onDismiss={this.onDismiss}>
         <div style={{ textAlign: "center", lineHeight:"150px" }}>
-          <div><input type="radio" id="2" name="favoriteImage" /><img src={require('../../../images/Asset 2.png')} height="150px" style={{marginLeft: "15px", verticalAlign:"middle"}} /></div>
-          <div><input type="radio" id="3" name="favoriteImage" /><img src={require('../../../images/Asset 3.png')} height="150px" style={{marginLeft: "15px", verticalAlign:"middle"}} /></div>
-          <div><input type="radio" id="4" name="favoriteImage" /><img src={require('../../../images/Asset 4.png')} height="150px" style={{marginLeft: "15px", verticalAlign:"middle"}} /></div>
-          <div><input type="radio" id="5" name="favoriteImage" /><img src={require('../../../images/Asset 5.png')} height="150px" style={{marginLeft: "15px", verticalAlign:"middle"}} /></div>
-          <div><input type="radio" id="6" name="favoriteImage" /><img src={require('../../../images/Asset 6.png')} height="150px" style={{marginLeft: "15px", verticalAlign:"middle"}} /></div>
-          <div><input type="radio" id="7" name="favoriteImage" /><img src={require('../../../images/Asset 7.png')} height="150px" style={{marginLeft: "15px", verticalAlign:"middle"}} /></div>
+          <div><input type="radio" id="2" name="favoriteImage" /><img src={require('../../../images/Asset_2.png')} height="150px" style={{marginLeft: "15px", verticalAlign:"middle"}} /></div>
+          <div><input type="radio" id="3" name="favoriteImage" /><img src={require('../../../images/Asset_3.png')} height="150px" style={{marginLeft: "15px", verticalAlign:"middle"}} /></div>
+          <div><input type="radio" id="4" name="favoriteImage" /><img src={require('../../../images/Asset_4.png')} height="150px" style={{marginLeft: "15px", verticalAlign:"middle"}} /></div>
+          <div><input type="radio" id="5" name="favoriteImage" /><img src={require('../../../images/Asset_5.png')} height="150px" style={{marginLeft: "15px", verticalAlign:"middle"}} /></div>
+          <div><input type="radio" id="6" name="favoriteImage" /><img src={require('../../../images/Asset_6.png')} height="150px" style={{marginLeft: "15px", verticalAlign:"middle"}} /></div>
+          <div><input type="radio" id="7" name="favoriteImage" /><img src={require('../../../images/Asset_7.png')} height="150px" style={{marginLeft: "15px", verticalAlign:"middle"}} /></div>
 
           <PrimaryButton text="Submit" style={{ marginTop: "15px", float: "right" }} />
         </div>

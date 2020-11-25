@@ -1,12 +1,19 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
   "solution": {
-    "name": "valo-extend-ui-poc-client-side-solution",
+    "name": "ValoExtensibiltySample",
     "id": "d99a1d10-9100-4df5-af53-514fa1e13390",
     "version": "1.0.0.0",
     "includeClientSideAssets": true,
     "skipFeatureDeployment": true,
     "isDomainIsolated": false,
+    "developer": {
+      "name": "Valo",
+      "websiteUrl": "https://www.valointranet.com/",
+      "privacyUrl": "https://www.valointranet.com/privacy-policy/",
+      "termsOfUseUrl": "https://www.valointranet.com/",
+      "mpnId": "1136673"
+    },
     "features": [
       {
         "title": "Application Extension - Deployment of custom action.",

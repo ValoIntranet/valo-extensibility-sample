@@ -5,7 +5,7 @@ const renderLinkIcon = (props: any) => {
   if (props.properties && props.properties.iconName) {
     return <Icon iconName={props.properties.iconName} />;
   } else if (props.properties && props.properties.staticLink) {
-    return <img src={require(`../../../images/Asset 3.png`)} height="45px" style={{ verticalAlign: "middle" }} />;
+    return <img src={require(`../../../images/Asset_3.png`)} height="45px" style={{ verticalAlign: "middle" }} />;
   } else {
     return <Icon iconName="GenericScan" />;
   }

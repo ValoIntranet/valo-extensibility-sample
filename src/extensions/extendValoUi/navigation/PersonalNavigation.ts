@@ -42,14 +42,14 @@ export class PersonalNavigation {
    */
   private static async fetchNavigation(ctx: ApplicationCustomizerContext) {
     try {
-      const intranetUrl = "https://valomodern.sharepoint.com/sites/tea-point";
+      const intranetUrl = "https://valointranetdev.sharepoint.com/sites/tea-point";
       const navUrl = new URL(intranetUrl);
       let pathName = navUrl.pathname;
       // Check if the pathName starts with a slash (issue on IE11)
       if (pathName.indexOf("/") > 0) {
         pathName = `/${pathName}`;
       }
-      const navUrlApi = `${intranetUrl}/_api/web/GetFileByServerRelativeUrl('${pathName}/config/navigation-personal.json')/$value`;
+      const navUrlApi = `${intranetUrl}/_api/web/GetFileByServerRelativeUrl('${pathName}/config/navigation1.json')/$value`;
       const data = await ctx.spHttpClient.get(navUrlApi, SPHttpClient.configurations.v1);
       // Check if footer html was retrieved
       if (data.ok) {

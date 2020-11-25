@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IntranetLocation, IntranetTrigger, IntranetProvider, ExtensionService, TriggerService, ProviderService, ExtensionProvider, IUserProfileProvider, DataSourceService, ExtensionPointToolboxAction, ExtensionPointToolboxPanelCreationAction, MegaMenuItem, StorageType, IClientStorageProvider, IMyToolsProvider, INavigationHierarchyProvider, MegaMenuNavigationItem, InformationMessage } from '@valo/extensibility';
+import { IntranetLocation, IntranetTrigger, IntranetProvider, ExtensionService, TriggerService, ProviderService, ExtensionProvider, IUserProfileProvider, DataSourceService, ExtensionPointToolboxAction, ExtensionPointToolboxPanelCreationAction, MegaMenuItem, StorageType, IClientStorageProvider, IMyToolsProvider, INavigationHierarchyProvider, MegaMenuNavigationItem, InformationMessage, ContextActionType } from '@valo/extensibility';
 import { IMultilingualProvider } from '@valo/extensibility/lib/providerTypes/IMultilingualProvider';
 import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import Clock from './clock';
@@ -46,15 +46,15 @@ export default class CustomExtensions {
     //   element: <div style={{lineHeight: '60px'}}>👉 <style>{`.valo-site-logo{display:flex}.valo-site-logo__link{margin-right:15px !important}`}</style></div>
     // });
 
-    this.extensionService.registerExtension({
-      id: "NavigationLeft",
-      location: IntranetLocation.NavigationLeft,
-      element: (
-        <React.Fragment>
-          <Clock />
-        </React.Fragment>
-      )
-    });
+    // this.extensionService.registerExtension({
+    //   id: "NavigationLeft",
+    //   location: IntranetLocation.NavigationBottom,
+    //   element: (
+    //     <React.Fragment>
+    //       <Clock />
+    //     </React.Fragment>
+    //   )
+    // });
 
     // this.extensionService.registerExtension({
     //   id: "NavigationRight",
@@ -62,79 +62,122 @@ export default class CustomExtensions {
     //   element: <div style={{lineHeight: '60px', marginLeft: 'auto'}}>👈 <style>{`.valo-language-switcher-container{margin-left:7px}`}</style></div>
     // });
 
-    this.extensionService.registerExtension({
-      id: "NavigationTop",
-      location: IntranetLocation.NavigationTop,
-      element: <div style={{textAlign: "center", height: "20px"}}>👆</div>
-    });
+    // this.extensionService.registerExtension({
+    //   id: "NavigationTop",
+    //   location: IntranetLocation.NavigationTop,
+    //   element: <div style={{textAlign: "center", height: "20px"}}>👆</div>
+    // });
 
 
 
-    this.extensionService.registerExtension({
-      id: "NavigationBottom",
-      location: IntranetLocation.NavigationBottom,
-      element: (
-        <div style={{textAlign: "center", padding: "15px"}}>
-          <PrimaryButton onClick={async () => {
-            const trigger = await this.triggerService.registerTrigger(IntranetTrigger.OpenEventCreationPanel);
-            if (trigger) {
-              trigger.invokeTrigger();
-            }
-          }}>Open page creation</PrimaryButton>
+    // this.extensionService.registerExtension({
+    //   id: "NavigationBottom",
+    //   location: IntranetLocation.NavigationBottom,
+    //   element: (
+    //     <div style={{textAlign: "center", padding: "15px"}}>
+    //       <PrimaryButton onClick={async () => {
+    //         const trigger = await this.triggerService.registerTrigger(IntranetTrigger.OpenEventCreationPanel);
+    //         if (trigger) {
+    //           trigger.invokeTrigger();
+    //         }
+    //       }}>Open page creation</PrimaryButton>
 
-          <CustomNotifications />
-        </div>
-      )
-    });
+    //       <PrimaryButton onClick={async () => {
+    //         const trigger = await this.triggerService.registerTrigger(IntranetTrigger.GenericPanel);
+    //         if (trigger) {
+    //           trigger.invokeTrigger({
+    //             siteUrl: ctx.pageContext.site.absoluteUrl,
+    //             webUrl: ctx.pageContext.web.absoluteUrl,
+    //             listId: "90bca00f-7b09-409b-9131-a35c5b9d5b8c", // The id of the list
+    //             contextActionType: ContextActionType.create
+    //           });
+    //         }
+    //       }}>Open GenericPanel</PrimaryButton>
 
-    this.extensionService.registerExtension({
-      id: "Footer",
-      location: IntranetLocation.Footer,
-      element: (
-        <React.Fragment>
-          <Footer />
+    //       <CustomNotifications />
+    //     </div>
+    //   )
+    // });
 
-          <ToolboxComponent extensionService={this.extensionService} />
-        </React.Fragment>
-      )
-    });
+    // this.extensionService.registerExtension({
+    //   id: "Footer",
+    //   location: IntranetLocation.Footer,
+    //   element: (
+    //     <React.Fragment>
+    //       <Footer />
+
+    //       <ToolboxComponent extensionService={this.extensionService} />
+    //     </React.Fragment>
+    //   )
+    // });
 
     /**
      * New extension points available in version 1.6
      */
-    this.extensionService.registerExtension({
-      id: "OverwriteNavigationGroupHeader",
-      location: IntranetLocation.OverwriteNavigationGroupHeader,
-      element: CustomGroupHeader
-    });
+    // this.extensionService.registerExtension({
+    //   id: "OverwriteNavigationGroupHeader",
+    //   location: IntranetLocation.OverwriteNavigationGroupHeader,
+    //   element: CustomGroupHeader
+    // });
+
+    // this.extensionService.registerExtension({
+    //   id: "OverwriteNavigationItemLink",
+    //   location: IntranetLocation.OverwriteNavigationItemLink,
+    //   element: CustomNavigationItem
+    // });
+
+    // this.extensionService.registerExtension({
+    //   id: "OverwriteBreadcrumb",
+    //   location: IntranetLocation.OverwriteBreadcrumb,
+    //   element: CustomBreadcrumb
+    // });
+
+    // this.extensionService.registerExtension({
+    //   id: "ToolboxPanelCreationAction",
+    //   location: IntranetLocation.ToolboxPanelCreationAction,
+    //   element: [
+    //     {
+    //       title: "Creation Extension 2",
+    //       icon: "QRCode",
+    //       description: "Creation extension 2 description",
+    //       onClick: () => alert('You clicked on the creation extension 2 toolbox action.')
+    //     } as ExtensionPointToolboxPanelCreationAction
+    //   ]
+    // });
+
+
+    // this.extensionService.registerExtension({
+    //   id: "ToolboxPanelCreationAction2",
+    //   location: IntranetLocation.ToolboxPanelCreationAction,
+    //   element: [
+    //     {
+    //       title: "Creation Extension 1",
+    //       icon: "Code",
+    //       description: "Creation extension 1 description",
+    //       onClick: () => alert('You clicked on the creation extension 1 toolbox action.')
+    //     } as ExtensionPointToolboxPanelCreationAction
+    //   ]
+    // });
 
     this.extensionService.registerExtension({
-      id: "OverwriteNavigationItemLink",
-      location: IntranetLocation.OverwriteNavigationItemLink,
-      element: CustomNavigationItem
-    });
-
-    this.extensionService.registerExtension({
-      id: "OverwriteBreadcrumb",
-      location: IntranetLocation.OverwriteBreadcrumb,
-      element: CustomBreadcrumb
-    });
-
-    this.extensionService.registerExtension({
-      id: "ToolboxPanelCreationAction",
+      id: "ToolboxPanelCreationAction3",
       location: IntranetLocation.ToolboxPanelCreationAction,
       element: [
         {
-          title: "Creation Extension 1",
-          icon: "Code",
-          description: "Creation extension 1 description",
-          onClick: () => alert('You clicked on the creation extension 1 toolbox action.')
-        } as ExtensionPointToolboxPanelCreationAction,
-        {
-          title: "Creation Extension 2",
-          icon: "QRCode",
-          description: "Creation extension 2 description",
-          onClick: () => alert('You clicked on the creation extension 2 toolbox action.')
+          title: "Vacation request",
+          icon: "Vacation",
+          description: "Create a vacation request",
+          onClick: async () => {
+            const trigger = await this.triggerService.registerTrigger(IntranetTrigger.GenericPanel);
+            if (trigger) {
+              trigger.invokeTrigger({
+                siteUrl: ctx.pageContext.site.absoluteUrl,
+                webUrl: ctx.pageContext.web.absoluteUrl,
+                listId: "77919457-4521-49bc-9ee6-72dbe7976709", // The id of the list
+                contextActionType: ContextActionType.create
+              });
+            }
+          }
         } as ExtensionPointToolboxPanelCreationAction
       ]
     });
