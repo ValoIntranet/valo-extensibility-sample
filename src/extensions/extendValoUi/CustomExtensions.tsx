@@ -238,6 +238,16 @@ export default class CustomExtensions {
       id: "NoPagingDataSource",
       name: "Custom data source"
     });
+
+
+    // Get notifications on navigation triggers
+    this.triggerService.registerTriggerListener({
+      id: `CustomTriggerForSiteNavigation`,
+      trigger: IntranetTrigger.PageNavigation,
+      invokeTrigger: async () => {
+        console.log('Component might need to be retriggered.');
+      }
+    });
   }
 
 
