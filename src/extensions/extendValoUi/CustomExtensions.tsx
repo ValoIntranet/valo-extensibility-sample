@@ -94,6 +94,21 @@ export default class CustomExtensions {
     //         }
     //       }}>Open GenericPanel</PrimaryButton>
 
+    //       <PrimaryButton onClick={async () => {
+    //         const trigger = await this.triggerService.registerTrigger(IntranetTrigger.EventsPanel);
+    //         if (trigger) {
+    //           trigger.invokeTrigger({
+    //             siteUrl: ctx.pageContext.site.absoluteUrl,
+    //             webUrl: ctx.pageContext.web.absoluteUrl,
+    //             listId: "90bca00f-7b09-409b-9131-a35c5b9d5b8c", // The id of the list
+    //             itemId: "1",                                    // List Item Id
+    //             panelTitle: "<<Title of Event>>"
+    //             panelBackgroundImageUrl: "<<Url of the image to show as panel Backgroud>>"
+    //             contextActionType: ContextActionType.view
+    //           });
+    //         }
+    //       }}>Open event panel</PrimaryButton>
+
     //       <CustomNotifications />
     //     </div>
     //   )

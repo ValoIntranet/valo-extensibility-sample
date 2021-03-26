@@ -1,0 +1,52 @@
+<content id="metadata" type="x-handlebars-metadata">
+  {
+    "fields": ["Path", "Title", "BannerUrlOWSURLH", "Location", "EventsRollUpStartDate", "EventsRollUpEndDate", "Description", "ValoEventDate", "SPWebUrl", "ListID", "ListItemID", "IsAllDayEvent", "SiteID", "WebID", "UniqueId","owstaxIdValoOfficeLocation"],
+    "query": "(ContentTypeId:0x0102*) AND (ValofRecurrence:0)",
+    "sorting": "EventsRollUpStartDate:ascending",
+    "totalResults": 3,
+    "skipResults": 0,
+    "resources": [
+      {
+        "key": "title",
+        "values": {
+          "default": "Title:",
+          "nl-nl": "Titel:"
+        }
+      }
+    ]
+  }
+</content>
+
+<content id="template" type="x-handlebars-template">
+  <div class="valo-events compact ms-Grid vm-Grid" template-id="valo-rec-compact">
+    {{setVariable "preferRegionalSettingsOfWebToDisplayDates" parameters.PreferRegionalSettingsOfWebToDisplayDates}}
+    <div class="valo-events__list ms-Grid-row vm-Cards vm-Grid-row">
+      {{#each dsData.items}}
+        {{setVariable "elementId" (generateId)}}
+        
+        
+        <div class="valo-events__item ms-sm4 vm-Card showTransition" title="" id="{{@root.elementId}}">
+          <div>{{Title}}</div>
+        </div>
+        
+        <!-- Use unique-id to assign click event for valo-trigger component -->
+        <valo-trigger unique-id="{{@root.elementId}}" site-url="{{SPWebUrl}}" trigger-type="EventsPanel" panel-title="{{Title}}"
+          action-type="view" style="display: none;" list-id="{{ListID}}" item-id="{{ListItemID}}" panel-background-image-url="{{BannerUrlOWSURLH}}"></valo-trigger>
+      {{/each}}
+    </div>
+  </div>
+</content>
+
+
+<content id="placeholder" type="x-handlebars-template">
+  <div>
+    Loading...
+  </div>
+</content>
+<head><title>Events Panel Trigger template</title><html xmlns:mso="urn:schemas-microsoft-com:office:office" xmlns:msdt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882">
+<!--[if gte mso 9]><xml>
+<mso:CustomDocumentProperties>
+<mso:TemplateTitle msdt:dt="string">Events-Panel-Trigger</mso:TemplateTitle>
+</mso:CustomDocumentProperties>
+</xml><![endif]-->
+</head>
