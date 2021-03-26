@@ -17,20 +17,6 @@
   }
 </content>
 
-<content id="customHelpers" type="x-handlebars-helpers">
-  <script>
-    Handlebars.registerHelper("prepareNewsMetadata", function prepareNewsMetadata(item) {
-    var result = {
-      Title: item["Title"],
-      ValoOfficeLocation: item["owstaxIdValoOfficeLocation"],
-      ValoNewsPublishDate: "2020-12-12T04:42:54.150Z"
-    }
-  
-    return JSON.stringify(result);
-  });
-  </script>
-</content>
-
 <content id="template" type="x-handlebars-template">
   <div class="valo-events compact ms-Grid vm-Grid" template-id="valo-rec-compact">
     {{setVariable "preferRegionalSettingsOfWebToDisplayDates" parameters.PreferRegionalSettingsOfWebToDisplayDates}}
@@ -43,6 +29,7 @@
           <div>{{Title}}</div>
         </div>
         
+        <!-- Use unique-id to assign click event for valo-trigger component -->
         <valo-trigger unique-id="{{@root.elementId}}" site-url="{{SPWebUrl}}" trigger-type="EventsPanel" panel-title="{{Title}}"
           action-type="view" style="display: none;" list-id="{{ListID}}" item-id="{{ListItemID}}" panel-background-image-url="{{BannerUrlOWSURLH}}"></valo-trigger>
       {{/each}}
