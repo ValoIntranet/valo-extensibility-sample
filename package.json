@@ -17,7 +17,7 @@
     "@microsoft/sp-dialog": "1.11.0",
     "@types/es6-promise": "0.0.33",
     "@types/webpack-env": "1.13.1",
-    "@valo/extensibility": "1.8.0-87805cc51abb879ef773a371ac39be53c7dbb366",
+    "@valo/extensibility": "1.9.0-02350049f80a30cd0ada54a8d616abf77b489280",
     "date-fns": "1.30.1",
     "faker": "4.1.0"
   },
