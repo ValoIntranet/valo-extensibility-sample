@@ -1,0 +1,35 @@
+<!-- Template is intended to work with Intranet2.1 -->
+<content id="metadata" type="x-handlebars-metadata">
+{
+	"query": "https://graph.microsoft.com/v1.0/me/events?$orderby=start/dateTime&$filter=start/dateTime ge {today-10}"
+	"parameters": []
+}
+</content>
+
+<content id="customHelpers" type="x-handlebars-helpers">
+	<script>
+		Handlebars.registerHelper("convertToJson", function displayItem(item) {
+			console.log(JSON.stringify(item));
+			return JSON.stringify(item);
+		});
+	</script>
+</content>
+
+<content id="template" type="x-handlebars-template">
+ 
+	<style></style>
+
+	<div class="">
+		<h2>My events</h2>
+		{{#if dsData.items}}
+			<mgt-agenda group-by-day events="{{convertToJson dsData.items}}"></mgt-agenda>
+		{{/if}}
+	</div>
+</content><html xmlns:mso="urn:schemas-microsoft-com:office:office" xmlns:msdt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882"><head>
+<!--[if gte mso 9]><xml>
+<mso:CustomDocumentProperties>
+<mso:TemplateTitle msdt:dt="string">GraphDS-MGT-MyEvents</mso:TemplateTitle>
+<mso:DataSource msdt:dt="string">GraphAPI</mso:DataSource>
+</mso:CustomDocumentProperties>
+</xml><![endif]-->
+<title>GraphDS-MGT-MyEvents</title></head>
