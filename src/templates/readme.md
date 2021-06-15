@@ -10,8 +10,12 @@ Events panel provides an example how to open EventsView panel with background im
 
 ## GrapgDsMGT-PersonDetails
 
-Template shows hwo to use MGT with Microsoft Graph Data Source to present personal details. The template is intended to work with Intranet 2.1
+Template shows how to use MGT with Microsoft Graph Data Source to present personal details. The template is intended to work with Intranet 2.1
 
 ## GraphDsMGT-MyEvents
 
-Template shows hwo to use MGT with Microsoft Graph Data Source to load user events based on the current date. The template is intended to work with Intranet 2.1
+Template shows how to use MGT with Microsoft Graph Data Source to load user events based on the current date. The template is intended to work with Intranet 2.1
+
+## GraphDsMGT-Users
+
+Template shows how to use MGT with Microsoft Graph Data Source to load users from the Azure Active directory. The template is intended to work with Intranet 2.1

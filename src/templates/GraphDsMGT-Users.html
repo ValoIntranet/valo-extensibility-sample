@@ -1,0 +1,38 @@
+<!-- Template is intended to work with Intranet2.1 -->
+<content id="metadata" type="x-handlebars-metadata">
+    {
+    "query": "",
+    "parameters": []
+    }
+</content>
+
+<content id="template" type="x-handlebars-template">
+    <style></style>
+    <div class="">
+        <h2>Users</h2>
+        <mgt-get resource="/users">
+            <template data-type="value">
+                <div class="user" data-for="user in value">
+                    <h3>[[ group.displayName ]]</h3>
+                </div>
+            </template>
+            <template data-type="loading">
+                loading
+            </template>
+            <template data-type="error">
+                [[ this ]]
+            </template>
+        </mgt-get>
+    </div>
+</content>
+<html xmlns:mso="urn:schemas-microsoft-com:office:office" xmlns:msdt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882">
+
+<head>
+    <!--[if gte mso 9]><xml>
+    <mso:CustomDocumentProperties>
+    <mso:TemplateTitle msdt:dt="string">GraphDS-MGT-Users</mso:TemplateTitle>
+    <mso:DataSource msdt:dt="string">GraphAPI</mso:DataSource>
+    </mso:CustomDocumentProperties>
+    </xml><![endif]-->
+    <title>GraphDS-MGT-Users</title>
+</head>
