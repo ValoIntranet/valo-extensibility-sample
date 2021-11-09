@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IntranetLocation, IntranetTrigger, IntranetProvider, ExtensionService, TriggerService, ProviderService, ExtensionProvider, IUserProfileProvider, DataSourceService, ExtensionPointToolboxAction, ExtensionPointToolboxPanelCreationAction, MegaMenuItem, StorageType, IClientStorageProvider, IMyToolsProvider, INavigationHierarchyProvider, MegaMenuNavigationItem, InformationMessage, ContextActionType } from '@valo/extensibility';
+import { IntranetLocation, IntranetTrigger, IntranetProvider, ExtensionService, TriggerService, ProviderService, ExtensionProvider, IUserProfileProvider, DataSourceService, ExtensionPointToolboxAction, ExtensionPointToolboxPanelCreationAction, MegaMenuItem, StorageType, IClientStorageProvider, IMyToolsProvider, INavigationHierarchyProvider, MegaMenuNavigationItem, InformationMessage, ContextActionType, ConnectWidgetService, ConnectWidgetSize } from '@valo/extensibility';
 import { IMultilingualProvider } from '@valo/extensibility/lib/providerTypes/IMultilingualProvider';
 import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import Clock from './clock';
@@ -14,6 +14,8 @@ import { CustomGroupHeader } from './customGroupHeader';
 import { Footer } from './footer';
 import { CustomNotifications } from './customNotifications/CustomNotifications';
 import ToolboxComponent from './toolboxComponent/ToolboxComponent';
+import { CustomWidget } from './customWidget/CustomWidget';
+import { CustomWidgetConfigComponent } from './customWidget/CustomWidgetConfig';
 
 export const CustomBreadcrumb: React.SFC<any> = (props: any) => {
   console.log('CustomBreadcrumb', props);
@@ -31,12 +33,14 @@ export default class CustomExtensions {
   private triggerService: TriggerService = null;
   private providerService: ProviderService = null;
   private dataSourceService: DataSourceService = null;
+  private connectWidgetService: ConnectWidgetService = null;
 
   constructor() {
     this.extensionService = ExtensionService.getInstance();
     this.triggerService = TriggerService.getInstance();
     this.providerService = ProviderService.getInstance();
     this.dataSourceService = DataSourceService.getInstance();
+    this.connectWidgetService = ConnectWidgetService.getInstance();
   }
 
   public register(ctx: ApplicationCustomizerContext) {
@@ -173,6 +177,7 @@ export default class CustomExtensions {
     //     } as ExtensionPointToolboxPanelCreationAction
     //   ]
     // });
+    this.registerWidget();
 
     this.extensionService.registerExtension({
       id: "ToolboxPanelCreationAction3",
@@ -261,6 +266,25 @@ export default class CustomExtensions {
       trigger: IntranetTrigger.PageNavigation,
       invokeTrigger: async () => {
         console.log('Component might need to be retriggered.');
+      }
+    });
+  }
+
+  private registerWidget(): void {
+    this.connectWidgetService.registerWidget({
+      id: "custom-widget-sample",
+      size: ConnectWidgetSize.Single,
+      title: "Widget sample",
+      description: "This is a sample widget registered via extension",
+      widgetComponentsFactory: (config) => [
+        {
+          id: "custom-widget-sample-1",
+          title: "Tab 1",
+          content: <CustomWidget widgetConfig={config} />
+        }
+      ],
+      widgetConfigComponentFactory: (currentConfig: any, onConfigUpdated: (config: any) => void) => {
+        return <CustomWidgetConfigComponent onConfigurationUpdated={onConfigUpdated} widgetConfiguration={currentConfig} />;
       }
     });
   }
