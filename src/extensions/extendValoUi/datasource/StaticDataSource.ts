@@ -1,6 +1,5 @@
 import { BaseDataSourceProvider, PagingType, IDataSourceData, IPagingSettings, PagingOption } from "@valo/extensibility";
-import { IPropertyPaneGroup, PropertyPaneSlider } from '@microsoft/sp-webpart-base';
-
+import { IPropertyPaneGroup, PropertyPaneSlider } from "@microsoft/sp-property-pane";
 export class StaticDataSource extends BaseDataSourceProvider<IDataSourceData> {
   private nrOfItems: number = 30;
 
