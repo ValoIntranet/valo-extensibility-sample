@@ -114,17 +114,17 @@ export default class CustomExtensions {
     //   )
     // });
 
-    // this.extensionService.registerExtension({
-    //   id: "Footer",
-    //   location: IntranetLocation.Footer,
-    //   element: (
-    //     <React.Fragment>
-    //       <Footer />
+    this.extensionService.registerExtension({
+      id: "Footer",
+      location: IntranetLocation.Footer,
+      element: (
+        <React.Fragment>
+          <Footer />
 
-    //       <ToolboxComponent extensionService={this.extensionService} />
-    //     </React.Fragment>
-    //   )
-    // });
+          <ToolboxComponent extensionService={this.extensionService} />
+        </React.Fragment>
+      )
+    });
 
     /**
      * New extension points available in version 1.6

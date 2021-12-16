@@ -1,5 +1,5 @@
 import { Guid } from "@microsoft/sp-core-library";
-import { IPropertyPaneDropdownOption, PropertyPaneDropdown } from "@microsoft/sp-webpart-base";
+import { IPropertyPaneDropdownOption, PropertyPaneDropdown } from "@microsoft/sp-property-pane";
 import { BaseDataSourceProvider, PagingType, IPagingSettings, PagingOption, DynamicDataEventEmitter, IDynamicDataEventSource, IDataSourceData } from "@valo/extensibility";
 
 export interface IDynamicPagingDataSourceProps extends IDataSourceData {

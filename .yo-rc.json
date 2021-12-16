@@ -2,7 +2,7 @@
   "@microsoft/generator-sharepoint": {
     "isCreatingSolution": true,
     "environment": "spo",
-    "version": "1.8.0",
+    "version": "1.12.1",
     "libraryName": "valo-extend-ui-poc",
     "libraryId": "d99a1d10-9100-4df5-af53-514fa1e13390",
     "packageManager": "npm",

@@ -1,6 +1,6 @@
 import { ApplicationCustomizerContext } from "@microsoft/sp-application-base";
 import { ProviderService, IClientStorageProvider, MegaMenuItem, ExtensionService, IntranetProvider, StorageType, IntranetLocation } from "@valo/extensibility";
-import { SPHttpClient } from "@microsoft/sp-http";
+import { HttpClient } from "@microsoft/sp-http";
 
 
 export class PersonalNavigation {
@@ -50,7 +50,7 @@ export class PersonalNavigation {
         pathName = `/${pathName}`;
       }
       const navUrlApi = `${intranetUrl}/_api/web/GetFileByServerRelativeUrl('${pathName}/config/navigation1.json')/$value`;
-      const data = await ctx.spHttpClient.get(navUrlApi, SPHttpClient.configurations.v1);
+      const data = await ctx.spHttpClient.get(navUrlApi, HttpClient.configurations.v1 as any);
       // Check if footer html was retrieved
       if (data.ok) {
         const txtData = await data.text();
