@@ -1,0 +1,198 @@
+<content id="metadata" type="x-handlebars-metadata">
+    {
+    "fields": ["Path", "Created", "LastModifiedTime", "Title", "AuthorOWSUSER", "EditorOWSUSER", "Author", "PictureThumbnailURL",
+    "Description", "ListID", "ListItemID", "UniqueId", "SPWebUrl", "ValoLocationOWSTEXT", "owstaxIdValoTags",
+    "BannerImageURLOWSURLH", "ValoTags", "ValoBlogHighlightOWSBOOL", "owstaxIdValoOfficeLocation", "ValoOfficeLocation",
+    "ValoTagsTaxonomy", "LayoutWebpartsContentOWSHTML", "ValoBlogPublishDate"],
+    "query": "ContentTypeId:0x0101009D1CB255DA76424F860D91F20E6C4118004F346AE83BEBE944ABDC990D1F9BD7B1*",
+    "refinementFilters": "ValoBlogPublishDate:range(min,{Now},to=\"le\")",
+    "sorting": "ValoBlogPublishDate:descending",
+    "totalResults": 12,
+    "parameters": [
+    {
+    "name": "ShowMoreTitle",
+    "value": "Read more",
+    "description": "Title for show more link"
+    },
+    {
+    "name": "ShowMoreUrl",
+    "value": "",
+    "description": "Url for show more link"
+    },
+    {
+    "name": "ShowMoreTarget",
+    "value": "_blank",
+    "description": "Target for show more link"
+    },
+    {
+    "name": "UseImageLazyLoading",
+    "value": "true",
+    "options": ["true","false"],
+    "description": "universalBannerUseImageLazyLoadingDesc"
+    },
+    {
+    "name": "UseThumbnailImages",
+    "value": "false",
+    "options": ["true","false"],
+    "description": "universalBannerUseThumbnailImagesDesc"
+    }    
+    ]
+    }
+</content>
+
+
+<content id="template" type="x-handlebars-template">
+    <style>
+        a.vm-Card.valo-blogs__item:hover,
+        a.vm-Card.valo-blogs__item:visited {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        a.vm-Card.valo-blogs__item {
+            display: block;
+            text-decoration: none;
+        }
+    </style>
+
+    <!-- Initialize batched Likes/Comments requests -->
+    {{prepareBatchSocialInfoPromises dsData.items}}
+    
+    <!-- Initialize batched PageImageInfo requests -->
+    {{prepareBatchPageImageInfoPromises dsData.items}}
+
+    <div class="valo-blogs ms-Grid vm-Grid">
+        {{setVariable "id" (randomId "blogs")}}
+        {{setVariable "canUseIntersectionObserver" (useIntersectionObserver parameters.UseImageLazyLoading) }}
+        <div class="valo-blogs__list ms-Grid-row vm-Grid-row vm-Cards" id="{{@root.id}}">
+            {{#each dsData.items}}
+            <div class="valo-blogs__item vm-Card showTransition">
+                <div class="valo-blogs__item__wrapper">
+                    <a class="valo-blogs__item__banner" href="{{Path}}" title="{{Title}}">
+                        {{#if PictureThumbnailURL}}
+                        <valo-image-focal-point css-names="valo-blogs__item__banner__parallax parallax parallaxSlow"
+                            img-url="{{imageResolution PictureThumbnailURL 4 null null ../parameters.UseThumbnailImages}}"
+                            item-id="{{ListItemID}}" list-id="{{ListID}}" site-url="{{SPWebUrl}}"
+                            layout-content="{{LayoutWebpartsContentOWSHTML}}"
+                            observer-support="{{@root.canUseIntersectionObserver}}"></valo-image-focal-point>
+                        {{else}}
+                        <valo-image-focal-point css-names="valo-blogs__item__banner__parallax parallax parallaxSlow"
+                            img-url="{{imageResolution BannerImageUrlOWSURLH 4 null null ../parameters.UseThumbnailImages}}"
+                            item-id="{{ListItemID}}" list-id="{{ListID}}" site-url="{{SPWebUrl}}"
+                            layout-content="{{LayoutWebpartsContentOWSHTML}}"
+                            observer-support="{{@root.canUseIntersectionObserver}}"></valo-image-focal-point>
+                        {{/if}}
+                    </a>
+                    <div class="valo-blogs__item__info">
+                        <a role="heading" aria-level="3" class="valo-blogs__item__title" href="{{Path}}"
+                            title="{{Title}}">
+                            {{ellipsis Title 120}}
+                        </a>
+                        <div class="valo-blogs__item__meta">
+                            {{#if ValoBlogPublishDate}}
+                                {{dateAgoFormat ValoBlogPublishDate}} -
+                            {{else}}
+                                {{dateAgoFormat Created}} -
+                            {{/if}}
+                            {{#if AuthorOWSUSER}}
+                            <span class="valo-blogs__item__meta__editor">
+                                {{splitSPUser AuthorOWSUSER 'displayName'}}
+                                {{wrapWithHtmlElementAsync 'span' (wrapAsyncValue (getProfilePropertyValue (splitSPUser AuthorOWSUSER 'email') 'Department') "/ ") }}
+                            </span>
+                            {{else}}
+                            <span class="valo-blogs__item__meta__editor">
+                                {{splitSPUser EditorOWSUSER 'displayName'}}
+                                {{wrapWithHtmlElementAsync 'span' (wrapAsyncValue (getProfilePropertyValue (splitSPUser EditorOWSUSER 'email') 'Department') "/ ") }}
+                            </span>
+                            {{/if}}
+                        </div>
+                        <div class="valo-blogs__item__abstract">{{ellipsis Description 100}}</div>
+                        <div class="valo-blogs__item__social">
+                            {{#if (isUniversalWebPart ../items ../dsData)}}
+                            <span class="valo-blogs__item__social__comments">
+                                <valo-page-social-info item-id="{{ListItemID}}" list-id="{{ListID}}"
+                                    site-url="{{SPWebUrl}}"></valo-page-social-info>
+                            </span>
+                            {{else if (isSearchVisualizerWebPart ../items ../dsData)}}
+                            <span class="valo-blogs__item__social__comments">
+                                <i data-icon-name="Comment" role="presentation"
+                                    class="valo-blogs__item__social-icon ms-Icon ms-Icon--Comment"
+                                    aria-label="Comment"></i>
+                                <span
+                                    class="valo-blogs__item__social__counter">{{totalComments SPWebUrl ListID ListItemID UniqueId}}</span>
+                            </span>
+                            <span class="valo-blogs__item__social__likes">
+                                <i data-icon-name="Like" role="presentation"
+                                    class="valo-blogs__item__social-icon ms-Icon ms-Icon--Like" aria-label="Like"></i>
+                                <span
+                                    class="valo-blogs__item__social__counter">{{totalLikes SPWebUrl ListID ListItemID UniqueId}}</span>
+                            </span>
+                            {{/if}}
+                        </div>
+                        <div class="valo-blogs__item__tags">
+                            {{#or owstaxIdValoOfficeLocation ValoOfficeLocation}}
+                            <valo-terms
+                                term-value="{{#if owstaxIdValoOfficeLocation}}{{owstaxIdValoOfficeLocation}}{{else if ValoOfficeLocation }}{{ValoOfficeLocation}}{{/if}}"
+                                web-url="{{SPWebUrl}}"
+                                css-span="valo-blogs__item__tags__location valo-blogs__item__tags__tag"
+                                css-icon="valo-blogs__item__tag-icon ms-Icon ms-Icon--POI">
+                            </valo-terms>
+                            {{else}}
+                            {{#if ValoLocationOWSTEXT}}
+                            <span class="valo-blogs__item__tags__location valo-blogs__item__tags__tag">
+                                <i class="valo-blogs__item__tag-icon ms-Icon ms-Icon--POI" aria-label="Tag"></i>
+                                {{ValoLocationOWSTEXT}}
+                            </span>
+                            {{/if}}
+                            {{/or}}
+
+                            {{#or ValoTagsTaxonomy owstaxIdValoTags ValoTags}}
+                            <valo-terms
+                                term-value="{{#if ValoTagsTaxonomy}}{{ValoTagsTaxonomy}}{{else if owstaxIdValoTags }}{{owstaxIdValoTags}}{{else if ValoTags}}{{ValoTags}}{{/if}}"
+                                web-url="{{SPWebUrl}}"
+                                css-span="valo-blogs__item__tags__tag"
+                                css-icon="valo-blogs__item__tag-icon ms-Icon ms-Icon--Tag"
+                                css-more="valo-blogs__item__tags__more" show-more-tag="true">
+                            </valo-terms>
+                            {{/or}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{/each}}
+        </div>
+    </div>
+    {{#if parameters.ShowMoreUrl}}
+    <div class="valo-showMore">
+      {{#ifCond parameters.ShowMoreTarget "==" "_blank"}}
+        <a href="{{parameters.ShowMoreUrl}}" target="{{parameters.ShowMoreTarget}}" data-interception="off">{{parameters.ShowMoreTitle}}</a>
+      {{else}}
+        <a href="{{parameters.ShowMoreUrl}}" target="{{parameters.ShowMoreTarget}}">{{parameters.ShowMoreTitle}}</a>
+      {{/ifCond}}
+    </div>
+    {{/if}}
+</content>
+
+
+<content id="placeholder" type="x-handlebars-template">
+    <div class="valo-blogs ms-Grid vm-Grid">
+        <div class="valo-blogs__list ms-Grid-row vm-Grid-row vm-Cards placeholder">
+            {{#repeat nrOfResults}}
+            <div class="valo-blogs__item ms-sm4 vm-Card">
+                <div class="valo-blogs__item__wrapper">
+                    <div class="valo-blogs__item__banner">
+                        <div style="background-image:url('/_layouts/15/images/sitepagethumbnail.png');"></div>
+                    </div>
+                    <div class="valo-blogs__item__info">
+                        <p class="valo-blogs__item__title"></p>
+                        <div class="valo-blogs__item__meta"></div>
+                        <div class="valo-blogs__item__abstract"></div>
+                        <div class="valo-blogs__item__social"></div>
+                        <div class="valo-blogs__item__tags"></div>
+                    </div>
+                </div>
+            </div>
+            {{/repeat}}
+        </div>
+    </div>
+</content>

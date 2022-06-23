@@ -1,0 +1,56 @@
+<content id="metadata" type="x-handlebars-metadata">
+  {
+    "parameters": []
+  }
+</content>
+
+<content id="template" type="x-handlebars-template">
+
+<style></style>
+    <div class="valo-org-chart__item-wrapper">
+      <div class="valo-org-chart__item-header">
+        <div class="valo-org-chart__item-header__picture">
+            {{#if mail}}
+              <div class="valo-org-chart__item-header__picture__placeholder valo-classic-spfxcontrols-bordercolor" style="background-image: url('{{userPicture mail}}')"></div>
+            {{else}}
+              <div class="valo-org-chart__item-header__picture__placeholder valo-classic-spfxcontrols-bordercolor" style="background-image: url('{{userPicture userPrincipalName}}')"></div>
+            {{/if}}
+            {{#if mail}}
+            <div class="valo-org-chart__item-header__icon">
+              <a title="Message: {{mail}}" href="IM:sip:{{mail}}" class="valo-org-chart__item-header__icon-link">
+                <i title="Message" class="ms-Icon ms-Icon--Message valo-org-chart__item-header__icon-container" aria-hidden="true"></i>
+              </a>
+            </div>
+            {{/if}}
+          </div>
+        <a href="{{OriginalPath}}" class="valo-org-chart__item-header__name" role="heading" aria-level="3" title="{{displayName}}">{{displayName}}</a>
+        <div class="valo-org-chart__item-header__position">{{jobTitle}}</div>
+      </div>
+      <div class="valo-org-chart__item-body">
+        {{#if mobilePhone}}
+        <div class="valo-org-chart__item-body__part">
+            <i title="" class="ms-Icon ms-Icon--CellPhone valo-org-chart__item-body__part__icon" aria-hidden="true"></i>
+            <a title="{{mobilePhone}}" href="tel:{{mobilePhone}}" class="valo-org-chart__item-body__part__text">{{mobilePhone}}</a>
+        </div>
+        {{/if}}
+        {{#if workPhone}}
+        <div class="valo-org-chart__item-body__part">
+            <i title="" class="ms-Icon ms-Icon--Phone valo-org-chart__item-body__part__icon" aria-hidden="true"></i>
+            <a title="{{workPhone}}" href="tel:{{workPhone}}" class="valo-org-chart__item-body__part__text">{{workPhone}}</a>
+        </div>
+        {{/if}}
+        {{#if mail}}
+        <div class="valo-org-chart__item-body__part">
+            <i title="" class="ms-Icon ms-Icon--Mail valo-org-chart__item-body__part__icon" aria-hidden="true"></i>
+            <a title="{{mail}}" href="mailto:{{mail}}" class="valo-org-chart__item-body__part__text">{{mail}}</a>
+        </div>
+        {{/if}}
+        {{#if officeLocation}}
+        <div class="valo-org-chart__item-body__part">
+            <i title="" class="ms-Icon ms-Icon--POI valo-org-chart__item-body__part__icon" aria-hidden="true"></i>
+            <span title="{{officeLocation}}" class="valo-org-chart__item-body__part__text">{{officeLocation}}</span>
+        </div>
+        {{/if}}
+      </div>
+    </div>
+</content>

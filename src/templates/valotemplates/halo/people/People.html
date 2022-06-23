@@ -1,0 +1,40 @@
+<content id="metadata" type="x-handlebars-metadata">
+  {
+    "fields": ["FirstName","LastName", "JobTitle", "Department", "WorkPhone", "MobilePhone", "WorkEmail", "BaseOfficeLocation", "PictureURL", "AccountName", "OriginalPath"],
+    "query": "-PreferredName:\"_spo*\" -PreferredName:\"app@*\" -PreferredName:\"Foreign Principal*\" -PreferredName:\"spsearch\" -\"sps-usertype\":1",
+    "sorting": "FirstName:ascending",
+    "sourceId": "b09a7990-05ea-4af9-81ef-edfab16c4e31",
+    "totalResults": 12,
+    "resources": [
+      {
+        "key": "empty",
+        "values": {
+          "default": "n/a"
+        }
+      }
+    ],
+    "pagingType": 3
+  }
+</content>
+
+<content id="template" type="x-handlebars-template">
+  <style></style>
+
+  <div class="ms-Grid valo-people-finder">
+    <div class="ms-Grid-row vm-Cards valo-people-finder__list">
+      {{#if dsData.items}}
+        <div class="halo-cardTilesContainer">
+          {{#each dsData.items}}
+            {{setVariable "elementId" (generateId)}}
+            <div id="id-{{@root.elementId}}"><valo-compact-people-profile-card item="{{ json this }}" /></div>
+          {{/each}}
+        </div>
+      {{/if}}
+      <!-- dsData.items - results set is ready but no data is available -->
+      {{#if (isDataSetIsEmpty dsData)}}
+        {{resourceLabel "NoResultsFound"}}
+      {{/if}}
+    </div>
+  </div>
+ 
+</content>

@@ -1,0 +1,379 @@
+<content id="metadata" type="x-handlebars-metadata">
+  {
+    "fields": ["Title", "SiteName", "SiteTitle", "HitHighlightedSummary", "ModifiedBy", "ModifiedById", "ModifiedOWSDATE", "ServerRedirectedPreviewURL", "BannerImageUrlOWSURLH", "PictureThumbnailURL", "FileExtension", "Path", "LayoutWebpartsContentOWSHTML", "ValoTitle", "Description"],
+    "query": "IsDocument:1",
+    "totalResults": 12,
+    "sorting": "ViewsLifeTime:descending",
+    "pagingType": 3,
+    "parameters": [
+      {
+        "name": "ShowMoreTitle",
+        "value": "Read more",
+        "description": "Title for show more link"
+      },
+      {
+        "name": "ShowMoreUrl",
+        "value": "",
+        "description": "Url for show more link"
+      },
+      {
+        "name": "ShowMoreTarget",
+        "value": "_blank",
+        "description": "Target for show more link"
+      },
+      {
+        "name": "UseThumbnailImages",
+        "value": "false",
+        "options": ["true","false"],
+        "description": "universalBannerUseThumbnailImagesDesc"
+      }
+    ]
+  }
+</content>
+
+<content id="template" type="x-handlebars-template">
+
+  <style>
+
+    .valo-documents-detail__item {
+        max-width: 307px !important;
+    }
+    
+    .valo-documents-detail__list .valo-documents-detail__item > .valo-documents-detail__item-wrapper {
+        border: 1px solid #e1dfdd !important;
+        box-sizing:border-box;
+        border-radius:4px;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .valo-documents-detail__item__header {
+        position: relative;
+    }
+    
+    .valo-documents-detail__item__titlecontainer{
+        height:54px;
+        padding: 0 42px 0 12px;
+    }
+    .valo-documents-detail__item__title {
+        font-size: 16px;
+        font-weight: 600;
+        text-decoration: none;
+        color: #222;
+        vertical-align: super;
+    }
+    .valo-documents-detail__item__file-icon {
+        font-size: 24px;
+        color: #222;
+        line-height: 54px;
+        margin-right:4px;
+    }
+    .valo-documents-detail__item__share {
+        position: absolute;
+        right: 8px;
+        top: 0;
+        line-height: 54px;
+        cursor: pointer;
+        font-size: 18px;
+    }
+    .valo-documents-detail__item__img-container {
+        height: 130px;
+        overflow: hidden;
+        position: relative;
+        border-width: 1px 0 1px 0;
+        border-color: #e1dfdd;
+        border-style: solid;
+    }
+    .valo-documents-detail__item__img {
+        width: 100%;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+    
+    .valo-documents-detail__item__status-container {
+        position: absolute;
+        bottom: -16px;
+        right: 8px;
+        padding: 8px;
+        border-radius: 32px;
+        background: var(--primaryButtonBackground, #666);;
+        font-weight: 700;
+        text-transform: uppercase;
+        font-size: 12px;
+        color: #fff;
+    }
+    .valo-documents-detail__item__metadata {
+        padding: 16px 8px 8px 8px;
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .valo-documents-detail__item__metadata-field {
+        flex: 1 1 50%;
+        box-sizing: border-box;
+        padding: 8px 8px;
+        min-height:51px;
+    }
+    
+    .valo-documents-detail__item__metadata-field-label{
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: var(--primaryButtonBackground, #666);
+        line-height:auto;
+    }
+    .valo-documents-detail__item__metadata-field-value{
+        color: #222;
+        line-height:auto;
+        font-weight:400;
+    }
+    
+    .valo-documents-detail__item__metadata-field-more {
+        position: relative;
+        max-height: 32px;
+        overflow: hidden;
+        display: block;
+        transition: all 0.4s ease;
+    }
+    
+    .valo-documents-detail__item__metadata-field-more:focus-within {
+        max-height: 100vh;
+        overflow: visible;
+    }
+    
+    .valo-documents-detail__item__metadata-field-more-toggle {
+        flex-basis: 100%;
+        line-height: 32px;
+        text-align: center;
+        font-size: 12px;
+        color: #999;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.4s ease;
+        display:block;
+        text-decoration: none;
+    }
+    
+    .valo-documents-detail__item__metadata-field-more-toggle:hover {
+        background: rgba(100,100,100,0.1);
+    }
+    
+    .valo-documents-detail__item__metadata-field-more-toggle:focus{
+        position:absolute;
+        opacity:0;
+    }
+    
+    .valo-documents-detail__item__metadata-field-more .valo-documents-detail__item__metadata{
+        padding-top: 0;
+        opacity: 0;
+        pointer-events: none;
+        position: absolute;
+        left: -1px;
+        margin-top: -12px;
+        right: -1px;
+        background: #fff;
+        z-index: 1;
+        border-width: 0 1px 1px 1px;
+        border-style: solid;
+        border-color: #ddd;
+        transition: all 0.5s ease;
+    }
+    
+    .valo-documents-detail__item__metadata-field-more:focus-within .valo-documents-detail__item__metadata{
+        opacity:1;
+    }
+    
+    </style>
+
+  <div class="valo-documents-detail ms-Grid">
+    <div class="valo-documents-detail__list ms-Grid-row vm-Cards">
+      {{#if dsData.items}}
+        {{#each dsData.items}}
+          <div target="_blank" class="valo-documents-detail__item vm-Card ms-sm12 ms-md6 ms-lg4 ms-xlg3 showTransition">
+            <div class="valo-documents-detail__item-wrapper">
+              <div class="valo-documents-detail__item__header">
+                <div class="valo-documents-detail__item__titlecontainer">
+                <i class="valo-documents-detail__item__file-icon ms-Icon ms-Icon--{{fileIconName FileExtension}}" aria-hidden="true"></i>
+                  {{#if_containsQueryString Path}}
+                  <a href="{{Path}}" class="valo-documents-detail__item__title">
+                    {{#if ValoTitle}}
+                      {{ValoTitle}}
+                    {{else}}
+                      {{Title}}
+                    {{/if}}
+                  </a>
+                {{else}}
+                  <a href="{{Path}}?web=1" class="valo-documents-detail__item__title">
+                    {{#if ValoTitle}}
+                      {{ValoTitle}}
+                    {{else}}
+                      {{Title}}
+                    {{/if}}
+                  </a>
+                {{/if_containsQueryString}}
+                <div class="valo-documents-detail__item__share">
+                  <i class="valo-documents-detail__item__share__icon ms-Icon ms-Icon--Share" aria-hidden="true"></i>
+                </div>
+                </div>
+                {{#if ServerRedirectedPreviewURL}}
+                  <div class="valo-documents-detail__item__img-container"><img src="{{ServerRedirectedPreviewURL}}" loading="lazy" alt="" class="valo-documents-detail__item__img"/></div>
+                {{else}}
+                  {{#if PictureThumbnailURL}}
+                    <div class="valo-documents-detail__item__img-container"><img src="{{imageResolution PictureThumbnailURL 1 null null ../parameters.UseThumbnailImages}}" loading="lazy" alt="" class="valo-documents-detail__item__img"/></div>
+                  {{else}}
+                    <div class="valo-documents-detail__item__img-container"><img src="{{imageResolution BannerImageUrlOWSURLH 1 null null ../parameters.UseThumbnailImages}}" loading="lazy" alt="" class="valo-documents-detail__item__img"/></div>
+                  {{/if}}
+                {{/if}}
+                <div class="valo-documents-detail__item__status-container">New</div>
+              </div>
+              <div class="valo-documents-detail__item__content">
+                <div class="valo-documents-detail__item__metadata">
+                  <div class="valo-documents-detail__item__metadata-field">
+                    <div class="valo-documents-detail__item__metadata-field-label">
+                      Document type
+                    </div>
+                    <div class="valo-documents-detail__item__metadata-field-value">
+                      Word document
+                    </div>
+                  </div>
+                  <div class="valo-documents-detail__item__metadata-field">
+                    <div class="valo-documents-detail__item__metadata-field-label">
+                      Document type
+                    </div>
+                    <div class="valo-documents-detail__item__metadata-field-value">
+                      Word document
+                    </div>
+                  </div>
+                  <div class="valo-documents-detail__item__metadata-field">
+                    <div class="valo-documents-detail__item__metadata-field-label">
+                      Document type
+                    </div>
+                    <div class="valo-documents-detail__item__metadata-field-value">
+                      Word document
+                    </div>
+                  </div>
+                  <div class="valo-documents-detail__item__metadata-field">
+                    <div class="valo-documents-detail__item__metadata-field-label">
+                      Document type
+                    </div>
+                    <div class="valo-documents-detail__item__metadata-field-value">
+                      Word document
+                    </div>
+                  </div>
+                  <div class="valo-documents-detail__item__metadata-field">
+                    <div class="valo-documents-detail__item__metadata-field-label">
+                      Document type
+                    </div>
+                    <div class="valo-documents-detail__item__metadata-field-value">
+                      Word document
+                    </div>
+                  </div>
+                  <div class="valo-documents-detail__item__metadata-field">
+                    <div class="valo-documents-detail__item__metadata-field-label">
+                      Document type
+                    </div>
+                    <div class="valo-documents-detail__item__metadata-field-value">
+                      Word document
+                    </div>
+                  </div>
+                </div>
+
+                <div class="valo-documents-detail__item__metadata-field-more">
+                  <a href="#" class="valo-documents-detail__item__metadata-field-more-toggle">
+                    See more details
+                  </a>
+                  <div class="valo-documents-detail__item__metadata">
+                    <div class="valo-documents-detail__item__metadata-field">
+                    <div class="valo-documents-detail__item__metadata-field-label">
+                      Document type
+                    </div>
+                    <div class="valo-documents-detail__item__metadata-field-value">
+                      Word document
+                    </div>
+                  </div>
+                  <div class="valo-documents-detail__item__metadata-field">
+                    <div class="valo-documents-detail__item__metadata-field-label">
+                      Document type
+                    </div>
+                    <div class="valo-documents-detail__item__metadata-field-value">
+                      Word document
+                    </div>
+                  </div>
+                  <div class="valo-documents-detail__item__metadata-field">
+                    <div class="valo-documents-detail__item__metadata-field-label">
+                      Document type
+                    </div>
+                    <div class="valo-documents-detail__item__metadata-field-value">
+                      Word document
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+                  <!--{{#if Description}}
+                    {{ellipsis Description 100}}
+                  {{else if HitHighlightedSummary}}
+                    {{summary HitHighlightedSummary}}
+                  {{/if}}
+                </div>
+                <div class="valo-documents-detail__item__info">
+                  <div class="valo-documents-detail__item__info__location">
+                    {{resourceLabel "LabelOnSite"}}
+                    <span class="valo-documents-detail__item__sub-link" onclick="window.open('{{SiteName}}', '_blank'); return false;" role="link">{{SiteTitle}}</span>
+                  </div>
+                  <div class="valo-documents-detail__item__info__updated">
+                    {{#if ModifiedBy}}
+                      {{resourceLabel "LabelUpdatedBy"}}
+                      <span class="valo-documents-detail__item__sub-link" onclick="window.open('{{userProfileUrl ModifiedById}}', '_blank'); return false;" role="link">{{ModifiedBy}}</span>
+                    {{/if}}
+                    {{#if ModifiedOWSDATE}}
+                      <span> {{dateAgoFormat ModifiedOWSDATE}}</span>
+                    {{/if}}
+                  </div>
+                </div>-->
+              </div>
+            </div>
+          </div>
+        {{/each}}
+      {{else}}
+        {{resourceLabel "NoResultsFound"}}
+      {{/if}}
+    </div>
+  </div>
+  {{#if parameters.ShowMoreUrl}}
+  <div class="valo-showMore">
+    {{#ifCond parameters.ShowMoreTarget "==" "_blank"}}
+      <a href="{{parameters.ShowMoreUrl}}" target="{{parameters.ShowMoreTarget}}" data-interception="off">{{parameters.ShowMoreTitle}}</a>
+    {{else}}
+      <a href="{{parameters.ShowMoreUrl}}" target="{{parameters.ShowMoreTarget}}">{{parameters.ShowMoreTitle}}</a>
+    {{/ifCond}}
+  </div>
+  {{/if}}
+</content>
+
+
+<content id="placeholder" type="x-handlebars-template">
+  <div class="valo-documents ms-Grid">
+    <div class="valo-documents__list ms-Grid-row vm-Cards placeholder">
+      {{#repeat nrOfResults}}
+      <a class="vm-Card ms-sm12 ms-md6 ms-lg4 ms-xlg3">
+        <div class="valo-documents-detail__item-wrapper">
+            <div class="valo-documents-detail__item__header"></div>
+            <div class="valo-documents-detail__item__content">
+                <div class="valo-documents-detail__item__title"></div>
+                <div class="valo-documents-detail__item__info"></div>
+            </div>
+        </div>
+      </a>
+      {{/repeat}}
+    </div>
+  </div>
+</content>
+<html xmlns:mso="urn:schemas-microsoft-com:office:office" xmlns:msdt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882"><head>
+<!--[if gte mso 9]><xml>
+<mso:CustomDocumentProperties>
+<mso:DataSource msdt:dt="string">SearchDataSource</mso:DataSource>
+<mso:TemplateTitle msdt:dt="string">Detailed document card</mso:TemplateTitle>
+</mso:CustomDocumentProperties>
+</xml><![endif]-->
+<title>Detailed document card</title></head>

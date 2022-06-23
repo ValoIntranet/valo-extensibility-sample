@@ -1,0 +1,111 @@
+<content id="metadata" type="x-handlebars-metadata">
+    {
+    "fields": ["Path", "LastModifiedTime", "Title", "AuthorOWSUSER", "EditorOWSUSER", "Author", "PictureThumbnailURL",
+    "Description", "ListID", "ListItemID", "UniqueId", "SPWebUrl", "ValoLocationOWSTEXT", "owstaxIdValoTags",
+    "BannerImageURLOWSURLH", "ValoTags", "ValoBlogHighlightOWSBOOL", "owstaxIdValoOfficeLocation", "ValoOfficeLocation",
+    "ValoTagsTaxonomy", "LayoutWebpartsContentOWSHTML","ValoBlogPublishDate"],
+    "query": "ContentTypeId:0x0101009D1CB255DA76424F860D91F20E6C4118004F346AE83BEBE944ABDC990D1F9BD7B1*",
+    "refinementFilters": "ValoBlogPublishDate:range(min,{Now},to=\"le\")",
+    "sorting": "ViewsLifeTime:descending",
+    "totalResults": 5,
+    "parameters": [
+    {
+    "name": "ShowMoreTitle",
+    "value": "Read more",
+    "description": "Title for show more link"
+    },
+    {
+    "name": "ShowMoreUrl",
+    "value": "",
+    "description": "Url for show more link"
+    },
+    {
+    "name": "ShowMoreTarget",
+    "value": "_blank",
+    "description": "Target for show more link"
+    },
+    {
+    "name": "UseImageLazyLoading",
+    "value": "true",
+    "options": ["true","false"],
+    "description": "universalBannerUseImageLazyLoadingDesc"
+    },
+    {
+    "name": "UseThumbnailImages",
+    "value": "false",
+    "options": ["true","false"],
+    "description": "universalBannerUseThumbnailImagesDesc"
+    }
+    ]
+    }
+</content>
+
+
+<content id="template" type="x-handlebars-template">
+    <style>
+        a.vm-Card.valo-blogs__item:hover,
+        a.vm-Card.valo-blogs__item:visited {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        a.vm-Card.valo-blogs__item {
+            display: block;
+            text-decoration: none;
+        }
+    </style>
+
+    <div class="valo-blogs popular">
+        {{setVariable "id" (randomId "blogs")}}
+        <ol class="valo-blogs__list" id="{{@root.id}}">
+            {{#each dsData.items}}
+            <li class="valo-blogs__item">
+                <span class="valo-blogs__item__index" role="presentation" aria-hidden="true">{{incrementIndex @index}}</span>
+                <a role="heading" aria-level="3" class="valo-blogs__item__title" href="{{Path}}" title="{{Title}}">
+                    {{ellipsis Title 120}}
+                </a>
+                <div class="valo-blogs__item__meta">
+                    {{#if AuthorOWSUSER}}
+                    <span class="valo-blogs__item__meta__editor">
+                        {{splitSPUser AuthorOWSUSER 'displayName'}}
+                        {{wrapWithHtmlElementAsync 'span' (wrapAsyncValue (getProfilePropertyValue (splitSPUser AuthorOWSUSER 'email') 'Department') "/ ") }}
+                    </span>
+                    {{else}}
+                    <span class="valo-blogs__item__meta__editor" rel="author">
+                        {{splitSPUser EditorOWSUSER 'displayName'}}
+                        {{wrapWithHtmlElementAsync 'span' (wrapAsyncValue (getProfilePropertyValue (splitSPUser EditorOWSUSER 'email') 'Department') "/ ") }}
+                    </span>
+                    {{/if}}
+                </div>
+            </li>
+            {{/each}}
+        </ol>
+    </div>
+    {{#if parameters.ShowMoreUrl}}
+    <div class="valo-showMore">
+      {{#ifCond parameters.ShowMoreTarget "==" "_blank"}}
+        <a href="{{parameters.ShowMoreUrl}}" target="{{parameters.ShowMoreTarget}}" data-interception="off">{{parameters.ShowMoreTitle}}</a>
+      {{else}}
+        <a href="{{parameters.ShowMoreUrl}}" target="{{parameters.ShowMoreTarget}}">{{parameters.ShowMoreTitle}}</a>
+      {{/ifCond}}
+    </div>
+    {{/if}}
+
+</content>
+
+
+<content id="placeholder" type="x-handlebars-template" role="placeholder">
+    <div class="valo-blogs popular">
+        <div class="valo-blogs__list">
+            {{#repeat nrOfResults}}
+            <div class="valo-blogs__item">
+                <span class="valo-blogs__item__index"></span>
+                <span role="heading" class="valo-blogs__item__title"></span>
+                <div class="valo-blogs__item__meta">
+                    <span class="valo-blogs__item__meta__editor"></span>
+                </div>
+            </div>
+            {{/repeat}}
+        </div>
+    </div>
+</content>

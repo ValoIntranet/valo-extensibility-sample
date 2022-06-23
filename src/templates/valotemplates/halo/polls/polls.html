@@ -1,0 +1,19 @@
+<content id="metadata" type="x-handlebars-metadata">
+  {
+    "parameters": []
+  }
+</content>
+
+<content id="template" type="x-handlebars-template">
+  <div class="valo-polls">
+    {{#if dsData.title}}
+      <div id="poll-{{dsData.title}}" class="valo-wp__wp-title-bar">
+        <span class="valo-wp__wp-title-bar__title">{{dsData.title}}</span>
+      </div>
+    {{/if}}
+
+    {{#each dsData.items}}
+      <valo-poll-card siteUrl="{{SPWebUrl}}" listId="{{ListID}}" itemId="{{ListItemID}}" allowUsersVote="{{AllowUsersVote}}" hotSwap={{HotSwap}}></valo-poll>
+    {{/each}}
+  </div>
+</content>

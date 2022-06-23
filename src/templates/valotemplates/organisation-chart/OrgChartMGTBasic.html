@@ -1,0 +1,14 @@
+<!-- Template is intended to work with Intranet2.1 -->
+<content id="metadata" type="x-handlebars-metadata">
+  {
+    "query": "https://graph.microsoft.com/v1.0/me",
+    "parameters": []
+  }
+  </content>
+    
+  <content id="template" type="x-handlebars-template">   
+      <style></style>
+      <div class="valo-org-chart__item-wrapper">
+          <mgt-person user-id="{{id}}" view="twolines" person-card="hover" show-presence></mgt-person>
+      </div>
+  </content>

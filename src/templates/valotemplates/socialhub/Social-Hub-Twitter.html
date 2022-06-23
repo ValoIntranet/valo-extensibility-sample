@@ -1,0 +1,50 @@
+<content id="metadata" type="x-handlebars-metadata">
+  {
+    "parameters": [
+      {
+        "name": "TwitterHandle",
+        "value": "valointranet"
+      },
+      {
+        "name": "Height",
+        "value": "390"
+      },
+      {
+        "name": "Limit",
+        "value": "1"
+      }
+    ]
+  }
+</content>
+
+<content id="template" type="x-handlebars-template">
+  <script>
+    var head = document.getElementsByTagName('head')[0];
+    var scriptId = "{{parameters.TwitterHandle}}-twitter-widget";
+
+    var widgetScript = document.getElementById(scriptId);
+    if(widgetScript) {
+      widgetScript.parentNode.removeChild(widgetScript);
+    }
+
+    widgetScript = document.createElement('script');
+    widgetScript.src = "https://platform.twitter.com/widgets.js";
+    widgetScript.id = scriptId;
+    widgetScript.type = "text/javascript";
+
+    head.appendChild(widgetScript);
+  </script>
+  {{#if parameters.TwitterHandle}}
+    {{#if parameters.Height}}
+      {{#if parameters.Limit}}
+        <a class="twitter-timeline" data-height="{{parameters.Height}}" data-tweet-limit="{{parameters.Limit}}" href="https://twitter.com/{{parameters.TwitterHandle}}?ref_src=twsrc%5Etfw" data-chrome="noheader nofooter noborders"></a>
+      {{else}}
+        <a class="twitter-timeline" data-height="{{parameters.Height}}" href="https://twitter.com/{{parameters.TwitterHandle}}?ref_src=twsrc%5Etfw" data-chrome="noheader nofooter noborders"></a>
+      {{/if}}
+    {{else}}
+      <a class="twitter-timeline" data-tweet-limit="{{parameters.Limit}}" href="https://twitter.com/{{parameters.TwitterHandle}}?ref_src=twsrc%5Etfw" data-chrome="noheader nofooter noborders"></a>
+    {{/if}}
+  {{else}}
+    <p>{{resourceLabel "ConfigureTwitterParameter"}}</p>
+  {{/if}}
+</content>
