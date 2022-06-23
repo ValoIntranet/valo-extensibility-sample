@@ -1,8 +1,11 @@
 {
   "name": "valo-extend-ui-poc",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "private": true,
   "main": "lib/index.js",
+  "engines": {
+    "node": ">=0.10.0"
+  },
   "scripts": {
     "build": "gulp bundle",
     "clean": "gulp clean",
@@ -13,22 +16,23 @@
     "@microsoft/sp-application-base": "1.12.1",
     "@microsoft/sp-core-library": "1.12.1",
     "@microsoft/sp-dialog": "1.12.1",
-    "@valo/extensibility": "1.9.0-02350049f80a30cd0ada54a8d616abf77b489280",
+    "@valo/extensibility": "^1.10.0-9a308458be9ce8379ab03aacd617b631648295b2",
     "date-fns": "1.30.1",
     "faker": "4.1.0"
   },
   "devDependencies": {
-    "@microsoft/rush-stack-compiler-3.9": "0.4.47",
+    "@microsoft/rush-stack-compiler-3.3": "0.1.18",
+    "@microsoft/rush-stack-compiler-3.7": "0.2.3",
     "@microsoft/sp-build-web": "1.12.1",
     "@microsoft/sp-module-interfaces": "1.12.1",
     "@microsoft/sp-tslint-rules": "1.12.1",
-    "@microsoft/sp-webpart-base": "1.12.1",
+    "@microsoft/sp-webpart-base": "1.11.0",
     "@microsoft/sp-webpart-workbench": "1.12.1",
     "@types/es6-promise": "0.0.33",
-    "@types/webpack-env": "1.13.1",
     "@types/faker": "4.1.12",
+    "@types/webpack-env": "1.13.1",
     "ajv": "~5.2.2",
-    "gulp": "~3.9.1",
+    "gulp": "4.0.2",
     "typescript": "3.3.4000"
   }
 }
