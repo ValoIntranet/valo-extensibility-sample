@@ -1,0 +1,77 @@
+<content id="metadata" type="x-handlebars-metadata">
+  {
+  "fields": ["Path","Created", "LastModifiedTime", "FirstPublishedDate", "Title", "AuthorOWSUSER", "EditorOWSUSER", "Author",
+  "BannerImageUrlOWSURLH", "PictureThumbnailURL", "Description", "ValoTagsTaxonomy", "owstaxIdValoTags", "ValoTags",
+  "ValoLocationOWSTEXT", "owstaxIdValoOfficeLocation", "ValoOfficeLocation", "ValoJobPostingApplyByOWSDATE",
+  "ValoJobPostingEmploymentStatusOWSCHCS", "ValoJobPostingEmploymentHoursOWSNMBR", "ValoJobPostingFTEOWSBOOL",
+  "LayoutWebpartsContentOWSHTML", "UniqueId", "SPWebUrl", "ValoJobPostingHiringManagerOWSUSER"],
+  "query": "ContentTypeId:0x0101009D1CB255DA76424F860D91F20E6C41180065789619A4EFB44992AF42CEEBB13C9A03*",
+  "sorting": "ValoJobPostingApplyBy:ascending",
+  "refinementFilters": "not(ValoJobPostingApplyBy:range(min,{Now},from=\"ge\",to=\"lt\"))",
+  "parameters": [
+  {
+  "name": "ShowMoreTitle",
+  "value": "Read more",
+  "description": "Title for show more link"
+  },
+  {
+  "name": "ShowMoreUrl",
+  "value": "",
+  "description": "Url for show more link"
+  },
+  {
+  "name": "ShowMoreTarget",
+  "value": "_blank",
+  "description": "Target for show more link"
+  },
+  {
+  "name": "UseMultilingualTerms",
+  "value": "true",
+  "options": ["true","false"],
+  "description": "universalUseMultilingualTerms"
+  }
+  ]
+  }
+</content>
+
+<content id="template" type="x-handlebars-template">
+  {{#if dsData.items}}
+    <div class="halo-cardTilesContainer">
+      {{#each dsData.items}}
+        {{setVariable "elementId" (generateId)}}
+        <div id="id-{{@root.elementId}}">
+          <valo-job-posting-compact-card item="{{ json this }}" multilingual="{{@root.parameters.UseMultilingualTerms}}" />
+        </div>
+      {{/each}}
+    </div>
+    {{#if parameters.ShowMoreUrl}}
+      <div class="halo-showMore">
+        {{#ifCond parameters.ShowMoreTarget "==" "_blank"}}
+          <a href="{{parameters.ShowMoreUrl}}" target="{{parameters.ShowMoreTarget}}" data-interception="off">{{parameters.ShowMoreTitle}}</a>
+        {{else}}
+          <a href="{{parameters.ShowMoreUrl}}" target="{{parameters.ShowMoreTarget}}">{{parameters.ShowMoreTitle}}</a>
+        {{/ifCond}}
+      </div>
+    {{/if}}
+  {{/if}}
+</content>
+
+<content id="placeholder" type="x-handlebars-template">
+  <div class="valo-news ms-Grid vm-Grid">
+    <div class="valo-news__list ms-Grid-row vm-Cards vm-Grid-row placeholder">
+      {{#repeat nrOfResults}}
+      <div class="valo-news__item ms-sm4 vm-Card">
+        <div class="valo-news__item__wrapper">
+          <div class="valo-news__item__banner">
+            <div style="background-image:url('/_layouts/15/images/sitepagethumbnail.png');"></div>
+          </div>
+          <div class="valo-news__item__info">
+            <p class="valo-news__item__title"></p>
+            <div class="valo-news__item__tags"></div>
+          </div>
+        </div>
+      </div>
+      {{/repeat}}
+    </div>
+  </div>
+</content>

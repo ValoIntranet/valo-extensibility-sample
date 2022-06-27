@@ -1,0 +1,20 @@
+<content id="metadata" type="x-handlebars-metadata">
+  {
+    "parameters": [
+      {
+        "name": "CustomImageWidth",
+        "value": "1920",
+        "description": "staffbaseUniversalBannerCustomImageWidth"
+      }
+    ]
+  }
+</content>
+
+<content id="template" type="x-handlebars-template">
+  <staffbase-news-list 
+    items="{{json dsData.items}}" 
+    post-config="{{ json dsData.postConfig }}" post-layout="{{ json dsData.postLayout }}" 
+    web-part-width="{{ dsData.webPartWidth }}" 
+    image-quality="{{ parameters.CustomImageWidth }}"
+  />
+</content>

@@ -1,0 +1,99 @@
+<content id="metadata" type="x-handlebars-metadata">
+  {
+    "fields": ["FirstName","LastName", "JobTitle", "Department", "WorkPhone", "MobilePhone", "WorkEmail", "BaseOfficeLocation", "PictureURL", "AccountName", "OriginalPath"],
+    "query": "-PreferredName:\"_spo*\" -PreferredName:\"app@*\" -PreferredName:\"Foreign Principal*\" -PreferredName:\"spsearch\" -\"sps-usertype\":1",
+    "sorting": "FirstName:ascending",
+    "sourceId": "b09a7990-05ea-4af9-81ef-edfab16c4e31",
+    "totalResults": 12,
+    "resources": [
+      {
+        "key": "empty",
+        "values": {
+          "default": "n/a"
+        }
+      }
+    ],
+    "parameters": [
+      {
+        "name": "BannerStyle",
+        "value": "Candela",
+        "options": ["Candela","Lux"],
+        "description": "universalBannerTmplStyleParamDesc"
+      }
+    ],
+    "pagingType": 3
+  }
+</content>
+
+<content id="template" type="x-handlebars-template">
+  <style></style>
+
+  <div class="ms-Grid valo-people-finder {{parameters.BannerStyle}}">
+    <div class="ms-Grid-row vm-Cards valo-people-finder__list">
+      {{#if dsData.items}}
+        {{#each dsData.items}}
+          <div class="ms-sm12 ms-smd6 ms-lg4 ms-xlg3 valo-people-finder__item-link">
+            <div class="valo-people-finder__item-wrapper">
+              <div class="valo-people-finder__item-header">
+                <div class="valo-people-finder__item-header__picture">
+                  {{#if PictureURL}}
+                    <div class="valo-people-finder__item-header__picture__placeholder valo-classic-spfxcontrols-bordercolor" style="background-image: url('{{SPWebUrl}}/_layouts/15/userphoto.aspx?size=L&amp;accountname={{resolveAccountName AccountName}}');"></div>
+                  {{else}}
+                    <div class="valo-people-finder__item-header__picture__placeholder valo-classic-spfxcontrols-bordercolor">
+                      <i class="ms-Icon ms-Icon--Contact valo-people-finder__item-header__picture__placeholder-icon" aria-hidden="true"></i>
+                    </div>
+                  {{/if}}
+                  {{#if WorkEmail}}
+                  <div class="valo-people-finder__item-header__icon">
+                    <a title="{{resourceLabel 'GeneralIM'}}: {{WorkEmail}}"href="IM:sip:{{WorkEmail}}" class="valo-people-finder__item-header__icon-link">
+                      <i title="{{resourceLabel 'GeneralIM'}}" class="ms-Icon ms-Icon--Message valo-people-finder__item-header__icon-container" aria-hidden="true"></i>
+                    </a>
+                  </div>
+                  {{/if}}
+                </div>
+                <a href="{{OriginalPath}}" role="heading" aria-level="3" class="valo-people-finder__item-header__name valo-classic-spfxcontrols-bgcolor valo-classic-spfxcontrols-wp-title" title="{{FirstName}} {{LastName}}">{{FirstName}} {{LastName}}</a>
+                <div class="valo-people-finder__item-header__position">
+                  {{#if JobTitle}} {{JobTitle}}{{/if}}
+                </div>
+              </div>
+              <div class="valo-people-finder__item-body">
+                {{#if Department}}
+                <div class="valo-people-finder__item-body__part">
+                    <i title="{{resourceLabel 'GeneralDepartment'}}" class="ms-Icon ms-Icon--Group valo-people-finder__item-body__part__icon" aria-hidden="true"></i>
+                    <span title="{{Department}}" class="valo-people-finder__item-body__part__text">{{Department}}</span>
+                </div>
+                {{/if}}
+                {{#if MobilePhone}}
+                <div class="valo-people-finder__item-body__part">
+                    <i title="{{resourceLabel 'GeneralPhone'}}" class="ms-Icon ms-Icon--CellPhone valo-people-finder__item-body__part__icon" aria-hidden="true"></i>
+                    <a title="{{resourceLabel 'GeneralPhone'}}: {{MobilePhone}}" href="tel:{{MobilePhone}}" class="valo-people-finder__item-body__part__text">{{MobilePhone}}</a>
+                </div>
+                {{/if}}
+                {{#if WorkPhone}}
+                <div class="valo-people-finder__item-body__part">
+                    <i title="{{resourceLabel 'GeneralPhone'}}" class="ms-Icon ms-Icon--Phone valo-people-finder__item-body__part__icon" aria-hidden="true"></i>
+                    <a title="{{resourceLabel 'GeneralPhone'}}: {{WorkPhone}}" href="tel:{{WorkPhone}}" class="valo-people-finder__item-body__part__text">{{WorkPhone}}</a>
+                </div>
+                {{/if}}
+                {{#if WorkEmail}}
+                <div class="valo-people-finder__item-body__part">
+                    <i title="{{resourceLabel 'GeneralEmail'}}" class="ms-Icon ms-Icon--Mail valo-people-finder__item-body__part__icon" aria-hidden="true"></i>
+                    <a title="{{resourceLabel 'GeneralEmail'}}: {{WorkEmail}}" href="mailto:{{WorkEmail}}" class="valo-people-finder__item-body__part__text">{{WorkEmail}}</a>
+                </div>
+                {{/if}}
+                {{#if BaseOfficeLocation}}
+                <div class="valo-people-finder__item-body__part">
+                    <i title="{{resourceLabel 'GeneralOffice'}}" class="ms-Icon ms-Icon--POI valo-people-finder__item-body__part__icon" aria-hidden="true"></i>
+                    <span title="{{BaseOfficeLocation}}" class="valo-people-finder__item-body__part__text">{{BaseOfficeLocation}}</span>
+                </div>
+                {{/if}}
+              </div>
+            </div>
+          </div>
+        {{/each}}
+      {{else}}
+        {{resourceLabel "NoResultsFound"}}
+      {{/if}}
+    </div>
+  </div>
+</content>

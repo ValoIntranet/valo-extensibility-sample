@@ -1,0 +1,171 @@
+<content id="metadata" type="x-handlebars-metadata">
+  {
+    "fields": ["Path","Created", "LastModifiedTime", "FirstPublishedDate", "Title", "AuthorOWSUSER", "EditorOWSUSER", "Author", "BannerImageUrlOWSURLH", "PictureThumbnailURL", "Description", "ListID", "ListItemID", "UniqueId", "SPWebUrl", "ValoTagsTaxonomy", "owstaxIdValoTags", "ValoTags", "ValoLocationOWSTEXT", "owstaxIdValoOfficeLocation", "ValoOfficeLocation", "ValoJobPostingApplyByOWSDATE", "ValoJobPostingEmploymentStatusOWSCHCS", "ValoJobPostingEmploymentHoursOWSNMBR", "ValoJobPostingFTEOWSBOOL", "LayoutWebpartsContentOWSHTML", "SPWebUrl"],
+    "query": "ContentTypeId:0x0101009D1CB255DA76424F860D91F20E6C41180065789619A4EFB44992AF42CEEBB13C9A03* AND ListItemID<>{Page.id}",
+    "sorting": "ValoJobPostingApplyBy:ascending",
+    "refinementFilters": "not(ValoJobPostingApplyBy:range(min,{Now},from=\"ge\",to=\"lt\"))",
+    "parameters": [
+      {
+        "name": "UseThumbnailImages",
+        "value": "false",
+        "options": ["true","false"],
+        "description": "universalBannerUseThumbnailImagesDesc"
+      },
+      {
+        "name": "UseImageLazyLoading",
+        "value": "true",
+        "options": ["true","false"],
+        "description": "universalBannerUseImageLazyLoadingDesc"
+      },
+      {
+        "name": "UseMultilingualTerms",
+        "value": "true",
+        "options": ["true","false"],
+        "description": "universalUseMultilingualTerms"
+      }
+    ]
+  }
+</content>
+
+<content id="template" type="x-handlebars-template">
+  <style>
+    a.vm-Card.valo-news__item:hover,
+    a.vm-Card.valo-news__item:visited {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    a.vm-Card.valo-news__item {
+      display: block;
+      text-decoration: none;
+    }
+
+    .compact .vm-Card .valo-news__item__banner {
+      min-height: 100px;
+      cursor: pointer;
+    }
+
+    .compact .valo-news__item__abstract {
+      padding-bottom: 0;
+      padding-top: 0;
+    }
+    .sendToTeams_position_compact {
+     height: 28px ;
+     width :28px;
+     vertical-align: middle;
+     float:right
+   }
+   .valo-news__item__info {
+    cursor: pointer;
+   }
+
+   .sendToTeams_position_compact:hover {
+      background-color: transparent;
+    }
+    .sendToTeams_position_compact:active {
+      background-color: transparent;
+    }
+     .send_to_teams__svg_icon_styles{
+      width: 12px;
+      height: 12px;
+      fill:  rgb(182, 182, 182);
+
+    }
+  </style>
+
+ <!-- Initialize batched PageImageInfo requests-->
+ {{prepareBatchPageImageInfoPromises dsData.items}}
+
+  <div class="valo-news valo-positions compact ms-Grid vm-Grid">
+    {{setVariable "id" (randomId "PositionCompact")}}
+    {{setVariable "canUseIntersectionObserver" (useIntersectionObserver parameters.UseImageLazyLoading) }}
+    <div class="ms-Grid-row vm-Cards vm-Grid-row valo-news__list compact" id="{{@root.id}}">
+      {{#each dsData.items}}
+      {{setVariable "elementId" (generateId)}}
+      <div class="valo-news__item ms-sm4 vm-Card showTransition">
+        <div class="valo-news__item__wrapper">
+          <valo-link unique-id="banner-id-{{@root.elementId}}" page-url="{{Path}}" localization="{{json (getValoOpenLinkLocalization)}}"></valo-link>
+          <div class="valo-news__item__banner" id="banner-id-{{@root.elementId}}">
+            {{#if PictureThumbnailURL}}
+              <valo-image-focal-point css-names="valo-news__item__banner__parallax parallax parallaxSlow" img-url="{{imageResolution PictureThumbnailURL 4 null null ../parameters.UseThumbnailImages}}" item-id="{{ListItemID}}" list-id="{{ListID}}" site-url="{{SPWebUrl}}" layout-content="{{LayoutWebpartsContentOWSHTML}}" observer-support="{{@root.canUseIntersectionObserver}}"></valo-image-focal-point>
+            {{else}}
+              <valo-image-focal-point css-names="valo-news__item__banner__parallax parallax parallaxSlow" img-url="{{imageResolution BannerImageUrlOWSURLH 4 null null ../parameters.UseThumbnailImages}}" item-id="{{ListItemID}}" list-id="{{ListID}}" site-url="{{SPWebUrl}}" layout-content="{{LayoutWebpartsContentOWSHTML}}" observer-support="{{@root.canUseIntersectionObserver}}"></valo-image-focal-point>
+            {{/if}}
+          </div>
+          <valo-link unique-id="id-{{@root.elementId}}" page-url="{{Path}}" localization="{{json (getValoOpenLinkLocalization)}}"></valo-link>
+          <div class="valo-news__item__info" id="id-{{@root.elementId}}">
+            <p role="heading" aria-level="3" class="valo-news__item__title">
+              {{Title}}
+            </p>
+            <div class="valo-news__item__abstract valo-job__item__abstract">{{ellipsis Description 50}}</div>
+            <div class="valo-job__item__metadata_compact">
+              <div class="valo-job__item__contract" title="{{resourceLabel 'jpEmploymentStatus'}}">
+                  <i class="ms-Icon ms-Icon--Calendar" aria-hidden="true" title="{{resourceLabel 'jpEmploymentStatus'}}"></i>
+                  {{ValoJobPostingEmploymentStatusOWSCHCS}}
+              </div>
+              <div class="valo-job__item__applyby" title="{{resourceLabel 'jpApplyBy'}}">
+                  <i class="ms-Icon ms-Icon--GotoToday" aria-hidden="true" title="{{resourceLabel 'jpApplyBy'}}"></i>
+                  {{#if ValoJobPostingApplyByOWSDATE}}
+                    {{ wrapWithHtmlElementAsync 'span' (formatUtcToZonedTimeAsync ValoJobPostingApplyByOWSDATE SPWebUrl "MMM dd yyyy") }}
+                  {{else}}
+                    <span> - </span>
+                  {{/if}}
+              </div>
+              <div class="valo-job__item__fte" title="{{resourceLabel 'jpHoursPerWeek'}}">
+                {{#eq ValoJobPostingFTEOWSBOOL "1"}}
+                  <i class="ms-Icon ms-Icon--Recent" aria-hidden="true" title="{{resourceLabel 'jpHoursPerWeek'}}"></i>
+                  {{resourceLabel "jpLabelFullTime"}}
+                {{/eq}}
+                {{#eq ValoJobPostingFTEOWSBOOL "0"}}
+                  <i class="ms-Icon ms-Icon--Recent" aria-hidden="true" title="{{resourceLabel 'jpHoursPerWeek'}}"></i>
+                  {{hours ValoJobPostingEmploymentHoursOWSNMBR}}
+                {{/eq}}
+              </div>
+            </div>
+          </div style="float:right">
+          <send-to-teams message="{{Description}}" class-Name="sendToTeams_position_compact"  title="{{Title}}" img-url="{{BannerUrlOWSURLH}}" published-date="{{Created}}" author="{{AuthorOWSUSER}}" link-url="{{Path}}" />
+        </div>
+      </div>
+
+      {{/each}}
+    </div>
+  </div>
+  {{#if parameters.ShowMoreUrl}}
+  <div class="valo-showMore">
+    {{#ifCond parameters.ShowMoreTarget "==" "_blank"}}
+      <a href="{{parameters.ShowMoreUrl}}" target="{{parameters.ShowMoreTarget}}" data-interception="off">{{parameters.ShowMoreTitle}}</a>
+    {{else}}
+      <a href="{{parameters.ShowMoreUrl}}" target="{{parameters.ShowMoreTarget}}">{{parameters.ShowMoreTitle}}</a>
+    {{/ifCond}}
+  </div>
+  {{/if}}
+</content>
+
+
+<content id="placeholder" type="x-handlebars-template">
+  <div class="valo-news compact ms-Grid vm-Grid">
+    <div class="valo-news__list ms-Grid-row vm-Cards vm-Grid-row placeholder compact">
+      {{#repeat nrOfResults}}
+      <div class="valo-news__item ms-sm4 vm-Card">
+        <div>
+          <div class="valo-news__item__banner">
+            <div style="background-image:url('/_layouts/15/images/sitepagethumbnail.png');"></div>
+          </div>
+          <div class="valo-news__item__info">
+            <p class="valo-news__item__title"></p>
+            <div class="valo-news__item__meta"></div>
+            <div class="valo-news__item__abstract"></div>
+          </div>
+        </div>
+      </div>
+      {{/repeat}}
+    </div>
+  </div>
+</content>
+<html xmlns:mso="urn:schemas-microsoft-com:office:office" xmlns:msdt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882"><head>
+<!--[if gte mso 9]><xml>
+<mso:CustomDocumentProperties>
+<mso:TemplateTitle msdt:dt="string">Videos - Compact</mso:TemplateTitle>
+</mso:CustomDocumentProperties>
+</xml><![endif]-->
+</head>

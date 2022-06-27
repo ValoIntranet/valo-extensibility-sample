@@ -1,0 +1,60 @@
+<content id="metadata" type="x-handlebars-metadata">
+  {
+    "parameters": [
+      {
+        "name": "PinterestHandle",
+        "value": "microsoft"
+      },
+      {
+        "name": "Height",
+        "value": "500"
+      }
+    ]
+  }
+</content>
+
+<content id="template" type="x-handlebars-template">
+  <script>
+    var head = document.getElementsByTagName('head')[0];
+    var scriptId = "{{parameters.PinterestHandle}}-pinterest-widget";
+
+    var widgetScript = document.querySelector("script[src*='//assets.pinterest.com/js/pinit_main.js']");
+    if(widgetScript) {
+      for(var globalVariable in window) { 
+        if(globalVariable.startsWith("PIN_")) { 
+          if(window[globalVariable].f) {
+            window[globalVariable].f.init();
+          }
+        } 
+      }
+    }
+
+    widgetScript = document.createElement('script');
+    widgetScript.src = "//assets.pinterest.com/js/pinit.js";
+    widgetScript.id = scriptId;
+    widgetScript.defer = true;
+    widgetScript.type = "text/javascript";
+
+    head.appendChild(widgetScript);
+  </script>
+  <style>
+    .super-responsive-wrapper {
+      width: 100%;
+      margin: auto;
+    }
+
+    .board-wrapper {
+      margin: auto;
+      text-align: center;
+    }
+
+    .board-wrapper > span {
+      overflow: hidden;
+      max-width: 100% !important;
+      width:100% !important;
+    }
+  </style>
+
+  
+  <a data-pin-do="embedUser" data-pin-board-width="640" data-pin-scale-height="{{subtract (toInt parameters.Height) 110}}" data-pin-scale-width="80" href="https://www.pinterest.com/{{parameters.PinterestHandle}}"></a>
+</content>

@@ -1,0 +1,27 @@
+<content id="metadata" type="x-handlebars-metadata">
+  {
+    "parameters": []
+  }
+</content>
+<content id="template" type="x-handlebars-template">
+  <style></style>
+  <div class="valo-org-chart__item-wrapper valo-org-chart__item-wrapper__open-position">
+    <div class="valo-org-chart__item-header">
+      <div class="valo-org-chart__item-header__picture">
+        <div class="valo-org-chart__item-header__picture__placeholder valo-classic-spfxcontrols-bordercolor">
+          <i class="ms-Icon ms-Icon--Unknown valo-org-chart__item-header__picture__placeholder-icon" aria-hidden="true"></i>
+        </div>
+      </div>
+      <div class="valo-org-chart__item-header__name valo-org-chart__item-header__name__open-position" role="heading" aria-level="3" title="{{title}}">{{ellipsis title 25}}</div>
+      <div class="valo-org-chart__item-header__position"></div>
+    </div>
+    <div class="valo-org-chart__item-body">
+      <div class="valo-org-chart__item-body__part">
+          <span title="{{description}}" class="valo-org-chart__item-body__part__text__open-position valo-org-chart__item-body__part__optext">{{ellipsis description 60}}</span>
+      </div>
+      <div class="valo-org-chart__item-body__part">
+        <a title="{{resourceLabel 'organizationChart'}}" href="{{url}}" data-interception="off" target="_blank" class="valo-org-chart__item-body__part__text">{{resourceLabel "organizationChartReadMoreApply"}}</a>
+      </div>
+    </div>
+  </div>
+</content>

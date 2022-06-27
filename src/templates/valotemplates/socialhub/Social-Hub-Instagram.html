@@ -1,0 +1,41 @@
+<content id="metadata" type="x-handlebars-metadata">
+  {
+    "parameters": [
+      {
+        "name": "SnapWidgetId",
+        "value": "182788"
+      },
+      {
+        "name": "minContainerHeight",
+        "value": "300px"
+      }
+    ]
+  }
+</content>
+
+<content id="template" type="x-handlebars-template">
+  <style>
+    .snapwidget-widget-styles {
+      border:none; overflow:hidden; width:100%;
+      min-height: {{parameters.minContainerHeight}};
+    }
+  </style>
+    <script>
+    var head = document.getElementsByTagName('head')[0];
+    var scriptId = "{{parameters.SnapWidgetId}}-snapwidget-widget";
+
+    var widgetScript = document.getElementById(scriptId);
+    if(widgetScript) {
+      widgetScript.parentNode.removeChild(widgetScript);
+    }
+
+    widgetScript = document.createElement('script');
+    widgetScript.src = "https://snapwidget.com/js/snapwidget.js";
+    widgetScript.id = scriptId;
+    widgetScript.type = "text/javascript";
+
+    head.appendChild(widgetScript);
+  </script>
+  <!-- SnapWidget -->
+  <iframe src='https://snapwidget.com/embed/{{parameters.SnapWidgetId}}' loading="lazy" class='snapwidget-widget snapwidget-widget-styles' allowTransparency='true' frameborder='0' scrolling='no'  ></iframe>
+</content>

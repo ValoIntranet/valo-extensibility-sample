@@ -1,0 +1,118 @@
+<content id="metadata" type="x-handlebars-metadata">
+    {
+        "fields": ["UniqueId", "Title", "Author", "CreatedBy", "AuthorOWSUSER", "Created", "ValoBlogPublishDate", "Path"],
+        "query": "ContentTypeId:0x0101009D1CB255DA76424F860D91F20E6C4118004F346AE83BEBE944ABDC990D1F9BD7B1*",
+        "refinementFilters": "ValoBlogPublishDate:range(min,{Now},to=\"le\")",
+        "sorting": "ValoBlogPublishDate:descending",
+        "totalResults": 100,
+        "uiBehaviours": {
+            "Valo__ExpandCollapseBehaviour": {
+              "parameters": {
+                "toggleTriggerElementSelector": ".archive-toggle-button",
+                "toggleIconSelector": ".archive-toggle-icon",
+                "toggleIconAddClassName": "ms-Icon--Add",
+                "toggleIconRemoveClassName": "ms-Icon--Remove",
+                "expandableContentElementsSelector": ".archive-toggle-panel",
+                "containsNestedExpandCollapsePanels": true
+              }
+            }
+        },
+        "parameters": [
+            {
+                "name": "ArchiveByManagedProperty",
+                "value": "ValoBlogPublishDate",
+                "description": "archiveByTemplateParamDesc"
+            }
+        ]
+    }
+</content>
+
+<content id="template" type="x-handlebars-template">
+    <style>
+        .valo-blogs.archive .valo-blogs__list a.valo-blogs__item__link {
+            display: block;
+            text-decoration: none;
+        }
+
+        .valo-blogs.archive .valo-blogs__list a.valo-blogs__item__link:hover,
+        .valo-blogs.archive .valo-blogs__list a.valo-blogs__item__link:visited {
+            color: inherit;
+            text-decoration: none;
+        }
+    </style>
+
+    <div class="valo-blogs archive ms-Grid vm-Grid">
+        {{setVariable "id" (randomId "blogsArchive")}}
+        {{setVariable "archiveByYear" "_blogsArchive.Year"}}
+        {{setVariable "archiveByMonth" "_blogsArchive.Month"}}
+        <div id="{{@root.id}}" class="valo-blogs__list ms-Grid-row vm-Grid-row">
+            <div class="valo-blogs__list__wrapper">
+                <ul class="valo-blogs__item__wrapper__year">
+                    {{#group (processDataSourceForArchiveListing dsData.items parameters.ArchiveByManagedProperty @root.archiveByYear @root.archiveByMonth) by=@root.archiveByYear}}
+                        {{setVariable "year" value}}
+                        <li class="valo-blogs__year">
+                            <button class="valo-blogs__toggle__button archive-toggle-button" type="button" aria-expanded="false" aria-controls="{{@root.id}}-year-{{@root.year}}">
+                                <i class="valo-blogs__toggle__icon archive-toggle-icon ms-Icon ms-Icon--Add" aria-hidden="true"></i>
+                                {{value}} ({{getItemCount items}})
+                            </button>
+                            <ul id="{{@root.id}}-year-{{@root.year}}" class="valo-blogs__item__wrapper__month valo-blogs__toggle__panel archive-toggle-panel">
+                                {{#group items by=@root.archiveByMonth}}
+                                    {{setVariable "month" value}}
+                                    <li class="valo-blogs__month">
+                                        <button class="valo-blogs__toggle__button archive-toggle-button" type="button" aria-expanded="false" aria-controls="{{@root.id}}-year-{{@root.year}}-month-{{@root.month}}">
+                                            <i class="valo-blogs__toggle__icon archive-toggle-icon ms-Icon ms-Icon--Add" aria-hidden="true"></i>
+                                            {{localizedMonthNameFromIndex value}} ({{getItemCount items}})
+                                        </button>
+                                        <ul id="{{@root.id}}-year-{{@root.year}}-month-{{@root.month}}" class="valo-blogs__item__wrapper valo-blogs__toggle__panel archive-toggle-panel">
+                                            {{#each items}}
+                                                <li class="valo-blogs__item">
+                                                    <a class="valo-blogs__item__link" href="{{Path}}">{{Title}}</a>
+                                                </li>
+                                            {{/each}}
+                                        </ul>
+                                    </li>
+                                {{/group}}
+                            </ul>
+                        </li>
+                    {{/group}}
+                </ul>
+            </div>
+        </div>
+    </div>
+</content>
+
+<content id="placeholder" type="x-handlebars-template">
+    <div class="valo-blogs archive ms-Grid vm-Grid">
+        <div class="valo-blogs__list ms-Grid-row vm-Grid-row placeholder">
+            <div class="valo-blogs__list__wrapper">
+                <div class="valo-blogs__item__wrapper__year">
+                    <p class="valo-blogs__year"></p>
+                    <div class="valo-blogs__item__wrapper__month">
+                        <p class="valo-blogs__month"></p>
+                        <div class="valo-blogs__item__wrapper">
+                            <p class="valo-blogs__item"></p>
+                            <p class="valo-blogs__item"></p>
+                            <p class="valo-blogs__item"></p>
+                        </div>
+                        <p class="valo-blogs__month"></p>
+                        <p class="valo-blogs__month"></p>
+                    </div>
+                </div>
+                <div class="valo-blogs__item__wrapper__year">
+                    <p class="valo-blogs__year"></p>
+                </div>
+                <div class="valo-blogs__item__wrapper__year">
+                    <p class="valo-blogs__year"></p>
+                    <div class="valo-blogs__item__wrapper__month">
+                        <p class="valo-blogs__month"></p>
+                        <p class="valo-blogs__month"></p>
+                        <div class="valo-blogs__item__wrapper">
+                            <p class="valo-blogs__item"></p>
+                        </div>
+                        <p class="valo-blogs__month"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</content>
