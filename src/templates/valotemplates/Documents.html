@@ -1,6 +1,6 @@
 <content id="metadata" type="x-handlebars-metadata">
   {
-    "fields": ["Title", "FileName","SiteName", "SiteTitle", "HitHighlightedSummary", "ModifiedBy", "ModifiedById", "ModifiedOWSDATE", "ServerRedirectedPreviewURL", "BannerImageUrlOWSURLH", "PictureThumbnailURL", "FileExtension", "Path", "LayoutWebpartsContentOWSHTML", "ValoTitle", "Description"],
+    "fields": ["Title", "SiteName", "SiteTitle", "HitHighlightedSummary", "ModifiedBy", "ModifiedById", "ModifiedOWSDATE", "ServerRedirectedPreviewURL", "BannerImageUrlOWSURLH", "PictureThumbnailURL", "FileExtension", "Path", "LayoutWebpartsContentOWSHTML", "ValoTitle", "Description"],
     "query": "IsDocument:1",
     "totalResults": 12,
     "sorting": "ViewsLifeTime:descending",
@@ -53,18 +53,30 @@
               <div class="valo-documents__item__content">
                 {{#if_containsQueryString Path}}
                   <a href="{{Path}}" class="valo-documents__item__title">
-                      {{FileName}}
+                    {{#if ValoTitle}}
+                      {{ValoTitle}}
+                    {{else}}
+                      {{Title}}
+                    {{/if}}
                   </a>
                 {{else}}
                   <a href="{{Path}}?web=1" class="valo-documents__item__title">
-                      {{FileName}}
+                    {{#if ValoTitle}}
+                      {{ValoTitle}}
+                    {{else}}
+                      {{Title}}
+                    {{/if}}
                   </a>
                 {{/if_containsQueryString}}
                 <div class="valo-documents__item__excerpt">
                   {{#if Description}}
                     {{ellipsis Description 100}}
-                  {{else if HitHighlightedSummary}}
-                    {{summary HitHighlightedSummary}}
+                  {{else}}
+                    {{#if HitHighlightedSummary}}
+                      {{{summary HitHighlightedSummary}}}
+                    {{else}}
+                      {{{summary "..."}}}
+                    {{/if}}
                   {{/if}}
                 </div>
                 <div class="valo-documents__item__info">
