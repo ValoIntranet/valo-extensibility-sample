@@ -1,0 +1,238 @@
+<content id="metadata" type="x-handlebars-metadata">
+  {
+  "fields": ["Path","Created", "LastModifiedTime", "FirstPublishedDate", "Title", "AuthorOWSUSER", "EditorOWSUSER", "Author",
+  "BannerImageUrlOWSURLH", "PictureThumbnailURL", "Description", "ValoTagsTaxonomy", "owstaxIdValoTags", "ValoTags",
+  "ValoLocationOWSTEXT", "owstaxIdValoOfficeLocation", "ValoOfficeLocation", "ValoJobPostingApplyByOWSDATE",
+  "ValoJobPostingEmploymentStatusOWSCHCS", "ValoJobPostingEmploymentHoursOWSNMBR", "ValoJobPostingFTEOWSBOOL",
+  "LayoutWebpartsContentOWSHTML", "UniqueId", "SPWebUrl", "ValoJobPostingHiringManagerOWSUSER"],
+  "query": "ContentTypeId:0x0101009D1CB255DA76424F860D91F20E6C41180065789619A4EFB44992AF42CEEBB13C9A03*",
+  "sorting": "ValoJobPostingApplyBy:ascending",
+  "refinementFilters": "not(ValoJobPostingApplyBy:range(min,{Now},from=\"ge\",to=\"lt\"))",
+  "parameters": [
+  {
+  "name": "ShowMoreTitle",
+  "value": "Read more",
+  "description": "Title for show more link"
+  },
+  {
+  "name": "ShowMoreUrl",
+  "value": "",
+  "description": "Url for show more link"
+  },
+  {
+  "name": "ShowMoreTarget",
+  "value": "_blank",
+  "description": "Target for show more link"
+  },
+  {
+  "name": "UseImageLazyLoading",
+  "value": "true",
+  "options": ["true","false"],
+  "description": "universalBannerUseImageLazyLoadingDesc"
+  },
+  {
+  "name": "UseMultilingualTerms",
+  "value": "true",
+  "options": ["true","false"],
+  "description": "universalUseMultilingualTerms"
+  }
+  ]
+  }
+</content>
+
+<content id="template" type="x-handlebars-template">
+  <style>
+    a.vm-Card.valo-news__item:hover,
+    a.vm-Card.valo-news__item:visited {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .sendToTeams_position {
+      height: 28px;
+      width: 28px;
+      vertical-align: middle;
+      float: right;
+      bottom: 12px;
+      padding-right: 20px;
+    }
+
+    .sendToTeams_position:active {
+      background-color: transparent;
+    }
+
+    .sendToTeams_position:hover {
+      background-color: transparent;
+    }
+
+    .send_to_teams__svg_icon_styles {
+      width: 12px;
+      height: 12px;
+      fill: rgb(182, 182, 182);
+
+    }
+
+    .valo-job__item__banner-info {
+      cursor: pointer;
+    }
+
+    a.vm-Card.valo-news__item {
+      display: block;
+      text-decoration: none;
+    }
+
+    .valo-events__item__banner-info__title {
+      max-height: 170px;
+    }
+
+    .ms-Icon--Tag {
+      position: initial;
+    }
+  </style>
+
+   <!-- Initialize batched PageImageInfo requests-->
+  {{prepareBatchPageImageInfoPromises dsData.items}}
+
+  <div class="valo-news ms-Grid valo-positions vm-Grid">
+    {{setVariable "id" (randomId "Positions")}}
+    {{setVariable "canUseIntersectionObserver" (useIntersectionObserver parameters.UseImageLazyLoading) }}
+    <div class="valo-news__list ms-Grid-row vm-Cards vm-Grid-row" id="{{@root.id}}">
+      {{#isEmpty dsData.items}}
+      <!-- Show something when no items are available -->
+      <p>{{resourceLabel "generalNoResultsFound"}}</p>
+      {{/isEmpty}}
+      {{#each dsData.items}}
+      {{setVariable "elementId" (generateId)}}
+      {{#if ValoJobPostingHiringManagerOWSUSER}}
+        {{setVariable "author" ValoJobPostingHiringManagerOWSUSER}}
+      {{else}}
+        {{setVariable "author" AuthorOWSUSER}}
+      {{/if}}
+      <div class="valo-news__item vm-Card showTransition">
+        <div class="valo-news__item__wrapper">
+          <valo-link unique-id="banner-id-{{@root.elementId}}" page-url="{{Path}}" panel-localization="{{json (getValoOpenLinkPanelLocalization)}}" message="{{Description}}" title="{{Title}}" img-url="{{PictureThumbnailURL}}" published-date="{{Created}}" author="{{@root.author}}" link-url="{{Path}}"></valo-link>
+          <div class="valo-events__item__banner-zone" id="banner-id-{{@root.elementId}}">
+            <div class="valo-news__item__banner">
+              {{#if PictureThumbnailURL}}
+              <valo-image-focal-point css-names="valo-news__item__banner__parallax parallax parallaxSlow"
+                img-url="{{imageResolution PictureThumbnailURL 4 null null ../parameters.UseThumbnailImages}}"
+                item-id="{{ListItemID}}" list-id="{{ListID}}" site-url="{{SPWebUrl}}"
+                layout-content="{{LayoutWebpartsContentOWSHTML}}"
+                observer-support="{{@root.canUseIntersectionObserver}}"></valo-image-focal-point>
+              {{else}}
+              <valo-image-focal-point css-names="valo-news__item__banner__parallax parallax parallaxSlow"
+                img-url="{{imageResolution BannerImageUrlOWSURLH 4 null null ../parameters.UseThumbnailImages}}"
+                item-id="{{ListItemID}}" list-id="{{ListID}}" site-url="{{SPWebUrl}}"
+                layout-content="{{LayoutWebpartsContentOWSHTML}}"
+                observer-support="{{@root.canUseIntersectionObserver}}"></valo-image-focal-point>
+              {{/if}}
+            </div>
+            <div class="valo-events__item__banner-info valo-job__item__banner-info">
+              <div class="valo-events__item__banner-info__icon">
+                <i class="valo-events__item__banner-info__icon-i ms-Icon ms-Icon--Megaphone" aria-hidden="true"></i>
+              </div>
+              <div class="valo-events__item__banner-info__text">
+                <span role="heading" aria-level="3" class="valo-events__item__banner-info__title">{{Title}}</span>
+              </div>
+            </div>
+          </div>
+          <div class="valo-news__item__info">
+            <div class="valo-news__item__abstract valo-jobs__item__description">{{ellipsis Description 140}}</div>
+            <div class="valo-job__item__metadata">
+              <div class="valo-job-item__metadata_details">
+                <div class="valo-job__item__contract" title="{{resourceLabel 'jpEmploymentStatus'}}">
+                  <i class="ms-Icon ms-Icon--Calendar" aria-hidden="true" title="{{resourceLabel 'jpEmploymentStatus'}}"></i>
+                  {{ValoJobPostingEmploymentStatusOWSCHCS}}
+                </div>
+                <div class="valo-job__item__applyby" title="{{resourceLabel 'jpApplyBy'}}">
+                  <i class="ms-Icon ms-Icon--GotoToday" aria-hidden="true" title="{{resourceLabel 'jpApplyBy'}}"></i>
+                  {{#if ValoJobPostingApplyByOWSDATE}}
+                    {{ wrapWithHtmlElementAsync 'span' (formatUtcToZonedTimeAsync ValoJobPostingApplyByOWSDATE SPWebUrl "PP") }}
+                  {{else}}
+                    <span> - </span>
+                  {{/if}}
+                </div>
+                <div class="valo-job__item__fte" title="{{resourceLabel 'jpHoursPerWeek'}}">
+                  {{#eq ValoJobPostingFTEOWSBOOL "1"}}
+                  <i class="ms-Icon ms-Icon--Recent" aria-hidden="true" title="{{resourceLabel 'jpHoursPerWeek'}}"></i>
+                  {{resourceLabel "jpLabelFullTime"}}
+                  {{/eq}}
+                  {{#eq ValoJobPostingFTEOWSBOOL "0"}}
+                  <i class="ms-Icon ms-Icon--Recent" aria-hidden="true" title="{{resourceLabel 'jpHoursPerWeek'}}"></i>
+                  {{hours ValoJobPostingEmploymentHoursOWSNMBR}}
+                  {{/eq}}
+                </div>
+                <div class="valo-job__item__location" title="{{resourceLabel 'jpOfficeLocation'}}">
+                  {{#if owstaxIdValoOfficeLocation}}
+                  <i class="ms-Icon ms-Icon--MapPin" aria-hidden="true"
+                    title="{{resourceLabel 'jpOfficeLocation'}}"></i>
+                  <valo-terms
+                    term-value="{{owstaxIdValoOfficeLocation}}"
+                    web-url="{{SPWebUrl}}" multilingual="{{@root.parameters.UseMultilingualTerms}}" hide-elms="true"
+                    css-icon="valo-news__item__tag-icon ms-Icon ms-Icon--POI"
+                    title-icon="{{resourceLabel 'jpOfficeLocation'}}">
+                  </valo-terms>
+                  {{else}}
+                    {{#if ValoLocationOWSTEXT}}
+                      <i class="ms-Icon ms-Icon--MapPin" aria-hidden="true"
+                        title="{{resourceLabel 'jpOfficeLocation'}}"></i>
+                        <span>{{ValoLocationOWSTEXT}}</span>
+                    {{else if ValoOfficeLocation}}
+                      <i class="ms-Icon ms-Icon--MapPin" aria-hidden="true"
+                        title="{{resourceLabel 'jpOfficeLocation'}}"></i>
+                        <span>{{ValoOfficeLocation}}</span>
+                    {{else}}
+                      <i class="ms-Icon ms-Icon--MapPin" aria-hidden="true"
+                        title="{{resourceLabel 'jpOfficeLocation'}}"></i>
+                        <span> - </span>
+                    {{/if}}
+                  {{/if}}
+                </div>
+              </div>
+              <div class="valo-job__item__tags" title="{{resourceLabel 'jpTags'}}">
+                {{#or ValoTagsTaxonomy owstaxIdValoTags ValoTags}}
+                <valo-terms
+                  term-value="{{#if ValoTagsTaxonomy}}{{ValoTagsTaxonomy}}{{else if owstaxIdValoTags }}{{owstaxIdValoTags}}{{else if ValoTags}}{{ValoTags}}{{/if}}"
+                  web-url="{{SPWebUrl}}" multilingual="{{@root.parameters.UseMultilingualTerms}}"
+                  css-icon="ms-Icon ms-Icon--Tag tooltip" title-icon="{{resourceLabel 'jpTags'}}">
+                </valo-terms>
+                {{/or}}
+              </div>
+            </div>
+          </div>
+          <div>
+          <send-to-teams message="{{Description}}" class-name="sendToTeams_position"  title="{{Title}}" img-url="{{PictureThumbnailURL}}" published-date="{{Created}}" author="{{@root.author}}" link-url="{{Path}}" />
+        </div>
+        </div>
+      </div>
+      {{/each}}
+    </div>
+  </div>
+  {{#if parameters.ShowMoreUrl}}
+  <div class="valo-showMore">
+    <a href="{{parameters.ShowMoreUrl}}" target="{{parameters.ShowMoreTarget}}">{{parameters.ShowMoreTitle}}</a>
+  </div>
+  {{/if}}
+
+</content>
+
+
+<content id="placeholder" type="x-handlebars-template">
+  <div class="valo-news ms-Grid vm-Grid">
+    <div class="valo-news__list ms-Grid-row vm-Cards vm-Grid-row placeholder">
+      {{#repeat nrOfResults}}
+      <div class="valo-news__item ms-sm4 vm-Card">
+        <div class="valo-news__item__wrapper">
+          <div class="valo-news__item__banner">
+            <div style="background-image:url('/_layouts/15/images/sitepagethumbnail.png');"></div>
+          </div>
+          <div class="valo-news__item__info">
+            <p class="valo-news__item__title"></p>
+            <div class="valo-news__item__tags"></div>
+          </div>
+        </div>
+      </div>
+      {{/repeat}}
+    </div>
+  </div>
+</content>

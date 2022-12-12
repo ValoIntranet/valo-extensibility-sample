@@ -1,0 +1,60 @@
+<content id="metadata" type="x-handlebars-metadata">
+  {
+  "fields": ["Path", "SPWebUrl", "ListID", "ListItemID", "SiteID", "WebID", "Title", "ValoTitle",
+  "ValoFAQAnswerOWSMTXT", "ValoFAQCategory"],
+  "query":"(ContentTypeId:0x010073A54E79C2E6914EBBFB29EF7861951E*)",
+  "totalResults": 12,
+  "uiBehaviours": {
+  "Valo__ExpandCollapseBehaviour": {
+  "parameters": {
+  "toggleTriggerElementSelector": ".valoFAQQuestionToggle",
+  "expandableContentElementsSelector": ".valoFAQAnswer",
+  "toggleIconSelector": ".valoFAQQuestionToggleIcon",
+  "toggleIconAddClassName": "ms-Icon--Add",
+  "toggleIconRemoveClassName": "ms-Icon--Remove",
+  "containsNestedExpandCollapsePanels": false
+  }
+  }
+  }
+  }
+</content>
+
+<content id="template" type="x-handlebars-template">
+  <div class="valo-faq ms-Grid">
+    <div class="valo-faq__questions-column">
+      <ul class="valo-faq__questions">
+        {{#each dsData.items}}
+        {{setVariable "editButtonId" (generateId)}}
+        <li class="valo-faq__question valoFAQQaItem" data-category="{{ValoFAQCategoryOWSCHCS}}">
+          <button class="valo-faq__question__toggle valoFAQQuestionToggle" type="button" aria-expanded="false"
+            aria-controls="answer-{{UniqueId}}-{{@index}}">
+            {{Title}}
+            <i class="valo-faq__question__toggle-icon valoFAQQuestionToggleIcon ms-Icon ms-Icon--Add"
+              aria-hidden="true"></i>
+          </button>
+          <div class="valo-faq__question__answer valoFAQAnswer" id="answer-{{UniqueId}}-{{@index}}">
+            {{{ValoFAQAnswerOWSMTXT}}}
+            <!-- level remoteListItem = 5 -->
+            <valo-security-trimmed level="remoteListItem" remote-site-url="{{SPWebUrl}}" list-id="{{ListID}}"
+              list-item-id="{{ListItemID}}" permissions="editListItems">
+              <div class="valo-faq__editbutton_row">
+                <button title="Edit FAQ Item : {{Title}}" class="valo-faq__editbutton valoFAQEditButton"
+                  id="{{@root.editButtonId}}" type="button" aria-expanded="false"
+                  aria-controls="answer-{{UniqueId}}-{{@index}}">
+                  <i class="valo-faq__editbutton-icon valoFAQEditButtonIcon ms-Icon ms-Icon--Edit"
+                    aria-hidden="true"></i>
+                </button>
+              </div>
+              <valo-trigger unique-id="{{@root.editButtonId}}" item-id="{{ListItemID}}" list-id="{{ListID}}"
+                site-url="{{SPWebUrl}}" panel-title="{{Title}}" trigger-type="FAQPanel" action-type="edit"
+                style="display: none;"></valo-trigger>
+            </valo-security-trimmed>
+          </div>
+        </li>
+
+        {{/each}}
+      </ul>
+    </div>
+  </div>
+  </div>
+</content>

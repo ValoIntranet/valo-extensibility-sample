@@ -1,0 +1,22 @@
+<content id="metadata" type="x-handlebars-metadata">
+  {
+    "parameters": [
+      {
+        "name":"chartColors",
+        "value": "",
+        "description": "Provide colors that are going to be used to render chart"
+      }
+    ]
+  }
+</content>
+
+<content id="template" type="x-handlebars-template">
+  <div width="400px" height="400px">
+    <canvas id="{{ dsData.elementId }}"></canvas>
+    {{#if dsData.chartJsConfiguration }}
+      {{ drawChartJs dsData.elementId dsData.chartJsConfiguration }}
+    {{else}}
+      <div id="uniqueUsers-tyGraph">Loading chart....</div>
+    {{/if}}
+  </div>
+</content>

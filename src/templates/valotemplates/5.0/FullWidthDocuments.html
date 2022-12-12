@@ -1,0 +1,161 @@
+<content id="metadata" type="x-handlebars-metadata">
+  {
+    "fields": ["Path", "LastModifiedTime", "Title", "EditorOWSUSER", "Author", "BannerImageUrlOWSURLH", "PictureThumbnailURL", "Description", "ListID", "ListItemID", "SPWebUrl", "ValoLocationOWSTEXT", "owstaxIdValoTags", "UniqueId"],
+    "query": "Path:{site} AND PromotedState:0",
+    "sorting": "ViewsLifeTime:descending",
+    "totalResults": 6,
+    "parameters": [
+    {
+      "name": "ShowMoreTitle",
+      "value": "Read more",
+      "description": "Title for show more link"
+    },
+    {
+      "name": "ShowMoreUrl",
+      "value": "",
+      "description": "Url for show more link"
+    },
+    {
+      "name": "ShowMoreTarget",
+      "value": "_blank",
+      "description": "Target for show more link"
+    }
+  ]
+  }
+</content>
+
+<content id="template" type="x-handlebars-template">
+  <style>
+    a.vm-Card.valo-news__item:hover,
+    a.vm-Card.valo-news__item:visited {
+        color: inherit;
+        text-decoration: none;
+    }
+
+    a.vm-Card.valo-news__item {
+        display: block;
+        text-decoration: none;
+    }
+
+    .valo-document-cards {
+      background: #4C4C4C;
+    }
+
+    .valo-document-cards .valo-wp__wp-title-bar {
+      padding-top: 24px;
+    }
+    .valo-document-cards .valo-wp__wp-title-bar__title {
+      margin-left: 12.2%;
+      color: #f4f4f4;
+    }
+
+    .valo-document-cards > .vm-Cards {
+      margin-left: 10%;
+      margin-right: 10%;
+      padding: 24px;
+      padding-top: 0px;
+    }
+
+    .persona{
+      border-radius: 50%;
+      position: relative;
+      background-color: #b1b1b1;
+      overflow: hidden;
+      width: 50px;
+      height: 50px;
+    }
+
+    .persona-image {
+      width: 100%;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%)
+    }
+  </style>
+  <div class="ms-Grid valo-document-cards">
+    <div class="valo-news__list ms-Grid-row vm-Cards">
+      {{#each items}}
+        <a class="valo-news__item ms-sm3 vm-Card showTransition" href="{{Path}}?web=1" title="{{Title}}" target="_blank">
+          <div class="valo-news__item__wrapper">
+            <div class="valo-news__item__info">
+              <p class="valo-news__item__title">
+                {{Title}}
+              </p>
+              <div class="valo-news__item__meta">
+                Edited {{dateAgoFormat LastModifiedTime}} - <span class="valo-news__item__meta__editor">{{splitSPUser EditorOWSUSER 'displayName'}}</span>
+              </div>
+              <div class="persona">
+                <img class="persona-image" loading="lazy" src="{{SPWebUrl}}/_layouts/15/userphoto.aspx?size=L&accountname={{splitSPUser EditorOWSUSER 'email'}}" alt="{{splitSPUser EditorOWSUSER 'displayName'}}">
+              </div>
+            </div>
+          </div>
+        </a>
+      {{/each}}
+    </div>
+  </div>
+  {{#if parameters.ShowMoreUrl}}
+  <div class="valo-showMore">
+    {{#ifCond parameters.ShowMoreTarget "==" "_blank"}}
+      <a href="{{parameters.ShowMoreUrl}}" target="{{parameters.ShowMoreTarget}}" data-interception="off">{{parameters.ShowMoreTitle}}</a>
+    {{else}}
+      <a href="{{parameters.ShowMoreUrl}}" target="{{parameters.ShowMoreTarget}}">{{parameters.ShowMoreTitle}}</a>
+    {{/ifCond}}
+  </div>
+  {{/if}}
+</content>
+
+
+<content id="placeholder" type="x-handlebars-template">
+  <div class="ms-Grid">
+    <div class="valo-news__list ms-Grid-row vm-Cards placeholder">
+      <div class="valo-news__item ms-sm3 vm-Card">
+        <div class="valo-news__item__wrapper">
+          <div class="valo-news__item__banner">
+            <div style="background-image:url('/_layouts/15/images/sitepagethumbnail.png');"></div>
+          </div>
+          <div class="valo-news__item__info">
+            <p class="valo-news__item__title"></p>
+            <div class="valo-news__item__meta"></div>
+            <div class="valo-news__item__abstract"></div>
+          </div>
+        </div>
+      </div>
+      <div class="valo-news__item ms-sm3 vm-Card">
+        <div class="valo-news__item__wrapper">
+          <div class="valo-news__item__banner">
+            <div style="background-image:url('/_layouts/15/images/sitepagethumbnail.png');"></div>
+          </div>
+          <div class="valo-news__item__info">
+            <p class="valo-news__item__title"></p>
+            <div class="valo-news__item__meta"></div>
+            <div class="valo-news__item__abstract"></div>
+          </div>
+        </div>
+      </div>
+      <div class="valo-news__item ms-sm3 vm-Card">
+        <div class="valo-news__item__wrapper">
+          <div class="valo-news__item__banner">
+            <div style="background-image:url('/_layouts/15/images/sitepagethumbnail.png');"></div>
+          </div>
+          <div class="valo-news__item__info">
+            <p class="valo-news__item__title"></p>
+            <div class="valo-news__item__meta"></div>
+            <div class="valo-news__item__abstract"></div>
+          </div>
+        </div>
+      </div>
+      <div class="valo-news__item ms-sm3 vm-Card">
+        <div class="valo-news__item__wrapper">
+          <div class="valo-news__item__banner">
+            <div style="background-image:url('/_layouts/15/images/sitepagethumbnail.png');"></div>
+          </div>
+          <div class="valo-news__item__info">
+            <p class="valo-news__item__title"></p>
+            <div class="valo-news__item__meta"></div>
+            <div class="valo-news__item__abstract"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</content>

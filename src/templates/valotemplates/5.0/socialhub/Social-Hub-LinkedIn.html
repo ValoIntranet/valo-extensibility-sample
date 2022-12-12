@@ -1,0 +1,44 @@
+<content id="metadata" type="x-handlebars-metadata">
+ {
+    "parameters": [
+      {
+        "name": "LinkedInPostId",
+        "value": "6478908214703460352"
+      },
+      {
+        "name": "Height",
+        "value": "500"
+      }
+    ]
+  }
+</content>
+
+<content id="template" type="x-handlebars-template">
+  <style>
+    .li-embed-container {
+      position: relative;
+      height: {{parameters.Height}}px;
+      overflow: hidden;
+      max-width: 100%;
+    }
+
+    .li-embed-container iframe, .li-embed-container object, .li-embed-container embed {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: {{parameters.Height}}px;
+    }
+  </style>
+
+  <div class='li-embed-container'>
+    <iframe src='{{linkedInUrl parameters.LinkedInPostId}}' loading="lazy" height="{{parameters.Height}}" frameborder='0' allowfullscreen=''></iframe>
+  </div>
+
+</content><html xmlns:mso="urn:schemas-microsoft-com:office:office" xmlns:msdt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882"><head>
+<!--[if gte mso 9]><xml>
+<mso:CustomDocumentProperties>
+<mso:TemplateTitle msdt:dt="string">Social Hub - LinkedIn</mso:TemplateTitle>
+</mso:CustomDocumentProperties>
+</xml><![endif]-->
+</head>

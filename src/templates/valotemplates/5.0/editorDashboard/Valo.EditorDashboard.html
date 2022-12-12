@@ -1,0 +1,218 @@
+<content id="metadata" type="x-handlebars-metadata">
+  {
+    "fields": ["Title", "SiteName", "SiteTitle", "HitHighlightedSummary", "ModifiedBy", "ModifiedById", "ModifiedOWSDATE", "CreatedOWSDATE", "FileExtension", "Path", "ViewsLifeTime", "PromotedState", "ContentType", "SPWebUrl", "ListItemID", "ListID"],
+    "query": "IsDocument:1 AND (AuthorOWSUSER:{User.Email} OR EditorOWSUSER:{User.Email}) AND FileExtension:aspx AND PromotedState:0",
+    "totalResults": 30,
+    "sorting": "LastModifiedTime:descending",
+    "pagingType": 3,
+    "parameters": [
+      {
+        "name": "ShowMoreTitle",
+        "value": "Read more",
+        "description": "Title for show more link"
+      },
+      {
+        "name": "ShowMoreUrl",
+        "value": "",
+        "description": "Url for show more link"
+      },
+      {
+        "name": "ShowMoreTarget",
+        "value": "_blank",
+        "description": "Target for show more link"
+      },
+      {
+        "name": "ExpiredAfter",
+        "value": "90",
+        "description": "The number of days after content is considered expired"
+      }
+    ]
+  }
+</content>
+
+<content id="template" type="x-handlebars-template">
+  <style>
+    #{{componentId}} .valo-list__header__col-title, #{{componentId}} .valo-list__item__col-title {
+      width: 20%;
+    }
+    #{{componentId}} .valo-list__header {
+      padding-left: 0px;
+    }
+
+    #{{componentId}} .valo-list__header__col-info__icon, #{{componentId}} .valo-list__item__col-info__icon {
+      width: 5%;
+    }
+
+    #{{componentId}} .valo-list__header__col-info__date, #{{componentId}} .valo-list__item__col-info__date {
+      width: 20%;
+    }
+
+    #{{componentId}} .valo-list__header__col-info__views, #{{componentId}} .valo-list__item__col-info__views {
+      width: 9%;
+    }
+
+    #{{componentId}} .valo-list__header__col-info__ct, #{{componentId}} .valo-list__item__col-info__ct {
+      width: 20%;
+    }
+
+    #{{componentId}} .valo-list__header__col-info__source-site, #{{componentId}} .valo-list__item__col-info__source-site {
+      width: 30%;
+    }
+
+    #{{componentId}} .valo-list__header__col-info__source-site, .valo-list__item__col-info__source-site {
+      font-style: normal;
+    }
+
+    #{{componentId}} a {
+      text-decoration: none;
+      color: #2d3f6e;
+    }
+
+    #{{componentId}} .ms-Icon {
+      font-size: medium;
+      vertical-align: sub;
+    }
+
+    #{{componentId}} .valo-expired {
+      background-color: {{@root.themeVariant.palette.themeLighterAlt}}
+    }  
+
+  </style>
+
+  <div class="valo-list ms-Grid">
+    <div class="valo-list__list ms-Grid-row vm-List">
+      <div class="valo-list__header">
+
+        <span class="valo-list__header__col-info__icon">
+
+        </span>
+
+        <div class="valo-list__header__col-title">
+          {{resourceLabel "LabelTitle"}}
+        </div>
+
+        <div class="valo-list__header__col-info">
+          <!-- "on HR Team" -->
+          <span class="valo-list__header__col-info__source-site">
+            {{resourceLabel "LabelSite"}}
+          </span>
+
+          <!-- " 3 days ago" -->
+          <span class="valo-list__header__col-info__date">
+            {{resourceLabel "generalCreated"}}
+          </span>
+
+          <!-- " 3 days ago" -->
+          <span class="valo-list__header__col-info__date">
+            {{resourceLabel "AnalyticsLastModified"}}
+          </span>
+
+          <span class="valo-list__header__col-info__ct">
+            {{resourceLabel "gnContentType"}}
+          </span>
+
+          <span class="valo-list__header__col-info__views">
+            {{resourceLabel "AnalyticsViews"}}
+          </span>
+
+        </div>
+      </div>
+      {{#each dsData.items}}
+        {{setVariable "elementId" (generateId)}}
+        {{#if @root.parameters.ExpiredAfter}}
+          {{#isExpired ModifiedOWSDATE @root.parameters.ExpiredAfter}}
+            <div class="valo-list__item valo-expired showTransition valo-list__editor-dashboard-item" id="{{@root.elementId}}">
+          {{else}}
+            <div class="valo-list__item showTransition valo-list__editor-dashboard-item" id="{{@root.elementId}}">
+          {{/isExpired}}
+        {{else}}
+          <div class="valo-list__item showTransition">
+        {{/if}}
+          <div class="valo-list__item__col-info__icon">
+            {{#ifCond PromotedState "==" "0"}}
+                <span><i class="valo-list__item__icon ms-Icon ms-Icon--{{fileIconName FileExtension}}" aria-hidden="true"></i></span>
+            {{/ifCond}}
+            {{#ifCond PromotedState "==" "1"}}
+                <span><i class="valo-list__item__icon ms-Icon ms-Icon--News" aria-hidden="true"></i></span>
+            {{/ifCond}}
+            {{#ifCond PromotedState "==" "2"}}
+                <span><i class="valo-list__item__icon ms-Icon ms-Icon--News" aria-hidden="true"></i></span>
+            {{/ifCond}}
+          </div>
+
+          <div class="valo-list__item__col-title"><span>{{Title}}</span></div>
+          <div class="valo-list__item__col-info">
+            <!-- "on HR Team" -->
+            <span class="valo-list__item__col-info__source-site"><span>{{SiteTitle}}</span></span>
+
+            <!-- " 3 days ago" -->
+            <span class="valo-list__item__col-info__date"> {{formatDateTimeDistanceToNow CreatedOWSDATE}}</span>
+
+            <!-- " 3 days ago" -->
+            <span class="valo-list__item__col-info__date"> {{formatDateTimeDistanceToNow ModifiedOWSDATE}}</span>
+            <span class="valo-list__item__col-info__ct">{{splitNewLine ContentType}}</span>
+            {{#if ViewsLifeTime}}
+              <span class="valo-list__item__col-info__views">{{ViewsLifeTime}}</span>
+            {{else}}
+              <span class="valo-list__item__col-info__views">0</span>
+            {{/if}}
+          </div>
+        </div>
+        <valo-trigger unique-id="{{@root.elementId}}" item-id="{{ListItemID}}" list-id="{{ListID}}" site-url="{{SPWebUrl}}" panel-title="{{Title}}"
+          trigger-type="PagePanel" action-type="view" style="display: none;"></valo-trigger>
+      {{/each}}
+    </div>
+  </div>
+  {{#if parameters.ShowMoreUrl}}
+    <div class="valo-showMore">
+      {{#ifCond parameters.ShowMoreTarget "==" "_blank"}}
+        <a href="{{parameters.ShowMoreUrl}}" target="{{parameters.ShowMoreTarget}}" data-interception="off">{{parameters.ShowMoreTitle}}</a>
+      {{else}}
+        <a href="{{parameters.ShowMoreUrl}}" target="{{parameters.ShowMoreTarget}}">{{parameters.ShowMoreTitle}}</a>
+      {{/ifCond}}
+    </div>
+  {{/if}}
+</content>
+
+
+<content id="placeholder" type="x-handlebars-template">
+  <div class="valo-list ms-Grid">
+    <div class="valo-list__list ms-Grid-row placeholder">
+      <div class="valo-list__header">
+        <div class="valo-list__header__col-title"></div>
+        <div class="valo-list__header__col-info">
+          <div class="valo-list__header__col-info__source-site"></div>
+          <div class="valo-list__header__col-info__author"></div>
+          <div class="valo-list__header__col-info__date"></div>
+        </div>
+      </div>
+      <a class="valo-list__item">
+        <div class="valo-list__item__col-icon"></div>
+        <div class="valo-list__item__col-title"></div>
+        <div class="valo-list__item__col-info">
+          <div class="valo-list__item__col-info__source-site"></div>
+          <div class="valo-list__item__col-info__author"></div>
+          <div class="valo-list__item__col-info__date"></div>
+        </div>
+      </a>
+      <a class="valo-list__item">
+        <div class="valo-list__item__col-icon"></div>
+        <div class="valo-list__item__col-title"></div>
+        <div class="valo-list__item__col-info">
+          <div class="valo-list__item__col-info__source-site"></div>
+          <div class="valo-list__item__col-info__author"></div>
+          <div class="valo-list__item__col-info__date"></div>
+        </div>
+      </a>
+      <a class="valo-list__item">
+        <div class="valo-list__item__col-icon"></div>
+        <div class="valo-list__item__col-title"></div>
+        <div class="valo-list__item__col-info">
+          <div class="valo-list__item__col-info__source-site"></div>
+          <div class="valo-list__item__col-info__author"></div>
+          <div class="valo-list__item__col-info__date"></div>
+        </div>
+      </a>
+    </div>
+  </div>
+</content>
