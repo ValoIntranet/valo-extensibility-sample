@@ -1,0 +1,125 @@
+<content id="metadata" type="x-handlebars-metadata">
+    {
+      "fields": [ "Title", "ValoPeopleLinkedInUrlOWSTEXT", "ValoPeopleFacebookUrlOWSTEXT", "ValoPeopleTwitterUrlOWSTEXT", "ValoPeopleWebsiteUrlOWSTEXT"],
+      "query": "ContentTypeId:0x0101009D1CB255DA76424F860D91F20E6C411800A984D1BDCA108B4D8E13AD19CD120C28* AND ListItemID:{page.id}",
+      "sorting": "Created:descending",
+      "totalResults": 1,
+      "parameters": [
+        {
+          "name": "ShowMoreTitle",
+          "value": "Read more",
+          "description": "Title for show more link"
+        },
+        {
+          "name": "ShowMoreUrl",
+          "value": "",
+          "description": "Url for show more link"
+        },
+        {
+          "name": "ShowMoreTarget",
+          "value": "_blank",
+          "description": "Target for show more link"
+        }
+      ]
+    }
+  </content>
+
+  <content id="template" type="x-handlebars-template">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <div class="ms-Grid">
+      <div class="ms-Grid-row">
+        {{#each dsData.items}}
+          <div class="item-social">
+              <div class="social-links">
+              {{#if ValoPeopleFacebookUrlOWSTEXT}}
+                  {{#if isTeamsAgent}}
+                  <a href="{{ValoPeopleFacebookUrlOWSTEXT}}"  data-interception="off" target="_parent" class="social-link">
+                    <div class="fa fa-facebook"></div>
+                    <div class="social-title">
+                      <p>Facebook</p>
+                    </div>
+                  </a>
+                  {{else}}
+                  <a href="{{ValoPeopleFacebookUrlOWSTEXT}}"  data-interception="off" target="_blank" class="social-link">
+                    <div class="fa fa-facebook"></div>
+                    <div class="social-title">
+                      <p>Facebook</p>
+                    </div>
+                  </a>
+                  {{/if}}
+              {{/if}}
+              {{#if ValoPeopleTwitterUrlOWSTEXT}}
+              {{#if isTeamsAgent}}
+                  <a href="{{ValoPeopleTwitterUrlOWSTEXT}}" class="social-link" data-interception="off" target="_parent">
+                    <div class="fa fa-twitter"></div>
+                    <div class="social-title">
+                      <p>Twitter</p>
+                    </div>
+                  </a>
+                  {{else}}
+                  <a href="{{ValoPeopleTwitterUrlOWSTEXT}}" class="social-link"  data-interception="off" target="_blank">
+                    <div class="fa fa-twitter"></div>
+                    <div class="social-title">
+                      <p>Twitter</p>
+                    </div>
+                  </a>
+                  {{/if}}
+              {{/if}}
+              {{#if ValoPeopleLinkedInUrlOWSTEXT}}
+              {{#if isTeamsAgent}}
+                  <a href="{{ValoPeopleLinkedInUrlOWSTEXT}}" class="social-link" data-interception="off" target="_parent">
+                    <div class="fa fa-linkedin"></div>
+                    <div class="social-title">
+                      <p>LinkedIn</p>
+                    </div>
+                  </a>
+                  {{else}}
+                  <a href="{{ValoPeopleLinkedInUrlOWSTEXT}}" class="social-link"  data-interception="off" target="_blank">
+                    <div class="fa fa-linkedin"></div>
+                    <div class="social-title">
+                      <p>LinkedIn</p>
+                    </div>
+                  </a>
+                  {{/if}}
+              {{/if}}
+              {{#if ValoPeopleWebsiteUrlOWSTEXT}}
+              {{#if isTeamsAgent}}
+                  <a href="{{ValoPeopleWebsiteUrlOWSTEXT}}" class="social-link" data-interception="off" target="_parent">
+                    <div class="fa fa-globe"></div>
+                    <div class="social-title">
+                      <p>Website</p>
+                    </div>
+                  </a>
+                  {{else}}
+                  <a href="{{ValoPeopleWebsiteUrlOWSTEXT}}" class="social-link"  data-interception="off" target="_blank">
+                    <div class="fa fa-globe"></div>
+                    <div class="social-title">
+                      <p>Website</p>
+                    </div>
+                  </a>
+                  {{/if}}
+              {{/if}}
+              </div>
+              </div>
+          </div>
+        {{/each}}
+      </div>
+    </div>
+    {{#if parameters.ShowMoreUrl}}
+      <div class="valo-showMore">
+        <a href="{{parameters.ShowMoreUrl}}" target="{{parameters.ShowMoreTarget}}">{{parameters.ShowMoreTitle}}</a>
+      </div>
+    {{/if}}
+  </content>
+
+
+  <content id="placeholder" type="x-handlebars-template">
+    <div class="ms-Grid">
+      <div class="ms-Grid-row placeholder">
+        <div class="item-social">
+            <div class="social-links">
+            </div>
+          </div>
+      </div>
+    </div>
+  </content>

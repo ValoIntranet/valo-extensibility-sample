@@ -1,0 +1,110 @@
+<content id="metadata" type="x-handlebars-metadata">
+  {
+    "fields": ["Path", "Title", "EditorOWSUSER", "BannerImageUrlOWSURLH", "PictureThumbnailURL", "ValoPeopleLinkedInUrlOWSTEXT", "ValoPeopleFacebookUrlOWSTEXT", "ValoPeopleTwitterUrlOWSTEXT", "ValoPeopleWebsiteUrlOWSTEXT", "LayoutWebpartsContentOWSHTML"],
+    "query": "ContentTypeId:0x0101009D1CB255DA76424F860D91F20E6C411800A984D1BDCA108B4D8E13AD19CD120C28*",
+    "sorting": "Created:descending",
+    "totalResults": 3,
+    "parameters": [
+      {
+        "name": "ShowMoreTitle",
+        "value": "Read more",
+        "description": "Title for show more link"
+      },
+      {
+        "name": "ShowMoreUrl",
+        "value": "",
+        "description": "Url for show more link"
+      },
+      {
+        "name": "ShowMoreTarget",
+        "value": "_blank",
+        "description": "Target for show more link"
+      },
+      {
+        "name": "UseThumbnailImages",
+        "value": "false",
+        "options": ["true","false"],
+        "description": "universalBannerUseThumbnailImagesDesc"
+      },
+      {
+        "name": "UseImageLazyLoading",
+        "value": "true",
+        "options": ["true","false"],
+        "description": "universalBannerUseImageLazyLoadingDesc"
+        }
+    ]
+  }
+</content>
+
+ <!-- Initialize batched PageImageInfo requests -->
+ {{prepareBatchPageImageInfoPromises dsData.items}}
+
+<content id="template" type="x-handlebars-template">
+  <style>
+    .valo-our-people-focus__item-link {
+      cursor: pointer;
+    }
+  </style>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <div class="ms-Grid vm-Focus">
+    {{setVariable "id" (randomId "ourPeopleFocus")}}
+    {{setVariable "canUseIntersectionObserver" (useIntersectionObserver parameters.UseImageLazyLoading) }}
+    <div class="ms-Grid-row vm-Cards valo-our-people-focus__list" id="{{@root.id}}">
+        {{#each dsData.items}}
+          {{setVariable "elementId" (generateId)}}
+          <div class="ms-sm4 vm-Card valo-our-people-focus__item">
+              <div class="valo-our-people-focus__item-wrapper">
+                  <valo-link   unique-id="id-{{@root.elementId}}" page-url="{{Path}}" localization="{{json (getValoOpenLinkLocalization)}}"></valo-link>
+                  <div class="valo-our-people-focus__item-link" id="id-{{@root.elementId}}">
+                    {{#if PictureThumbnailURL}}
+                      <valo-image-focal-point css-names="valo-our-people-focus__item__banner" img-url="{{imageResolution PictureThumbnailURL 4 null null ../parameters.UseThumbnailImages}}" item-id="{{ListItemID}}" list-id="{{ListID}}" site-url="{{SPWebUrl}}" layout-content="{{LayoutWebpartsContentOWSHTML}}" observer-support="{{@root.canUseIntersectionObserver}}"></valo-image-focal-point>
+                    {{else}}
+                      <valo-image-focal-point css-names="valo-our-people-focus__item__banner" img-url="{{imageResolution BannerImageUrlOWSURLH 4 null null ../parameters.UseThumbnailImages}}" item-id="{{ListItemID}}" list-id="{{ListID}}" site-url="{{SPWebUrl}}" layout-content="{{LayoutWebpartsContentOWSHTML}}" observer-support="{{@root.canUseIntersectionObserver}}"></valo-image-focal-point>
+                    {{/if}}
+                    <span role="heading" aria-level="3" class="valo-our-people-focus__item__name">{{Title}}</span>
+                  </div>
+                  <div class="valo-our-people-focus__item__info-links">
+                    {{#if ValoPeopleFacebookUrlOWSTEXT}}
+                      <a href="{{ValoPeopleFacebookUrlOWSTEXT}}" class="fa fa-facebook valo-our-people-focus__item__info-link"></a>
+                    {{/if}}
+                    {{#if ValoPeopleTwitterUrlOWSTEXT}}
+                      <a href="{{ValoPeopleTwitterUrlOWSTEXT}}" class="fa fa-twitter valo-our-people-focus__item__info-link"></a>
+                    {{/if}}
+                    {{#if ValoPeopleLinkedInUrlOWSTEXT}}
+                      <a href="{{ValoPeopleLinkedInUrlOWSTEXT}}" class="fa fa-linkedin valo-our-people-focus__item__info-link"></a>
+                    {{/if}}
+                    {{#if ValoPeopleWebsiteUrlOWSTEXT}}
+                      <a href="{{ValoPeopleWebsiteUrlOWSTEXT}}" class="fa fa-globe valo-our-people-focus__item__info-link"></a>
+                    {{/if}}
+                  </div>
+              </div>
+          </div>
+        {{/each}}
+    </div>
+  </div>
+  {{#if parameters.ShowMoreUrl}}
+  <div class="valo-showMore">
+    {{#ifCond parameters.ShowMoreTarget "==" "_blank"}}
+      <a href="{{parameters.ShowMoreUrl}}" target="{{parameters.ShowMoreTarget}}" data-interception="off">{{parameters.ShowMoreTitle}}</a>
+    {{else}}
+      <a href="{{parameters.ShowMoreUrl}}" target="{{parameters.ShowMoreTarget}}">{{parameters.ShowMoreTitle}}</a>
+    {{/ifCond}}
+  </div>
+  {{/if}}
+
+</content>
+
+
+<content id="placeholder" type="x-handlebars-template">
+  <div class="ms-Grid">
+    <div class="ms-Grid-row vm-Focus placeholder valo-our-people-focus__list">
+      <div class="valo-our-people-focus__item">
+        <div class="valo-our-people-focus__item-wrapper">
+          <div class="valo-our-people-focus__item__info-links">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</content><head><title>{{resourceLabel "LabelOUrPeople"}}</title></head>

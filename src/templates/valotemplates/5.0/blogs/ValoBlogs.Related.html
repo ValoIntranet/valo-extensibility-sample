@@ -1,0 +1,156 @@
+<content id="metadata" type="x-handlebars-metadata">
+    {
+    "fields": ["Path", "Created", "LastModifiedTime", "FirstPublishedDate", "Title", "AuthorOWSUSER", "EditorOWSUSER", "Author", "BannerImageUrlOWSURLH", "PictureThumbnailURL", "Description", "ListID", "ListItemID", "UniqueId", "SPWebUrl", "ValoLocationOWSTEXT", "owstaxIdValoOfficeLocation", "ValoOfficeLocation", "ValoTagsTaxonomy", "owstaxIdValoTags", "ValoTags", "ValoHighlightOWSBOOL", "LayoutWebpartsContentOWSHTML", "ValoBlogPublishDate"],
+    "query": "(ContentTypeId:0x0101009D1CB255DA76424F860D91F20E6C4118004F346AE83BEBE944ABDC990D1F9BD7B1* AND UniqueID&lt;&gt;{Page.UniqueID} AND ValoTagsTaxonomy={Page.ValoTags.TermID})",
+    "refinementFilters": "ValoBlogPublishDate:range(min,{Now},to=\"le\")",
+    "sorting": "ValoBlogPublishDate:descending",
+    "totalResults": 3,
+    "mobileResults": 3,
+    "skipResults": 0,
+    "resources": [
+      {
+        "key": "title",
+        "values": {
+          "default": "Title:",
+          "nl-nl": "Titel:"
+        }
+      }
+    ],
+    "parameters": [
+      {
+        "name": "ShowMoreTitle",
+        "value": "Read more",
+        "description": "Title for show more link"
+      },
+      {
+        "name": "ShowMoreUrl",
+        "value": "",
+        "description": "Url for show more link"
+      },
+      {
+        "name": "ShowMoreTarget",
+        "value": "_blank",
+        "description": "Target for show more link"
+      },
+      {
+        "name": "UseThumbnailImages",
+        "value": "false",
+        "options": ["true","false"],
+        "description": "universalBannerUseThumbnailImagesDesc"
+      },
+      {
+        "name": "UseImageLazyLoading",
+        "value": "true",
+        "options": ["true","false"],
+        "description": "universalBannerUseImageLazyLoadingDesc"
+      }
+    ]
+  }
+  </content>
+  
+  <content id="template" type="x-handlebars-template">
+    <style>
+      a.vm-Card.valo-blogs__item:hover,
+      a.vm-Card.valo-blogs__item:visited {
+        color: inherit;
+        text-decoration: none;
+      }
+  
+      a.vm-Card.valo-blogs__item {
+        display: block;
+        text-decoration: none;
+      }
+    </style>
+  
+    <!-- Initialize batched PageImageInfo requests-->
+    {{prepareBatchPageImageInfoPromises dsData.items}}
+  
+    <div class="valo-blogs compact ms-Grid vm-Grid">
+      {{setVariable "id" (randomId "blogsCompact")}}
+      {{setVariable "canUseIntersectionObserver" (useIntersectionObserver parameters.UseImageLazyLoading)}}
+      <div class="ms-Grid-row vm-Grid-row vm-Cards valo-blogs__list compact" id="{{@root.id}}">
+        {{#each dsData.items}}
+        <a class="valo-blogs__item ms-sm4 vm-Card showTransition" href="{{Path}}" title="{{Title}}">
+          <div class="valo-blogs__item__wrapper">
+            <div class="valo-blogs__item__banner">
+              {{#if PictureThumbnailURL}}
+                <valo-image-focal-point css-names="valo-blogs__item__banner__parallax parallax parallaxSlow" img-url="{{imageResolution PictureThumbnailURL 4 null null ../parameters.UseThumbnailImages}}" item-id="{{ListItemID}}" list-id="{{ListID}}" site-url="{{SPWebUrl}}" layout-content="{{LayoutWebpartsContentOWSHTML}}" observer-support="{{@root.canUseIntersectionObserver}}"></valo-image-focal-point>
+              {{else}}
+                <valo-image-focal-point css-names="valo-blogs__item__banner__parallax parallax parallaxSlow" img-url="{{imageResolution BannerImageUrlOWSURLH 4 null null ../parameters.UseThumbnailImages}}" item-id="{{ListItemID}}" list-id="{{ListID}}" site-url="{{SPWebUrl}}" layout-content="{{LayoutWebpartsContentOWSHTML}}" observer-support="{{@root.canUseIntersectionObserver}}"></valo-image-focal-point>
+              {{/if}}
+            </div>
+            <div class="valo-blogs__item__info">
+              <p role="heading" aria-level="3" class="valo-blogs__item__title">
+                {{ellipsis Title 80}}
+              </p>
+              <div class="valo-blogs__item__meta">
+                <span>
+                  {{#if ValoBlogPublishDate}}
+                      {{dateAgoFormat ValoBlogPublishDate}}
+                  {{else}}
+                      {{dateAgoFormat Created}}
+                  {{/if}}
+                </span>
+                {{#if AuthorOWSUSER}}
+                <span class="valo-blogs__item__meta__editor">{{splitSPUser AuthorOWSUSER 'displayName'}}</span>
+                {{else}}
+                <span class="valo-blogs__item__meta__editor">{{splitSPUser EditorOWSUSER 'displayName'}}</span>
+                {{/if}}
+              </div>
+            </div>
+          </div>
+        </a>
+        {{/each}}
+      </div>
+    </div>
+    {{#if parameters.ShowMoreUrl}}
+    <div class="valo-showMore">
+      {{#ifCond parameters.ShowMoreTarget "==" "_blank"}}
+        <a href="{{parameters.ShowMoreUrl}}" target="{{parameters.ShowMoreTarget}}" data-interception="off">{{parameters.ShowMoreTitle}}</a>
+      {{else}}
+        <a href="{{parameters.ShowMoreUrl}}" target="{{parameters.ShowMoreTarget}}">{{parameters.ShowMoreTitle}}</a>
+      {{/ifCond}}
+    </div>
+    {{/if}}
+  </content>
+  
+  <content id="placeholder" type="x-handlebars-template">
+    <div class="valo-blogs compact ms-Grid vm-Grid">
+      <div class="valo-blogs__list ms-Grid-row vm-Grid-row vm-Cards placeholder compact">
+        <div class="valo-blogs__item ms-sm4 vm-Card">
+          <div>
+            <div class="valo-blogs__item__banner">
+              <div style="background-image:url('/_layouts/15/images/sitepagethumbnail.png');"></div>
+            </div>
+            <div class="valo-blogs__item__info">
+              <p class="valo-blogs__item__title"></p>
+              <div class="valo-blogs__item__meta"></div>
+            </div>
+          </div>
+        </div>
+        <div class="valo-blogs__item ms-sm4 vm-Card">
+          <div>
+            <div class="valo-blogs__item__banner">
+              <div style="background-image:url('/_layouts/15/images/sitepagethumbnail.png');"></div>
+            </div>
+            <div class="valo-blogs__item__info">
+              <p class="valo-blogs__item__title"></p>
+              <div class="valo-blogs__item__meta"></div>
+            </div>
+          </div>
+        </div>
+        <div class="valo-blogs__item ms-sm4 vm-Card">
+          <div>
+            <div class="banner">
+              <div style="background-image:url('/_layouts/15/images/sitepagethumbnail.png');"></div>
+            </div>
+            <div class="valo-blogs__item__info">
+              <p class="valo-blogs__item__title"></p>
+              <div class="valo-blogs__item__meta"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </content>
+  

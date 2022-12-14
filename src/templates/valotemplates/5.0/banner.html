@@ -1,0 +1,71 @@
+<content id="metadata" type="x-handlebars-metadata">
+  {
+    "fields": ["Path", "Title", "BannerImageUrlOWSURLH", "PictureThumbnailURL", "LayoutWebpartsContentOWSHTML"],
+    "query": "PromotedState:2 AND -BannerImageUrlOWSURLH:sitepagethumbnail AND -PictureThumbnailURL:sitepagethumbnail",
+    "sorting": "LastModifiedTime:descending",
+    "totalResults": 1,
+    "skipResults": 0,
+    "resources": [
+      {
+        "key": "title",
+        "values": {
+          "default": "Title:",
+          "nl-nl": "Titel:"
+        }
+      }
+    ],
+    "hidePagingOptions": true,
+    "parameters": [
+    {
+      "name": "UseThumbnailImages",
+      "value": "false",
+      "options": ["true","false"],
+      "description": "universalBannerUseThumbnailImagesDesc"
+    }
+  ]
+  }
+</content>
+
+ <!-- Initialize batched PageImageInfo requests-->
+ {{prepareBatchPageImageInfoPromises dsData.items}}
+
+<content id="template" type="x-handlebars-template">
+
+  <div class="valo-banner">
+    {{#each dsData.items}}
+        {{#if PictureThumbnailURL}}
+          <valo-image-focal-point css-names="valo-banner__item showTransition" img-url="{{imageResolution PictureThumbnailURL 4 null null ../parameters.UseThumbnailImages}}" item-id="{{ListItemID}}" list-id="{{ListID}}" site-url="{{SPWebUrl}}" layout-content="{{LayoutWebpartsContentOWSHTML}}" observer-support="{{@root.canUseIntersectionObserver}}"></valo-image-focal-point>
+        {{else}}
+          <valo-image-focal-point css-names="valo-banner__item showTransition" img-url="{{imageResolution BannerImageUrlOWSURLH 4 null null ../parameters.UseThumbnailImages}}" item-id="{{ListItemID}}" list-id="{{ListID}}" site-url="{{SPWebUrl}}" layout-content="{{LayoutWebpartsContentOWSHTML}}" observer-support="{{@root.canUseIntersectionObserver}}"></valo-image-focal-point>
+        {{/if}}
+
+        <div class="valo-banner__item__overlay"></div>
+
+        {{#if ../paging}}
+        <a class="valo-banner__pagination-link valoPaginationPrevPage" href="javascript:;"><i class="valo-banner__pagination-icon ms-Icon ms-Icon--ChevronLeft" aria-hidden="true"></i></a>
+        <a class="valo-banner__pagination-link valoPaginationNextPage" href="javascript:;"><i class="valo-banner__pagination-icon ms-Icon ms-Icon--ChevronRight" aria-hidden="true"></i></a>
+        {{/if}}
+
+        <a class="valo-banner__item__link" href="{{Path}}" title="{{Title}}">
+          <span class="valo-banner__item__title">{{Title}}</span>
+        </a>
+      </div>
+    {{/each}}
+  </div>
+</content>
+
+
+<content id="placeholder" type="x-handlebars-template">
+  <div class="valo-banner placeholder">
+    <div class="valo-banner__item" style="background-image:url('/_layouts/15/images/sitepagethumbnail.png');">
+      <div class="valo-banner__item__link">
+        <span class="valo-banner__item__title"></span>
+        <div class="valo-banner__item__description"></div>
+        <div class="valo-banner__item__description"></div>
+        <div class="valo-banner__item__description"></div>
+        <div class="valo-banner__item__social"></div>
+        <span class="valo-banner__item__social__meta"></span>
+      </div>
+    </div>
+  </div>
+</content>

@@ -1,0 +1,78 @@
+<content id="metadata" type="x-handlebars-metadata">
+  {
+    "fields": ["Path", "LastModifiedTime", "Title", "EditorOWSUSER", "Author", "BannerImageUrlOWSURLH", "PictureThumbnailURL", "Description", "ValoPeoplePositionOWSTEXT", "ValoPeopleLinkedInUrlOWSTEXT", "ValoPeopleFacebookUrlOWSTEXT", "ValoPeopleTwitterUrlOWSTEXT", "ValoPeopleWebsiteUrlOWSTEXT", "LayoutWebpartsContentOWSHTML", "ValoPersonProfileOWSUSER", "ValoPersonLocationOWSTEXT", "NormUniqueId"],
+    "query": "ContentTypeId:0x0101009D1CB255DA76424F860D91F20E6C411800A984D1BDCA108B4D8E13AD19CD120C28*",
+    "sorting": "Created:descending",
+    "totalResults": 3,
+    "parameters": [
+      {
+        "name": "ShowMoreTitle",
+        "value": "Read more",
+        "description": "Title for show more link"
+      },
+      {
+        "name": "ShowMoreUrl",
+        "value": "",
+        "description": "Url for show more link"
+      },
+      {
+        "name": "ShowMoreTarget",
+        "value": "_blank",
+        "description": "Target for show more link"
+      },
+      {
+        "name": "UseThumbnailImages",
+        "value": "false",
+        "options": ["true","false"],
+        "description": "universalBannerUseThumbnailImagesDesc"
+      },
+      {
+        "name": "UseImageLazyLoading",
+        "value": "true",
+        "options": ["true","false"],
+        "description": "universalBannerUseImageLazyLoadingDesc"
+        }
+    ]
+  }
+</content>
+
+
+<content id="template" type="x-handlebars-template">
+  {{#if dsData.items}}
+    <div class="halo-cardTilesContainer">
+      {{#each dsData.items}}
+        {{setVariable "elementId" (generateId)}}
+        <div id="id-{{@root.elementId}}"><valo-compact-people-card item="{{ json this }}" /></div>
+      {{/each}}
+    </div>
+    {{#if parameters.ShowMoreUrl}}
+      <div class="halo-showMore">
+        {{#ifCond parameters.ShowMoreTarget "==" "_blank"}}
+          <a href="{{parameters.ShowMoreUrl}}" target="{{parameters.ShowMoreTarget}}" data-interception="off">{{parameters.ShowMoreTitle}}</a>
+        {{else}}
+          <a href="{{parameters.ShowMoreUrl}}" target="{{parameters.ShowMoreTarget}}">{{parameters.ShowMoreTitle}}</a>
+        {{/ifCond}}
+      </div>
+    {{/if}}
+  {{/if}}
+</content>
+
+<content id="placeholder" type="x-handlebars-template">
+  <div class="ms-Grid">
+    <div class="ms-Grid-row vm-Compact valo-our-people-compact__list placeholder">
+      {{#repeat 3}}
+        <div class="valo-our-people-compact__item">
+          <div class="valo-our-people-compact__item-link">
+            <span class="valo-our-people-compact__item__image-container" style="background-image:url('/_layouts/15/images/sitepagethumbnail.png');"></span>
+            <span class="person-name"></span>
+            <span class="person-position"></span>
+          </div>
+          <div class="valo-our-people-compact__item__info-links">
+          </div>
+        </div>
+      {{/repeat}}
+    </div>
+  </div>
+</content>
+
+<head><title>{{resourceLabel "LabelOurPeople"}}</title></head>

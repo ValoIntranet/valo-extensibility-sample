@@ -1,0 +1,128 @@
+<content id="metadata" type="x-handlebars-metadata">
+    {
+      "fields": ["Title", "SiteName", "SiteTitle", "HitHighlightedSummary", "ModifiedBy", "ModifiedById", "ModifiedOWSDATE", "FileExtension", "Path", "ValoTitle"],
+      "query": "IsDocument:1",
+      "totalResults": 30,
+      "sorting": "LastModifiedTime:descending",
+      "pagingType": 3,
+      "parameters": [
+        {
+          "name": "ShowMoreTitle",
+          "value": "Read more",
+          "description": "Title for show more link"
+        },
+        {
+          "name": "ShowMoreUrl",
+          "value": "",
+          "description": "Url for show more link"
+        },
+        {
+          "name": "ShowMoreTarget",
+          "value": "_blank",
+          "description": "Target for show more link"
+        }
+      ]
+    }
+  </content>
+
+  <content id="template" type="x-handlebars-template">
+    <div class="valo-list ms-Grid">
+      <div class="valo-list__list ms-Grid-row vm-List">
+        <div class="valo-list__header">
+          <div class="valo-list__header__col-title">
+            {{resourceLabel "LabelTitle"}}
+          </div>
+          <div class="valo-list__header__col-info">
+            <!-- "on HR Team" -->
+            <span class="valo-list__header__col-info__source-site">
+              {{resourceLabel "LabelSite"}}
+            </span>
+
+            <!-- " | by John Doe" -->
+            <span class="valo-list__header__col-info__author">
+                {{resourceLabel "LabelUpdatedBy"}}
+            </span>
+
+            <!-- " 3 days ago" -->
+            <span class="valo-list__header__col-info__date">
+              {{resourceLabel "LabelDate"}}
+            </span>
+          </div>
+        </div>
+        {{#each dsData.items}}
+          <a href="{{Path}}?web=1" target="_blank" class="valo-list__item showTransition">
+            <div class="valo-list__item__col-icon">
+              <i class="valo-list__item__icon ms-Icon ms-Icon--{{fileIconName FileExtension}}" aria-hidden="true"></i>
+            </div>
+
+            <div class="valo-list__item__col-title">
+              {{#if ValoTitle}}
+                {{ValoTitle}}
+              {{else}}
+                {{Title}}
+              {{/if}}
+            </div>
+            <div class="valo-list__item__col-info">
+              <!-- "on HR Team" -->
+              <span class="valo-list__item__col-info__source-site"><div onclick="window.open('{{SiteName}}', '_blank'); return false;">{{SiteTitle}}</div></span>
+
+              <!-- " | by John Doe" -->
+              <span class="valo-list__item__col-info__author"> <div onclick="window.open('{{userProfileUrl ModifiedById}}', '_blank'); return false;">{{ModifiedBy}}</div></span>
+
+              <!-- " 3 days ago" -->
+              <span class="valo-list__item__col-info__date"> {{dateAgoFormat ModifiedOWSDATE}}</span>
+
+            </div>
+          </a>
+        {{/each}}
+      </div>
+    </div>
+    {{#if parameters.ShowMoreUrl}}
+      <div class="valo-showMore">
+        <a href="{{parameters.ShowMoreUrl}}" target="{{parameters.ShowMoreTarget}}">{{parameters.ShowMoreTitle}}</a>
+      </div>
+    {{/if}}
+  </content>
+
+
+  <content id="placeholder" type="x-handlebars-template">
+    <div class="valo-list ms-Grid">
+      <div class="valo-list__list ms-Grid-row placeholder">
+        <div class="valo-list__header">
+          <div class="valo-list__header__col-title"></div>
+          <div class="valo-list__header__col-info">
+            <div class="valo-list__header__col-info__source-site"></div>
+            <div class="valo-list__header__col-info__author"></div>
+            <div class="valo-list__header__col-info__date"></div>
+          </div>
+        </div>
+        <a class="valo-list__item">
+          <div class="valo-list__item__col-icon"></div>
+          <div class="valo-list__item__col-title"></div>
+          <div class="valo-list__item__col-info">
+            <div class="valo-list__item__col-info__source-site"></div>
+            <div class="valo-list__item__col-info__author"></div>
+            <div class="valo-list__item__col-info__date"></div>
+          </div>
+        </a>
+        <a class="valo-list__item">
+          <div class="valo-list__item__col-icon"></div>
+          <div class="valo-list__item__col-title"></div>
+          <div class="valo-list__item__col-info">
+            <div class="valo-list__item__col-info__source-site"></div>
+            <div class="valo-list__item__col-info__author"></div>
+            <div class="valo-list__item__col-info__date"></div>
+          </div>
+        </a>
+        <a class="valo-list__item">
+          <div class="valo-list__item__col-icon"></div>
+          <div class="valo-list__item__col-title"></div>
+          <div class="valo-list__item__col-info">
+            <div class="valo-list__item__col-info__source-site"></div>
+            <div class="valo-list__item__col-info__author"></div>
+            <div class="valo-list__item__col-info__date"></div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </content>

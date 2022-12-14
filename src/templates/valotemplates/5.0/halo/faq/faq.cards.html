@@ -1,0 +1,60 @@
+<content id="metadata" type="x-handlebars-metadata">
+  {
+  "fields": ["Path","Created", "AuthorOWSUSER", "SPWebUrl", "ListID", "ListItemID", "SiteID", "WebID", "Title", "ValoTitle",
+  "ValoFAQAnswerOWSMTXT", "ValoFAQCategory"],
+  "query":"(ContentTypeId:0x010073A54E79C2E6914EBBFB29EF7861951E*)",
+  "totalResults": 12,
+  "resources": [
+  {
+  "key": "title",
+  "values": {
+  "default": "Title:",
+  "nl-nl": "Titel:"
+  }
+  }
+  ],
+  "parameters": [
+  {
+  "name": "faqItemIcon",
+  "value": "FeedbackRequestSolid",
+  "description": "The icon of a FAQ item",
+  "type": "Icon"
+  }
+  ]
+  }
+</content>
+
+<content id="template" type="x-handlebars-template">
+  <div class="halo-cardTilesContainer">
+    {{#if dsData.items}}
+      {{#each dsData.items}}
+        {{setVariable "elementId" (generateId)}}
+        <div id="valo-faq_item_info_{{@root.elementId}}">
+          <valo-faq-card item="{{ json this }}" />
+        </div>
+      {{/each}}
+    {{/if}}
+  </div>
+</content>
+<content id="placeholder" type="x-handlebars-template">
+  <div class="valo-faq ms-Grid vm-Grid">
+    <div class="valo-faq__list ms-Grid-row vm-Cards vm-Grid-row placeholder">
+      {{#repeat nrOfResults}}
+      <div class="valo-faq__item ms-sm4 vm-Card">
+        <div class="valo-faq__item__wrapper">
+          <div class="valo-faq__item__banner">
+            <div style="background-image:url('/_layouts/15/images/sitepagethumbnail.png');"></div>
+          </div>
+          <div class="valo-faq__item__info">
+            <p class="valo-faq__item__title"></p>
+            <div class="valo-faq__item__meta"></div>
+            <div class="valo-faq__item__abstract"></div>
+            <div class="valo-faq__item__social"></div>
+            <div class="valo-faq__item__tags"></div>
+          </div>
+        </div>
+      </div>
+      {{/repeat}}
+    </div>
+  </div>
+</content>

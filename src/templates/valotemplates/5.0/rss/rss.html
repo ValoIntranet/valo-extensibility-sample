@@ -1,0 +1,85 @@
+<content id="metadata" type="x-handlebars-metadata">
+  {
+    "parameters": [
+      {
+        "name": "DisplayFeedTitle",
+        "value": "true",
+        "options": ["true","false"],
+        "description": "Display the title of the feed before the feed items."
+      },
+      {
+        "name": "DisplayFeedItemSource",
+        "value": "true",
+        "options": ["true","false"]
+      },
+      {
+        "name": "DisplayItemCommentCount",
+        "value": "true",
+        "options": ["true","false"]
+      },
+      {
+        "name": "DisplayImages",
+        "value": "true",
+        "options": ["true","false"]
+      }
+    ]
+  }
+</content>
+
+<content id="template" type="x-handlebars-template" class="valo-rss-feed">
+  {{#if dsData}}
+    {{#eq parameters.DisplayFeedTitle "true"}}
+      {{#if dsData.title}}
+        {{#if dsData.link}}
+          <h3 class="valo-rss-feed__feed-title" title="{{dsData.description}}"><a href="{{dsData.link}}" target="_blank" class="valo-rss-feed__link">{{dsData.title}}</a></h3>
+        {{else}}
+          <h3>{{dsData.title}}</h3>
+        {{/if}}
+      {{/if}}
+    {{/eq}}
+    {{#isEmpty dsData.items}}
+      {{!-- Show something when no items are available --}}
+      <p class="valo-rss-feed__empty-feed"> {{resourceLabel "generalNoResultsFound"}}</p>
+    {{else}}
+      <ul class="valo-rss-feed__list">
+        {{#each dsData.items}}
+          <li class="valo-rss-feed__item">
+            {{#eq ../parameters.DisplayImages "true"}}
+              {{#if imageUrl}}
+                {{!-- RSS 2.0 image: --}}
+                <div class="valo-rss-feed__img-section" style="{{imageBlockStyle}}">
+                  {{#if link}}
+                  <a href="{{link}}" title="{{title}}" target="_blank"><img src="{{imageUrl}}" loading="lazy" alt="" class="valo-rss-feed__img"></a>
+                  {{else}}
+                  <img src="{{imageUrl}}" loading="lazy" alt="" class="valo-rss-feed__img">
+                  {{/if}}
+                </div>
+              {{/if}}
+            {{/eq}}
+            <span class="valo-rss-feed__title"><a href="{{link}}" title="{{title}}" class="valo-rss-feed__link" target="_blank">{{title}}</a></span>
+            {{#if contentSnippet}}
+              <p class="valo-rss-feed__ingress"><span class="valo-rss-feed__ingress-text">{{ellipsis contentSnippet 200}}</span></p>
+            {{/if}}
+            <div class="valo-rss-feed__item-metadata">
+                {{#if isoDate}}<time class="valo-rss-feed__date valo-rss-feed__item-metadata__item" datetime="{{isoDate}}">{{dateAgoFormat isoDate}}</time>{{/if}}
+                {{#eq ../parameters.DisplayFeedItemSource "true"}}
+                  {{#if source}}<span class="valo-rss-feed__sourceName valo-rss-feed__item-metadata__item">{{source}}</span>{{/if}}
+                {{/eq}}
+                {{#eq ../parameters.DisplayItemCommentCount "true"}}
+                  {{#if slash:comments}}
+                    <span class="valo-rss-feed__comment-count valo-rss-feed__item-metadata__item">
+                      <i class="ms-Icon ms-Icon--Comment" aria-hidden="true"></i>
+                      <span vclass="valo-rss-feed__comment-count-bagde">{{slash:comments}}</span>
+                    </span>
+                  {{/if}}
+                {{/eq}}
+            </div>
+          </li>
+        {{/each}}
+      </ul>
+    {{/isEmpty}}
+  {{else}}
+    {{!-- Show something when RSS feed was not available --}}
+    <p class="valo-rss-feed__no-feed">{{resourceLabel "generalNoResultsFound"}}</p>
+  {{/if}}
+</content>

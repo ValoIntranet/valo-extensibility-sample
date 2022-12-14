@@ -1,0 +1,311 @@
+<content id="metadata" type="x-handlebars-metadata">
+  {
+    "fields": ["PreferredName", "Path", "WorkEmail", "PictureURL", "JobTitle", "Department", "WorkPhone", "BaseOfficeLocation", "OfficeNumber", "Manager", "AccountName", "Firstname", "Lastname", "ValoBirthday"],
+    "query": "ValoBirthday:{birthdays_show_upcoming_days}:6",
+    "sorting": "ValoBirthday:ascending",
+    "sourceId": "B09A7990-05EA-4AF9-81EF-EDFAB16C4E31",
+    "totalResults": 20,
+    "skipResults": 0,
+    "hidePagingOptions": true,
+    "uiBehaviours": {
+      "Valo__ShowMoreBehaviour": {
+        "parameters": {
+          "showMoreTriggerElementSelector": "#showUpcomingBirthdays",
+          "isVisibleCssClass": "is-visible",
+          "elementsToShowSelector": ".upcomingBirthdays",
+          "textContainerSelector": "#showMoreTextContainer",
+          "showMoreKey": "Birthday_ShowMore",
+          "showLessKey": "Birthday_ShowLess",  
+          "sizeRefElementSelector": ".upcomingBirthdaysPanel",
+          "linksToUpdateTabIndexSelector": ".upcomingBirthdayLink",  
+          "toggleIconSelector": ".valo-birthdays__functions__show-more-btn__icon",
+          "collapsedIconCssClass": "ms-Icon--ChevronDown",
+          "expandedIconCssClass": "ms-Icon--ChevronUp"
+        }
+      },
+      "Valo__FlipToggleBehaviour": {
+        "parameters": {
+          "toggleOnElementsSelector": ".flipToggleFront",
+          "toggleOffElementsSelector": ".flipToggleBack",
+          "toggledLinksSelector": ".persona-link",
+          "dataContainerAttributeName": "data-container"
+        }
+      }
+    }
+  }
+</content>
+
+<content id="template" type="x-handlebars-template">
+<div class="valo-birthdays">
+  <div class="ms-Grid valo-birthdays__background">
+      {{#if dsData.items}}
+        {{#if_birthdaystoday dsData.items "ValoBirthday"}}
+          {{!-- show today headline only if there are birthdays today --}}
+          <div class="valo-birthdays__current-wrapper">
+              <div class="valo-birthdays__date-area">
+                  <div class="valo-birthdays__event-date valo-classic-spfxcontrols-color">
+                    <div class="valo-birthdays__event-date__month">
+                      {{formatNow "MMM"}}
+                    </div>
+                    <div class="valo-birthdays__event-date__day">
+                      {{formatNow "dd"}}
+                    </div>
+                    <div class="valo-birthdays__event-date__today">
+                      {{resourceLabel "Birthday_Today"}}
+                    </div>
+                    <div class="valo-birthdays__event-date__cake">
+                      <i class="valo-birthdays__event-date__cake__icon ms-Icon ms-Icon--Cake" aria-hidden="true"></i>
+                    </div>
+                  </div>
+              </div>
+              <div class="valo-birthdays__current-day">
+            {{#each (getTodaysBirthdays dsData.items "ValoBirthday")}}
+              {{!-- template for today's birthdays --}}
+                <div class="valo-birthdays__card showTransition vertical" id="cardFlipperContainer{{@index}}">
+                  <div class="valo-birthdays__card-flipper">
+                    <div class="valo-birthdays__card-front">
+                      <a href="javascript:;" class="valo-birthdays__card__flip-toggle flipToggleFront" tabindex="0" data-container="#cardFlipperContainer{{@index}}">
+                        <div class="valo-birthdays__card-details">
+                          <div class="valo-birthdays__card-details__thumbnail">
+                            <div class="valo-birthdays__card-details__thumbnail__image" style="background-image: url('{{SPWebUrl}}/_layouts/15/userphoto.aspx?size=L&amp;accountname={{resolveAccountName AccountName}}');"></div>
+                          </div>
+                            <div class="valo-birthdays__card-details__text">
+                                <span class="valo-birthdays__card-details__name">{{PreferredName}}</span>
+                                {{#if JobTitle}}
+                                <span class="valo-birthdays__card-details__position">{{JobTitle}}</span>
+                                {{/if}}
+                            </div>
+                        </div>
+                        <i class="ms-Icon ms-Icon--ChevronRight valo-classic-spfxcontrols-color" aria-hidden="true"></i>
+                      </a>
+                    </div>
+                    <div class="valo-birthdays__card-back valo-birthdays__card-info">
+                      <h3 class="valo-birthdays__card-back__title">{{ getWishesText Firstname }}</h3>
+                      {{!-- <div class="ms-Grid-row"></div> --}}
+                      <a href="javascript:;" class="valo-birthdays__card__flip-toggle flipToggleBack" tabindex="-1" data-container="#cardFlipperContainer{{@index}}">
+                        <i class="ms-Icon ms-Icon--ChevronLeft valo-classic-spfxcontrols-color" aria-hidden="true"></i>
+                      </a>
+                      {{#if WorkEmail}}
+                        <span class="valo-birthdays__card-back__detail ms-ListItem-primaryText">
+                            <i class="valo-birthdays__card-back__detail-icon ms-Icon ms-Icon--Mail" aria-hidden="true"></i>
+                            <a class="valo-birthdays__card-back__detail-contact-link persona-link" tabindex="-1" href="mailto:{{WorkEmail}}"> {{resourceLabel "Birthday_CongratulateViaEmail_Label"}}</a>
+                        </span>
+                        <span class="valo-birthdays__card-back__detail ms-ListItem-primaryText">
+                            <i class="valo-birthdays__card-back__detail-icon ms-Icon ms-Icon--TeamsLogo" aria-hidden="true"></i>
+                            <a class="valo-birthdays__card-back__detail-contact-link persona-link" tabindex="-1" href="im:sip:{{WorkEmail}}"> {{resourceLabel "Birthday_CongratulateViaIM_Label"}}</a>
+                        </span>
+                      {{/if}}
+                      {{#if WorkPhone}}
+                        <span class="valo-birthdays__card-back__detail ms-ListItem-primaryText">
+                            <i class="valo-birthdays__card-back__detail-icon ms-Icon ms-Icon--Phone" aria-hidden="true"></i>
+                            <a class="valo-birthdays__card-back__detail-contact-link persona-link" tabindex="-1" href="tel:{{WorkPhone}}">{{WorkPhone}}</a>
+                        </span>
+                      {{/if}}
+                    </div>
+                  </div>
+                </div>
+              {{/each}}
+              </div>
+            </div>
+            {{else}}
+            {{!-- no cake today --}}
+            <div class="valo-birthdays__current-wrapper">
+              <div class="valo-birthdays__date-area">
+                <div class="valo-birthdays__event-date valo-classic-spfxcontrols-color">
+                  <div class="valo-birthdays__event-date__month">{{formatNow "MMM"}}</div>
+            <div class="valo-birthdays__event-date__day">{{formatNow "dd"}}</div>
+                  <div class="valo-birthdays__event-date__time">{{resourceLabel "Birthday_Today"}}</div>
+                </div>
+              </div>
+
+              <div class="valo-birthdays__current-day">
+                  <div class="valo-birthdays__card showTransition vertical" id="cardFlipperContainer{{@index}}">
+                    <div class="valo-birthdays__card-flipper">
+                      <div class="valo-birthdays__card-noframe animate-background">
+                          <span class="valo-birthdays__card__no-cake">
+                            <span class="valo-birthdays__card__no-cake__text">{{resourceLabel "Birthday_NocakeToday_Label"}}</span>
+                            <i class="ms-Icon ms-Icon--EmojiDisappointed valo-birthdays__card__no-cake__icon" aria-hidden="true"></i>
+                          </span>
+                      </div>
+                    </div>
+                  </div>
+              </div>
+            </div>
+            {{/if_birthdaystoday}}
+
+            {{#if_birthdayspast_or_future dsData.items "ValoBirthday"}}
+              <div class="valo-birthdays__upcoming-birthdays upcomingBirthdays">
+                <div class="valo-birthdays__upcoming-birthdays__panel upcomingBirthdaysPanel">
+                  <h3 class="valo-birthdays__upcoming-birthdays__title">{{resourceLabel "Birthday_Upcoming_Label"}}</h3>
+              {{#each (getLaterBirthdays dsData.items "ValoBirthday")}}
+                  <div class="valo-birthdays__badge">
+                    <div class="valo-birthdays__badge__date">
+                      <div class="valo-birthdays__badge__date__day">{{formatBirthdayDate ValoBirthday "dd"}}</div>
+                      <div class="valo-birthdays__badge__date__month">{{formatBirthdayDate ValoBirthday "MMM"}}</div>
+                    </div>
+                    <a class="valo-birthdays__badge__link upcomingBirthdayLink" tabindex="-1" title="{{PreferredName}}{{#if JobTitle}} - {{JobTitle}}{{/if}}" target="_blank" href="{{Path}}">
+                      <div class="valo-birthdays__badge__thumbnail" style="background-image:url('{{SPWebUrl}}/_layouts/15/userphoto.aspx?size=L&amp;accountname={{resolveAccountName AccountName}}')">
+                          {{!-- <img class="valo-birthdays__badge__thumbnail__img" loading="lazy" src="{{SPWebUrl}}/_layouts/15/userphoto.aspx?size=L&amp;accountname={{resolveAccountName AccountName}}"> --}}
+                      </div>
+                    </a>
+                  </div>
+              {{/each}}
+              {{!-- the case when year changes in the defined time scope --}}
+              {{#each (getPastBirthdays dsData.items "ValoBirthday")}}
+                  <div class="valo-birthdays__badge">
+                    <div class="valo-birthdays__badge__date">
+                      <div class="valo-birthdays__badge__date__day">{{formatBirthdayDate ValoBirthday "dd"}}</div>
+                      <div class="valo-birthdays__badge__date__month">{{formatBirthdayDate ValoBirthday "MMM"}}</div>
+                    </div>
+                    <a class="valo-birthdays__badge__link upcomingBirthdayLink" tabindex="-1" title="{{PreferredName}}{{#if JobTitle}} - {{JobTitle}}{{/if}}" target="_blank" href="{{Path}}">
+                      <div class="valo-birthdays__badge__thumbnail" style="background-image:url('{{SPWebUrl}}/_layouts/15/userphoto.aspx?size=L&amp;accountname={{resolveAccountName AccountName}}')">
+                          {{!-- <img class="valo-birthdays__badge__thumbnail__img" loading="lazy" src="{{SPWebUrl}}/_layouts/15/userphoto.aspx?size=L&amp;accountname={{resolveAccountName AccountName}}"> --}}
+                      </div>
+                    </a>
+                  </div>
+              {{/each}}
+                </div>
+              </div>
+              <div class="ms-Grid-col ms-sm12 ms-md12 ms-lg12 valo-birthdays__functions">
+                <button type="button" tabindex="0" id="showUpcomingBirthdays" class="valo-birthdays__functions__show-more-btn">
+                  <span id="showMoreTextContainer" class="valo-birthdays__functions__show-more-btn__text">{{resourceLabel "Birthday_ShowMore"}}</span>
+                  <i class="ms-Icon ms-Icon--ChevronDown valo-birthdays__functions__show-more-btn__icon valo-classic-spfxcontrols-color" aria-label="{{resourceLabel 'generalShowMore'}}"></i>
+                </button>
+              </div>
+            {{/if_birthdayspast_or_future}}
+      {{else}}
+        {{!-- no cake today --}}
+        <div class="valo-birthdays__current-wrapper">
+          <div class="valo-birthdays__date-area">
+            <div class="eventInfo">
+              <div class="valo-birthdays__event-date valo-classic-spfxcontrols-color">
+                <div class="valo-birthdays__event-date__month">{{formatNow "MMM"}}</div>
+                <div class="valo-birthdays__event-date__day">{{formatNow "dd"}}</div>
+                <div class="valo-birthdays__event-date__time">{{resourceLabel "Birthday_Today"}}</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="valo-birthdays__current-day">
+              <div class="valo-birthdays__card showTransition vertical" id="cardFlipperContainer{{@index}}">
+                <div class="valo-birthdays__card-flipper">
+                  <div class="valo-birthdays__card-noframe animate-background">
+                      <span class="valo-birthdays__card__no-cake">
+                        <span class="valo-birthdays__card__no-cake__text">{{resourceLabel "Birthday_NocakeToday_Label"}}</span>
+                        <i class="ms-Icon ms-Icon--EmojiDisappointed valo-birthdays__card__no-cake__icon" aria-hidden="true"></i>
+                      </span>
+                  </div>
+                </div>
+              </div>
+          </div>
+
+        </div>
+      {{/if}}
+    </div>
+  </div>
+</div>
+</content>
+
+
+<content id="placeholder" type="x-handlebars-template">
+  <div class="ms-Grid valo-birthdays__background">
+    <div class="valo-birthdays__current-wrapper">
+        <div class="valo-birthdays__date-area">
+          <div class="valo-birthdays__event-date valo-classic-spfxcontrols-color">
+            <div class="valo-birthdays__event-date__month"></div>
+            <div class="valo-birthdays__event-date__day"></div>
+            <div class="valo-birthdays__event-date__time"></div>
+          </div>
+        </div>
+        <div class="valo-birthdays__current-day">
+          <div class="valo-birthdays__card showTransition vertical">
+              <div class="valo-birthdays__card-flipper">
+                <div class="valo-birthdays__card-front">
+                </div>
+                <div class="valo-birthdays__card-back cardInfo">
+                  <h3 class="valo-birthdays__card-back__title"></h3>
+                </div>
+              </div>
+          </div>
+
+          <div class="valo-birthdays__card showTransition vertical">
+              <div class="valo-birthdays__card-flipper">
+                <div class="valo-birthdays__card-front">
+                </div>
+                <div class="valo-birthdays__card-back cardInfo">
+                  <h3 class="valo-birthdays__card-back__title"></h3>
+                </div>
+              </div>
+          </div>
+
+          <div class="valo-birthdays__card showTransition vertical">
+              <div class="valo-birthdays__card-flipper">
+                <div class="valo-birthdays__card-front">
+                </div>
+                <div class="valo-birthdays__card-back cardInfo">
+                  <h3 class="valo-birthdays__card-back__title"></h3>
+                </div>
+              </div>
+          </div>
+        </div>
+
+      {{!-- <div class="ms-Grid-col ms-sm12 ms-md12 ms-lg12">
+        <div>
+          <div class="bannerZone">
+              <div class="banner" style="background-image:url('/_layouts/15/images/sitepagethumbnail.png');"></div>
+              <div class="bannerInfo">
+                <div class="icon"></div>
+                <div class="details"></div>
+              </div>
+          </div>
+          <div class="eventInfo">
+            <div class="valo-birthdays__event-date valo-classic-spfxcontrols-color">
+              <div class="valo-birthdays__event-date__month"></div>
+              <div class="valo-birthdays__event-date__day"></div>
+              <div class="valo-birthdays__event-date__time"></div>
+            </div>
+            <div class="eventDescription"></div>
+          </div>
+        </div>
+      </div>
+      <div class="ms-Grid-col ms-sm12 ms-md12 ms-lg12">
+        <div>
+          <div class="bannerZone">
+              <div class="banner" style="background-image:url('/_layouts/15/images/sitepagethumbnail.png');"></div>
+              <div class="bannerInfo">
+                <div class="icon"></div>
+                <div class="details"></div>
+              </div>
+          </div>
+          <div class="eventInfo">
+            <div class="valo-birthdays__event-date valo-classic-spfxcontrols-color">
+              <div class="valo-birthdays__event-date__month"></div>
+              <div class="valo-birthdays__event-date__day"></div>
+              <div class="valo-birthdays__event-date__time"></div>
+            </div>
+            <div class="eventDescription"></div>
+          </div>
+        </div>
+      </div>
+      <div class="ms-Grid-col ms-sm12 ms-md12 ms-lg12">
+        <div>
+          <div class="bannerZone">
+              <div class="banner" style="background-image:url('/_layouts/15/images/sitepagethumbnail.png');"></div>
+              <div class="bannerInfo">
+                <div class="icon"></div>
+                <div class="details"></div>
+              </div>
+          </div>
+          <div class="eventInfo">
+            <div class="valo-birthdays__event-date valo-classic-spfxcontrols-color">
+              <div class="valo-birthdays__event-date__month"></div>
+              <div class="valo-birthdays__event-date__day"></div>
+              <div class="valo-birthdays__event-date__time"></div>
+            </div>
+            <div class="eventDescription"></div>
+          </div>
+        </div>
+      </div> --}}
+    </div>
+  </div>
+</content>
