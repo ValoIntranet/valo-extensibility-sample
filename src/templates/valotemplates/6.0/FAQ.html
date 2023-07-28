@@ -1,0 +1,79 @@
+<content id="metadata" type="x-handlebars-metadata">
+  {
+  "fields": ["Title", "ValoFAQCategoryOWSCHCS", "ValoFAQAnswerOWSMTXT", "UniqueId"],
+  "query": "Path:{site} AND ContentTypeId:0x010073A54E79C2E6914EBBFB29EF7861951E*",
+  "sorting": "ViewsLifeTime:descending",
+  "totalResults": 20,
+  "uiBehaviours": {
+    "Valo__ExpandCollapseBehaviour": {
+      "parameters": {
+        "toggleTriggerElementSelector": ".valoFAQQuestionToggle",
+        "expandableContentElementsSelector": ".valoFAQAnswer",
+        "toggleIconSelector": ".valoFAQQuestionToggleIcon",
+        "toggleIconAddClassName": "ms-Icon--Add",
+        "toggleIconRemoveClassName": "ms-Icon--Remove",
+        "containsNestedExpandCollapsePanels": false
+      }
+    },
+    "Valo__FilterContentBehaviour": {
+      "parameters": {
+        "triggerElementsSelector": ".valoFAQCatFilter",
+        "triggerElementFilterValueAttributeName": "id",
+        "filterableElementsSelector": "[data-category]",
+        "matchingFilterElementsSelector": "[data-category='{value}']",
+        "cssDisplayType": "block"
+      }
+    }
+  }
+  }
+</content>
+
+<content id="template" type="x-handlebars-template">
+  <div class="valo-faq ms-Grid">
+    <div class="valo-faq__row ms-Grid-row ">
+      <div class="valo-faq__categories-column">
+        <ul class="valo-faq__categories">
+          <li id="all" class="valo-faq__category">
+            <button class="valo-faq__category__filter valoFAQCatFilter" id="all" type="button">{{resourceLabel 'generalAllLabel'}}</button>
+          </li>
+          {{#each (removeDuplicates dsData.items 'ValoFAQCategoryOWSCHCS')}}
+          <li id="{{ValoFAQCategoryOWSCHCS}}" class="valo-faq__category">
+            <button class="valo-faq__category__filter valoFAQCatFilter" id="{{ValoFAQCategoryOWSCHCS}}" type="button">{{ValoFAQCategoryOWSCHCS}}</button>
+          </li>
+          {{/each}}
+        </ul>
+      </div>
+      <div class="valo-faq__questions-column">
+        <ul class="valo-faq__questions">
+          {{#each dsData.items}}
+          <li class="valo-faq__question valoFAQQaItem" data-category="{{ValoFAQCategoryOWSCHCS}}">
+            <button class="valo-faq__question__toggle valoFAQQuestionToggle" type="button" aria-expanded="false" aria-controls="answer-{{UniqueId}}-{{@index}}">
+              {{Title}}
+              <i class="valo-faq__question__toggle-icon valoFAQQuestionToggleIcon ms-Icon ms-Icon--Add" aria-hidden="true"></i>
+            </button>
+            <div class="valo-faq__question__answer valoFAQAnswer" id="answer-{{UniqueId}}-{{@index}}">
+              {{{ValoFAQAnswerOWSMTXT}}}
+            </div>
+          </li>
+          {{/each}}
+        </ul>
+      </div>
+    </div>
+  </div>
+</content>
+
+<content id="placeholder" type="x-handlebars-template">
+  <div class="valo-faq ms-Grid">
+    <div class="valo-faq__row ms-Grid-row">
+      <div class="valo-faq__categories-column"></div>
+      <div class="valo-faq__questions-column"></div>
+      <div class="faq-item">
+        <div class="FAQ-question">
+          <div class="FAQ-answer">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+</content>

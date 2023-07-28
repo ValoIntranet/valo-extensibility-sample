@@ -1,0 +1,219 @@
+<content id="metadata" type="x-handlebars-metadata">
+  {
+  "fields": ["Path", "Title", "BannerImageUrlOWSURLH", "PictureThumbnailURL", "Description", "LastModifiedTime", "FirstPublishedDate", "AuthorOWSUSER", "EditorOWSUSER", "SPWebUrl", "ListID", "ListItemID", "UniqueId", "ValoLocationOWSTEXT", "owstaxIdValoOfficeLocation", "ValoOfficeLocation", "owstaxIdValoTags", "LayoutWebpartsContentOWSHTML", "ValoNewsPublishDate", "DepartmentId", "ValoMustRead", "ValoMustReadBefore", "ValoNewsTeamsCommentingConfiguration", "NormUniqueId", "RelatedHubSites", "ValoCommentingTypeOWSCHCS", "Audiences"],
+  "query": "ContentTypeId:0x0101009D1CB255DA76424F860D91F20E6C41180065789619A4EFB44992AF42CEEBB13C9A02* AND (PromotedState:1 OR PromotedState:2)) AND ValoHighlightOWSBOOL:1 AND NOT(ValoNewsPublishDate&gt;{Today}) AND NOT(ValoExpirationDate&lt;{Today})",
+  "sorting": "ValoNewsPublishDate:descending",
+  "totalResults": 5,
+  "skipResults": 0,
+  "resources": [
+  {
+  "key": "title",
+  "values": {
+  "default": "Title:",
+  "nl-nl": "Titel:"
+  }
+  }
+  ],
+  "parameters": [
+  {
+  "name": "UseThumbnailImages",
+  "value": "false",
+  "options": ["true","false"],
+  "description": "universalBannerUseThumbnailImagesDesc"
+  },
+  {
+  "name": "CustomImageWidth",
+  "value": "1920",
+  "description": "universalBannerCustomImageWidth"
+  },
+  {
+  "name": "UseMultilingualTerms",
+  "value": "true",
+  "options": ["true","false"],
+  "description": ""
+  }
+  ]
+  }
+</content>
+
+<content id="template" type="x-handlebars-template">
+  <style>
+    .valo-banner {
+      height: 484px !important;
+    }
+
+    .valo-banner__item {
+      height: 484px !important;
+    }
+
+    .valo-banner__item__link {
+      top: 40%;
+    }
+
+    .sendToTeams_banner {
+      height: 15px;
+      vertical-align: middle;
+      padding-bottom: 2px;
+      margin-left: 0px;
+      color: #fff;
+    }
+  </style>
+
+
+  <script src="https://unpkg.com/@valo/carousel@1.0.16/dist/carousel.min.js"></script>
+  <script>
+    (function () {
+      var itemsLength = "{{length dsData.items}}";
+      if (parseInt(itemsLength) > 0) {
+        // Initializing Siema slideshow
+        var slideshow = new Siema({
+          duration: 200,
+          threshold: 50,
+          loop: true,
+        });
+
+        function nextSlide() {
+          setTimeout(function () {
+            slideshow.next();
+            nextSlide();
+          }, 12000);
+        }
+
+        nextSlide();
+
+        // onClick event handlers
+        var compId = "{{componentId}}";
+        var prevBtn = document.querySelector("#" + compId + " .valo-banner-prevBtn");
+        if (prevBtn) {
+          prevBtn.addEventListener('click', function () {
+            slideshow.prev();
+          });
+        }
+        var nextBtn = document.querySelector("#" + compId + " .valo-banner-nextBtn");
+        if (nextBtn) {
+          nextBtn.addEventListener('click', function () {
+            slideshow.next();
+          });
+        }
+      }
+    })();
+  </script>
+
+  <!-- Initialize batched Likes/Comments requests-->
+  {{prepareBatchSocialInfoPromises dsData.items}}
+  <!-- Initialize batched terms requests-->
+  {{#if parameters.UseMultilingualTerms}}
+  {{prepareBatchTermsPromises dsData.items language}}
+  {{/if}}
+
+  <!-- Initialize batched PageImageInfo requests-->
+  {{prepareBatchPageImageInfoPromises dsData.items}}
+
+  <div class="valo-banner hero">
+    {{#gt (length dsData.items) 1}}
+    <button id="prev" class="valo-banner__pagination-link valo-banner-prevBtn"><i
+        class="valo-banner__pagination-icon ms-Icon ms-Icon--ChevronLeft" aria-hidden="true"></i></button>
+    <button id="next" class="valo-banner__pagination-link valo-banner-nextBtn"><i
+        class="valo-banner__pagination-icon ms-Icon ms-Icon--ChevronRight" aria-hidden="true"></i></button>
+    {{/gt}}
+    <div class="siema">
+      {{#each dsData.items}}
+      {{setVariable "elementId" (generateId)}}
+      <div class="valo-banner__item showTransition">
+        <valo-acknowledgement-label unique-id="{{UniqueId}}" valo-must-read-before="{{ValoMustReadBefore}}" department-id="{{DepartmentId}}" web-url="{{SPWebUrl}}" path="{{Path}}" valo-must-read="{{ValoMustRead}}"></valo-acknowledgement-label>
+        {{#if PictureThumbnailURL}}
+        <valo-image-focal-point css-names="valo-banner__item__image parallax"
+          img-url="{{imageResolution PictureThumbnailURL 4 null null ../parameters.UseThumbnailImages ../parameters.CustomImageWidth}}"
+          item-id="{{ListItemID}}" list-id="{{ListID}}" site-url="{{SPWebUrl}}"
+          layout-content="{{LayoutWebpartsContentOWSHTML}}" observer-support="{{@root.canUseIntersectionObserver}}"
+          observer-margin="0px 0px 0px -20px"></valo-image-focal-point>
+        {{else}}
+        <valo-image-focal-point css-names="valo-banner__item__image parallax"
+          img-url="{{imageResolution BannerImageUrlOWSURLH 4 null null ../parameters.UseThumbnailImages}}"
+          item-id="{{ListItemID}}" list-id="{{ListID}}" site-url="{{SPWebUrl}}"
+          layout-content="{{LayoutWebpartsContentOWSHTML}}" observer-support="{{@root.canUseIntersectionObserver}}"
+          observer-margin="0px 0px 0px -20px"></valo-image-focal-point>
+        {{/if}}
+
+        <div class="valo-banner__item__overlay"></div>
+
+        <span class="valo-banner__item__link" title="{{Title}}">
+          <span class="valo-banner__item__title" id="banner-title-id-{{@root.elementId}}" style="cursor:pointer">{{Title}}</span>
+          <valo-link unique-id="banner-title-id-{{@root.elementId}}" page-url="{{Path}}" localization="{{json (getValoOpenLinkLocalization)}}"
+              acknowledgment-button-localization="{{json (getValoAcknowledgmentButtonLocalization) }}"
+              document-acknowledgment-info="{{ json (getValoDocumentAcknowledgmentInfo this) }}"
+            ></valo-link>
+          <div class="valo-banner__item__description">{{ellipsis Description 180}}</div>
+          <div class="valo-banner__item__social">
+            <span class="valo-banner__item__social__meta">
+              <span>{{dateAgoFormat ValoNewsPublishDate}} by</span>
+
+              {{#if AuthorOWSUSER}}
+              <span class="valo-banner__item__social__meta__editor">{{AuthorOWSUSER}}</span>
+              {{/if}}
+            </span>
+            <span class="valo-banner__item__social__separator"></span>
+            <span class="valo-banner__item__social__comments">
+              <valo-social-reactions item-id="{{ListItemID}}" list-id="{{ListID}}" site-url="{{SPWebUrl}}" intranet-teams-commenting-value="{{ValoNewsTeamsCommentingConfiguration}}" commenting-type="{{ValoCommentingTypeOWSCHCS}}" yammer-Thread-Id="{{ValoYammerThreadIdOWSTEXT}}" unique-Id="{{UniqueId}}"></valo-social-reactions>
+            </span>
+            {{#or ValoLocationOWSTEXT owstaxIdValoTags}}
+            <span class="valo-banner__item__social__separator"></span>
+            {{/or}}
+            <span class="valo-banner__item__social__tags">
+              {{#or owstaxIdValoOfficeLocation ValoOfficeLocation}}
+              <valo-terms
+                term-value="{{#if owstaxIdValoOfficeLocation}}{{owstaxIdValoOfficeLocation}}{{else if ValoOfficeLocation }}{{ValoOfficeLocation}}{{/if}}"
+                web-url="{{SPWebUrl}}" multilingual="{{@root.parameters.UseMultilingualTerms}}"
+                css-span="valo-banner__item__social__tags__location"
+                css-icon="valo-banner__item__social-icon ms-Icon ms-Icon--POI">
+              </valo-terms>
+              {{else}}
+              {{#if ValoLocationOWSTEXT}}
+              <span class="valo-banner__item__social__tags__location">
+                <i class="valo-banner__item__social-icon ms-Icon ms-Icon--POI" aria-hidden="true"></i>
+                {{ValoLocationOWSTEXT}}
+              </span>
+              {{/if}}
+              {{/or}}
+            </span>
+          </div>
+        </span>
+
+      </div>
+      {{/each}}
+    </div>
+  </div>
+
+</content>
+
+
+<content id="placeholder" type="x-handlebars-template">
+  <style>
+    .valo-banner {
+      height: 484px !important;
+    }
+
+    .valo-banner__item {
+      height: 484px !important;
+    }
+
+    .valo-banner__item__link {
+      top: 40%;
+    }
+  </style>
+
+  <div class="valo-banner hero placeholder">
+    <div class="valo-banner__item">
+      <div class="valo-banner__item__image" style="background-image:url('/_layouts/15/images/sitepagethumbnail.png');">
+      </div>
+      <div class="valo-banner__item__link">
+        <span class="valo-banner__item__title"></span>
+        <div class="valo-banner__item__description"></div>
+        <div class="valo-banner__item__description"></div>
+        <div class="valo-banner__item__description"></div>
+        <div class="valo-banner__item__social"></div>
+        <span class="valo-banner__item__social__meta"></span>
+      </div>
+    </div>
+  </div>
+</content>

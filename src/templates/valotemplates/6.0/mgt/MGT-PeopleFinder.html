@@ -1,0 +1,50 @@
+<!-- Template is intended to work with Intranet2.1 -->
+<content id="metadata" type="x-handlebars-metadata">
+  {
+  "query": "https://graph.microsoft.com/v1.0/users",
+  "parameters": []
+  }
+</content>
+
+<content id="customHelpers" type="x-handlebars-helpers">
+  <script>
+    Handlebars.registerHelper("convertToJson", function displayItem(item) {      
+      return JSON.stringify(item);
+    });
+  </script>
+</content>
+
+<content id="template" type="x-handlebars-template">
+
+  <style></style>
+  <div class="ms-Grid valo-people-finder">
+    <div class="ms-Grid-row vm-Cards valo-people-finder__list">
+      {{#if dsData.items}}
+      {{#each dsData.items}}
+      <div class="ms-sm12 vm-Card ms-smd6 ms-lg4 ms-xlg3">
+        <div class="">
+          <mgt-person person-details="{{convertToJson this}}" fetch-image show-presence view="threelines"
+            person-card="click">
+            <template data-type="line1">
+              <div class="personDisplayName">
+                {{this.displayName}}
+              </div>
+            </template>
+            <template data-type="line2">
+              <div class="personEmail">
+                {{this.mail}}
+              </div>
+            </template>
+            <template data-type="line3">
+              <div class="personJob">
+                {{this.jobTitle}}
+              </div>
+            </template>
+          </mgt-person>
+        </div>
+      </div>
+      {{/each}}
+      {{/if}}
+    </div>
+  </div>
+</content>

@@ -1,0 +1,245 @@
+<content id="metadata" type="x-handlebars-metadata">
+  {
+    "fields": ["Path","Created","AuthorOWSUSER", "Title", "BannerUrlOWSURLH", "Location", "EventsRollUpStartDate", "EventsRollUpEndDate", "Description", "ValoEventDate", "SPWebUrl", "ListID", "ListItemID", "IsAllDayEvent", "SiteID", "WebID", "ValoRecurrenceData", "ValofRecurrence", "UniqueId", "ValoSiteTitle", "DisplayAuthor", "CategoryOWSCHCS"],
+    "query": "(ContentTypeId:0x0102*) AND (ValofRecurrence:0) AND (EventsRollUpStartDate>={VALO_EVENT_START_DATE_TOKEN} AND EventsRollUpEndDate<={VALO_EVENT_END_DATE_TOKEN})",
+    "refinementFilters": "EventsRollUpEndDate:range({Now},max,from=\"ge\")",
+    "sorting": "EventsRollUpStartDate:ascending",
+    "totalResults": 3,
+    "skipResults": 0,
+    "resources": [
+      {
+        "key": "title",
+        "values": {
+          "default": "Title:",
+          "nl-nl": "Titel:"
+        }
+      }
+    ],
+    "parameters": [
+      {
+        "name": "ShowMoreTitle",
+        "value": "Read more",
+        "description": "Title for show more link"
+      },
+      {
+        "name": "ShowMoreUrl",
+        "value": "",
+        "description": "Url for show more link"
+      },
+      {
+        "name": "ShowMoreTarget",
+        "value": "_blank",
+        "description": "Target for show more link"
+      },
+      {
+        "name": "UseThumbnailImages",
+        "value": "false",
+        "options": ["true","false"],
+        "description": "universalBannerUseThumbnailImagesDesc"
+      },
+      {
+        "name": "UseImageLazyLoading",
+        "value": "true",
+        "options": ["true","false"],
+        "description": "universalBannerUseImageLazyLoadingDesc"
+      }
+    ]
+  }
+</content>
+
+<content id="template" type="x-handlebars-template">
+  <style>
+    .valo-events__item__rec-event-sendtoteams {
+      position: absolute;
+      right: 4px;
+      bottom: 12px;
+    }
+    .sendToTeams_eventsRecFull {
+       vertical-align: middle;
+       float:right;
+    }
+   .sendToTeams_eventsRecFull:hover {
+      background-color: transparent;
+    }
+    .sendToTeams_eventsRecFull:active {
+      background-color: transparent;
+    }
+     .send_to_teams__svg_icon_styles{
+      width: 14px;
+      height: 14px;
+      fill:  rgb(182, 182, 182);
+    }
+  </style>
+  <div class="valo-events ms-Grid vm-Grid">
+    {{setVariable "id" (randomId "eventsRec")}}
+    {{setVariable "canUseIntersectionObserver" (useIntersectionObserver parameters.UseImageLazyLoading)}}
+    {{setVariable "preferRegionalSettingsOfWebToDisplayDates" parameters.PreferRegionalSettingsOfWebToDisplayDates}}
+    <div class="valo-events__list ms-Grid-row vm-Cards vm-Grid-row" id="{{@root.id}}">
+      {{#each dsData.items}}
+        {{setVariable "elementId" (generateId)}}
+        {{setVariable "elementId-date" (generateId)}}
+        <div class="valo-events__item ms-sm4 vm-Card showTransition" title="">
+          <div class="valo-events__item__wrapper">
+            <div class="valo-events__item__banner-zone" id="{{@root.elementId}}">
+              {{#if @root.canUseIntersectionObserver }}
+                {{#if BannerUrlOWSURLH}}
+                  <div class="valo-events__item__banner" data-bg="{{imageResolution BannerUrlOWSURLH 1 SiteID WebID ../parameters.UseThumbnailImages}}"></div>
+                {{else}}
+                  <div class="valo-events__item__banner"></div>
+                {{/if}}
+              {{else}}
+                {{#if BannerUrlOWSURLH}}
+                  <div class="valo-events__item__banner" style="background-image:url('{{imageResolution BannerUrlOWSURLH 1 SiteID WebID ../parameters.UseThumbnailImages}}');"></div>
+                {{else}}
+                  <div class="valo-events__item__banner"></div>
+                {{/if}}
+              {{/if}}
+              <div class="valo-events__item__banner-info">
+                <div class="valo-events__item__banner-info__icon">
+                  {{#eq ValofRecurrence "1"}}
+                    <i class="valo-events__item__banner-info__icon-i ms-Icon ms-Icon--RecurringEvent" aria-hidden="true"></i>
+                  {{else}}
+                    <i class="valo-events__item__banner-info__icon-i ms-Icon ms-Icon--Calendar" aria-hidden="true"></i>
+                  {{/eq}}
+                </div>
+                <div class="valo-events__item__banner-info__text">
+                  <span role="heading" aria-level="3" class="valo-events__item__banner-info__title" title="{{Title}}">{{Title}}</span>
+                  <span class="valo-events__item__banner-info__location">{{ellipsis Location 70}}</span>
+                </div>
+              </div>
+            </div>
+            <valo-trigger unique-id="{{@root.elementId}}" item-id="{{ListItemID}}" list-id="{{ListID}}" site-url="{{SPWebUrl}}" panel-title="{{Title}}"
+          trigger-type="EventsPanel" action-type="view" style="display: none;" panel-background-image-url="{{BannerUrlOWSURLH}}"></valo-trigger>
+            <div class="valo-events__item__event-info">
+              <div class="valo-events__item__event-date" id="{{@root.elementId-date}}">
+                <!-- Check if date and month for start date/end date of the event is the same or not. -->
+                {{#eq (doesEventSpanAcrossMultipleDays EventsRollUpStartDate EventsRollUpEndDate IsAllDayEvent @root.preferRegionalSettingsOfWebToDisplayDates) "0"}}
+                  <!-- Event is within one day, so then just display date and month of start date. -->
+                  <div class="valo-events__item__event-month">
+                    {{ getEventDateAsFormattedString EventsRollUpStartDate "MMM" IsAllDayEvent @root.preferRegionalSettingsOfWebToDisplayDates }}
+                  </div>
+                  <div class="valo-events__item__event-day">
+                    {{ getEventDateAsFormattedString EventsRollUpStartDate "dd" IsAllDayEvent @root.preferRegionalSettingsOfWebToDisplayDates }}
+                  </div>
+                {{else}}
+                  <!-- Event is spanning across multiple-days, so display date and month of both start date and end date respectively. -->
+                  <div class="valo-events__item__event-startmonth">
+                    {{ getEventDateAsFormattedString EventsRollUpStartDate "MMM" IsAllDayEvent @root.preferRegionalSettingsOfWebToDisplayDates }}
+                  </div>
+                  <div class="valo-events__item__event-startday">
+                    {{ getEventDateAsFormattedString EventsRollUpStartDate "dd" IsAllDayEvent @root.preferRegionalSettingsOfWebToDisplayDates }}
+                  </div>
+                  <div class="valo-events__item__event-separator">-</div>
+                  <div class="valo-events__item__event-endmonth">
+                    {{ getEventDateAsFormattedString EventsRollUpEndDate "MMM" IsAllDayEvent @root.preferRegionalSettingsOfWebToDisplayDates }}
+                  </div>
+                  <div class="valo-events__item__event-endday">
+                    {{ getEventDateAsFormattedString EventsRollUpEndDate "dd" IsAllDayEvent @root.preferRegionalSettingsOfWebToDisplayDates }}
+                  </div>
+                {{/eq}}
+
+                <div class="valo-events__item__event-time">
+                  {{#eq (isMidnightEvent EventsRollUpStartDate EventsRollUpEndDate IsAllDayEvent @root.preferRegionalSettingsOfWebToDisplayDates) "1"}}
+                    <i class="valo-events__item__event-time-icon ms-Icon ms-Icon--ClearNight" aria-hidden="true"></i>
+                  {{/eq}}
+                  {{ getEventTimeAsFormattedString EventsRollUpStartDate EventsRollUpEndDate "p" IsAllDayEvent @root.preferRegionalSettingsOfWebToDisplayDates }}
+                </div>
+              </div>
+              <div class="valo-events__item__event-description">
+                {{ellipsis Description 140}}
+              </div>
+              <div class="valo-events__item__rec-event-sendtoteams">
+                <send-to-teams class-name="sendToTeams_eventsRecFull"  title="{{Title}}" img-url="{{BannerUrlOWSURLH}}" published-date="{{Created}}" author="{{AuthorOWSUSER}}" link-url="{{getEventPage SPWebUrl ListID ListItemID}}"  message="{{Description}}"/>
+              </div>
+            </div>
+          </div>
+        </div>
+        <valo-trigger unique-id="{{@root.elementId-date}}" item-id="{{ListItemID}}" list-id="{{ListID}}" site-url="{{SPWebUrl}}" panel-title="{{Title}}"
+          trigger-type="EventsPanel" action-type="view" style="display: none;" panel-background-image-url="{{BannerUrlOWSURLH}}"></valo-trigger>
+      {{/each}}
+    </div>
+  </div>
+  {{#if parameters.ShowMoreUrl}}
+    <div class="valo-showMore">
+      {{#ifCond parameters.ShowMoreTarget "==" "_blank"}}
+        <a href="{{parameters.ShowMoreUrl}}" target="{{parameters.ShowMoreTarget}}" data-interception="off">{{parameters.ShowMoreTitle}}</a>
+      {{else}}
+        <a href="{{parameters.ShowMoreUrl}}" target="{{parameters.ShowMoreTarget}}">{{parameters.ShowMoreTitle}}</a>
+      {{/ifCond}}
+    </div>
+  {{/if}}
+  <script src="https://unpkg.com/@valo/carousel@1.0.16/dist/carousel.min.js"></script>
+  <script>
+      (function () {
+        var useIObserver = "{{parameters.UseImageLazyLoading}}"
+        var observer = new Observer({
+          selector: "#{{@root.id}}",
+          useIntersectionObserver: useIObserver
+        });
+      })();
+    </script>
+</content>
+
+<content id="placeholder" type="x-handlebars-template">
+  <div class="ms-Grid vm-Grid">
+    <div class="ms-Grid-row vm-Cards vm-Grid-row placeholder">
+      <a class="ms-sm4 vm-Card valo-events__item">
+        <div class="valo-events__item__wrapper">
+          <div class="valo-events__item__banner-zone">
+              <div class="valo-events__item__banner" style="background-image:url('/_layouts/15/images/sitepagethumbnail.png');"></div>
+              <div class="valo-events__item__banner-info">
+                <div class="valo-events__item__banner-info__icon"></div>
+                <div class="valo-events__item__banner-info__text"></div>
+              </div>
+          </div>
+          <div class="valo-events__item__event-info">
+            <div class="valo-events__item__event-date">
+              <div class="valo-events__item__event-month"></div>
+              <div class="valo-events__item__event-day"></div>
+              <div class="valo-events__item__event-time"></div>
+            </div>
+            <div class="valo-events__item__event-description"></div>
+          </div>
+        </div>
+      </a>
+      <a class="ms-sm4 vm-Card valo-events__item">
+        <div class="valo-events__item__wrapper">
+          <div class="valo-events__item__banner-zone">
+              <div class="valo-events__item__banner" style="background-image:url('/_layouts/15/images/sitepagethumbnail.png');"></div>
+              <div class="valo-events__item__banner-info">
+                <div class="valo-events__item__banner-info__icon"></div>
+                <div class="valo-events__item__banner-info__text"></div>
+              </div>
+          </div>
+          <div class="valo-events__item__event-info">
+            <div class="valo-events__item__event-date">
+              <div class="valo-events__item__event-month"></div>
+              <div class="valo-events__item__event-day"></div>
+              <div class="valo-events__item__event-time"></div>
+            </div>
+            <div class="valo-events__item__event-description"></div>
+          </div>
+        </div>
+      </a>
+      <a class="ms-sm4 vm-Card valo-events__item">
+        <div class="valo-events__item__wrapper">
+          <div class="valo-events__item__banner-zone">
+              <div class="valo-events__item__banner" style="background-image:url('/_layouts/15/images/sitepagethumbnail.png');"></div>
+              <div class="valo-events__item__banner-info">
+                <div class="valo-events__item__banner-info__icon"></div>
+                <div class="valo-events__item__banner-info__text"></div>
+              </div>
+          </div>
+          <div class="valo-events__item__event-info">
+            <div class="valo-events__item__event-date">
+              <div class="valo-events__item__event-month"></div>
+              <div class="valo-events__item__event-day"></div>
+              <div class="valo-events__item__event-time"></div>
+            </div>
+            <div class="valo-events__item__event-description"></div>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+</content>

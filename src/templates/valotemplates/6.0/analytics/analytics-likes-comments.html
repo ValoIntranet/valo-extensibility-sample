@@ -1,0 +1,97 @@
+<content id="metadata" type="x-handlebars-metadata">
+  {
+    "parameters": []
+  }
+</content>
+
+<content id="template" type="x-handlebars-template" class="valo-analytics">
+  <style>
+    .valo-analytics__table__row {
+      cursor: pointer;
+    }
+  </style>
+
+  <div class="valo-analytics valo-analytics-likes ms-Grid">
+    <div class="valo-wp__wp-title-bar">
+      {{#if dsData.title}}
+        <span class="valo-wp__wp-title-bar__title">{{dsData.title}}</span>
+      {{/if}}
+    </div>
+
+    <div class="valo-analytics__row ms-Grid-row">
+
+      <div class="valo-analytics__graph-column ms-sm12 ms-xl5">
+        {{#if dsData}}
+        <span id="spanchart-{{dsData.title}}" class="valo-analytics__graph">
+          <div class="valo-analytics__graph__wrapper"><canvas id="chart-{{dsData.title}}-{{dsData.randId}}" width="400" height="400"></canvas></div>
+          {{{drawChart dsData dsData.title dsData.randId dsData.sortAscending 0}}}
+        </span>
+        {{/if}}
+      </div>
+
+      <div class="valo-analytics__table-column ms-sm12 ms-xl7">
+          {{#isEmpty dsData.items}}
+          <!-- Show something when no items are available -->
+          <p>{{resourceLabel "generalNoResultsFound"}}</p>
+          {{else}}
+
+          <div class="valo-analytics__table" role="table">
+            <div class="valo-analytics__table__header" role="row">
+              <span class="valo-analytics__table__header__title" role="columnheader">
+                {{resourceLabel "AnalyticsName"}}
+              </span>
+              <div class="valo-analytics__table__header__info">
+                <span class="valo-analytics__table__header__source-site" role="columnheader">{{resourceLabel "AnalyticsSite" }}</span>
+                {{#if dsData.isLikesView}}
+                <span class="valo-analytics__table__header__likes" role="columnheader">
+                  <i class="valo-analytics__table__header__icon ms-Icon ms-Icon--Like" aria-hidden="true" title="{{dsData.countTitle}}"></i>
+                  <span class="valo-analytics__alt-label">{{dsData.countTitle}}</span>
+                </span>
+                {{else}}
+                <span class="valo-analytics__table__header__comments" role="columnheader">
+                  <i class="valo-analytics__table__header__icon ms-Icon ms-Icon--Comment" aria-hidden="true" title="{{dsData.countTitle}}"></i>
+                  <span class="valo-analytics__alt-label">{{dsData.countTitle}}</span>
+                </span>
+                {{/if}}
+                <span class="valo-analytics__table__header__modified" role="columnheader" title="{{resourceLabel 'AnalyticsLastModified' }}"><span>{{resourceLabel "AnalyticsLastModified" }}</span></span>
+                <span class="valo-analytics__table__header__author" role="columnheader"title="{{resourceLabel 'AnalyticsAuthor' }}"><span>{{resourceLabel "AnalyticsAuthor"}}</span></span>
+              </div>
+            </div>
+            {{#each dsData.items}}
+            {{setVariable "elementId" (generateId)}}
+              <valo-link   unique-id="id-{{@root.elementId}}" page-url="{{site}}?web=1" localization="{{json (getValoOpenLinkLocalization)}}"></valo-link>
+              <div class="valo-analytics__table__row showTransition" role="row" id="id-{{@root.elementId}}">
+                <div class="valo-analytics__table__row__title" role="cell">{{title}}</div>
+                <div class="valo-analytics__table__row__info">
+
+                  <span class="valo-analytics__table__row__source-site" role="cell">{{siteTitle}}</span>
+
+                  {{#if ../dsData.isLikesView}}
+                    <span class="valo-analytics__table__row__likes" role="cell">{{likesCount}}</span>
+                  {{else}}
+                    <span class="valo-analytics__table__row__comments" role="cell">{{commentsCount}}</span>
+                  {{/if}}
+
+                  {{#if lastmodified}}
+                  <span class="valo-analytics__table__row__modified" role="cell">{{formatDateTime lastmodified "P"}}</span>
+                  {{else}}
+                  <span class="valo-analytics__table__row__modified" role="cell">0</span>
+                  {{/if}}
+
+                  {{#if author}}
+                  <span class="valo-analytics__table__row__author" role="cell">{{author}}</span>
+                  {{else}}
+                  <span class="valo-analytics__table__row__author" role="cell">0</span>
+                  {{/if}}
+                </div>
+              </div>
+            {{/each}}
+          </div>
+          {{/isEmpty}}
+
+      </div>
+
+    </div>
+  </div>
+
+</content>

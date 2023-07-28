@@ -1,0 +1,42 @@
+<content id="metadata" type="x-handlebars-metadata">
+    { "fields": ["Path", "LastModifiedTime", "Title","EditorOWSUSER","Author"], "query": "", "sort": "" }
+</content>
+
+<content id="template" type="x-handlebars-template">
+    <style>
+        .myRow {
+            padding: 25px;
+        }
+
+        .myRow a.disabled,
+        .myRow a.disabled:visited,
+        .myRow a.disabled:hover {
+            color: #a6a6a6;
+            text-decoration: none;
+        }
+
+    </style>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script>
+        $(function () {
+            $('.myRow').css('background-color', '#c00000');
+        });
+    </script>
+
+    <div class="myRow ms-Grid-row ms-bgColor-blueDark ms-fontColor-white myRow">
+        <h1 class="ms-font-xl ms-fontColor-white">Template title: {{tplTitle}}</h1>
+
+        <ul>
+            {{#each items}}
+                <li>
+                    <a href="{{Path}}" class="ms-fontColor-white">{{Title}}</a> Created by Author => {{splitDisplayNames Author}}
+                    {{#if LastModifiedTime}} - and last modified by {{splitSPUser EditorOWSUSER 'displayName'}} on {{formatDateTime LastModifiedTime "Pp"}} {{/if}}
+                </li>
+            {{/each}}
+        </ul>
+
+        <a class="valoPaginationPrevPage ms-fontColor-white" href="javascript:;">Previous</a>
+        <a class="valoPaginationNextPage ms-fontColor-white" href="javascript:;">Next</a>
+    </div>
+</content>
