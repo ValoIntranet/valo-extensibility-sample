@@ -1,0 +1,60 @@
+<content id="metadata" type="x-handlebars-metadata">
+  {
+  "fields": ["Path", "Title", "BannerImageUrlOWSURLH", "PictureThumbnailURL", "Description", "LastModifiedTime", "SiteId", "WebId",
+  "FirstPublishedDate", "AuthorOWSUSER", "EditorOWSUSER", "SPWebUrl", "ListID", "ListItemID", "UniqueId",
+  "ValoLocationOWSTEXT", "owstaxIdValoOfficeLocation", "ValoOfficeLocation", "ValoTagsTaxonomy", "owstaxIdValoTags",
+  "ValoTags", "ValoCommentingTypeOWSCHCS", "ValoYammerThreadIdOWSTEXT", "ows_ValoBusinessArea", "ows_SiteName","ows_PostCategory",
+  "LayoutWebpartsContentOWSHTML","ValoNewsPublishDate", "ValoNewsTeamsCommentingConfiguration", "ValoMustRead", "ValoMustReadBefore", "RelatedHubSites", "NormUniqueId", "Audiences"],
+  "query": "PromotedState:2 AND NOT(ValoNewsPublishDate&gt;{Today}) AND NOT(ValoExpirationDate&lt;{Today})",
+  "refinementFilters": "ValoNewsPublishDate:range(min,{Now},to=\"le\")",
+  "sorting": "ValoNewsPublishDate:descending",
+  "totalResults": 15,
+  "skipResults": 0,
+  "resources": [
+  {
+  "key": "title",
+  "values": {
+  "default": "Title:",
+  "nl-nl": "Titel:"
+  }
+  }
+  ],
+  "parameters": [
+    {
+      "name": "CustomImageWidth",
+      "value": "1920",
+      "description": "universalBannerCustomImageWidth"
+    },
+    {
+      "name": "LoopDelay",
+      "value": 5000,
+      "description": "universalBannerLoopDelayDesc"
+    },
+    {
+      "name": "EnableAutomaticScroll",
+      "value": "false",
+      "options": ["true","false"],
+      "description": "universalBannerAutomaticScroll"
+    }
+  ]
+  }
+</content>
+
+ <!-- Initialize batched PageImageInfo requests-->
+ {{prepareBatchPageImageInfoPromises dsData.items}}
+
+<content id="template" type="x-handlebars-template">
+  <style>
+
+    /* Firefox only bug - Removing scrollbar */
+    @-moz-document url-prefix() {
+      highlight-news div {
+        scrollbar-width: none !important;
+      }
+    }
+  </style>
+  <highlight-news items="{{json dsData.items}}" enable-Scroll="{{parameters.EnableAutomaticScroll}}" loop-Delay="{{parameters.LoopDelay}}" category="ValoTags" image-quality="{{parameters.CustomImageWidth}}" />-->
+
+</content>
+
+

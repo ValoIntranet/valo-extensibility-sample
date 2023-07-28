@@ -1,0 +1,154 @@
+<content id="metadata" type="x-handlebars-metadata">
+  {
+  "fields": ["Path","Created", "AuthorOWSUSER", "SPWebUrl", "ListID", "ListItemID", "SiteID", "WebID", "Title", "ValoTitle",
+  "ValoFAQAnswerOWSMTXT", "ValoFAQCategory"],
+  "query":"(ContentTypeId:0x010073A54E79C2E6914EBBFB29EF7861951E*)",
+  "totalResults": 12,
+  "resources": [
+  {
+  "key": "title",
+  "values": {
+  "default": "Title:",
+  "nl-nl": "Titel:"
+  }
+  }
+  ],
+  "parameters": [
+  {
+  "name": "faqItemIcon",
+  "value": "FeedbackRequestSolid",
+  "description": "The icon of a FAQ item",
+  "type": "Icon"
+  }
+  ]
+  }
+</content>
+
+<content id="template" type="x-handlebars-template">
+  <style>
+    a.vm-Card.valo-faq__item:hover,
+    a.vm-Card.valo-faq__item:visited {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    a.vm-Card.valo-faq__item {
+      display: block;
+      text-decoration: none;
+    }
+
+    .valo-faq__item__info {
+      padding: 15px;
+    }
+
+    a.valo-faq__item__title {
+      font-size: 18px;
+      color: var(--bodyTextChecked, #292929);
+      text-decoration: none;
+      font-weight: 600;
+      margin-right: 40px;
+      display: block;
+      cursor: pointer;
+    }
+
+    i.valo-faq__item__social-icon {
+      font-size: 36px;
+      color: var(--primaryButtonBackground, #292929);
+      position: absolute;
+      right: 15px;
+      top: 15px;
+      display: flex !important;
+      justify-content: center;
+      border-radius: 50%;
+      align-items: center;
+    }
+
+    .valo-faq__item__category {
+      color: var(--primaryButtonBackground, #292929);
+      font-weight: 600;
+      margin: 5px 0 5px 0;
+    }
+
+    .sendToTeams_FaqCard {
+     height: 28px ;
+     width :28px;
+     vertical-align: middle;
+     float:right;
+    margin-right: 20px;
+   }
+  </style>
+
+  <!-- Initialize batched Likes/Comments requests-->
+  {{prepareBatchSocialInfoPromises dsData.items}}
+  <!-- Initialize batched terms requests-->
+  {{#if parameters.UseMultilingualTerms}}
+  {{prepareBatchTermsPromises dsData.items language}}
+  {{/if}}
+
+  <!-- Initialize batched PageImageInfo requests-->
+  {{prepareBatchPageImageInfoPromises dsData.items}}
+
+  <div class="valo-faq ms-Grid vm-Grid">
+    {{setVariable "id" (randomId "faq")}}
+    {{setVariable "canUseIntersectionObserver" (useIntersectionObserver parameters.UseImageLazyLoading) }}
+    <div class="valo-faq__list ms-Grid-row vm-Cards vm-Grid-row" id="{{@root.id}}">
+      {{#if dsData.items}}
+      {{#each dsData.items}}
+      {{setVariable "elementId" (generateId)}}
+      <div class="valo-faq__item vm-Card showTransition" id="{{@root.elementId}}">
+        <div class="valo-faq__item__wrapper">
+          <div class="valo-faq__item__info" id="valo-faq_item_info_{{@root.elementId}}">
+            <div  class="valo-faq__item__category">{{ValoFAQCategory}}</div>
+            <a role="heading" aria-level="3" class="valo-faq__item__title" title="{{Title}}">
+              <i data-icon-name="Comment" role="presentation"
+                class="valo-faq__item__social-icon ms-Icon ms-Icon--{{@root.parameters.faqItemIcon}}"
+                aria-label="Question"></i>
+              {{ellipsis Title 120}}
+            </a>
+            <div class="valo-faq__item__meta">
+              {{{ellipsis ValoFAQAnswerOWSMTXT 120}}}
+            </div>
+          </div>
+          <send-to-teams class-Name="sendToTeams_FaqCard"  message="{{ValoFAQAnswerOWSMTXT}}"  title="{{Title}}"  published-date="{{Created}}" author="{{AuthorOWSUSER}}"   />
+        </div>
+      </div>
+       <valo-trigger unique-id="valo-faq_item_info_{{@root.elementId}}" item-id="{{ListItemID}}" list-id="{{ListID}}"
+        site-url="{{SPWebUrl}}" panel-title="{{Title}}" trigger-type="FAQPanel" action-type="view"
+        style="display: none;"></valo-trigger>
+      {{/each}}
+      {{else}}
+      {{resourceLabel "NoResultsFound"}}
+      {{/if}}
+    </div>
+  </div>
+  {{#if parameters.ShowMoreUrl}}
+  <div class="valo-showMore">
+    <a href="{{parameters.ShowMoreUrl}}" target="{{parameters.ShowMoreTarget}}">{{parameters.ShowMoreTitle}}</a>
+  </div>
+  {{/if}}
+
+</content>
+
+
+<content id="placeholder" type="x-handlebars-template">
+  <div class="valo-faq ms-Grid vm-Grid">
+    <div class="valo-faq__list ms-Grid-row vm-Cards vm-Grid-row placeholder">
+      {{#repeat nrOfResults}}
+      <div class="valo-faq__item ms-sm4 vm-Card">
+        <div class="valo-faq__item__wrapper">
+          <div class="valo-faq__item__banner">
+            <div style="background-image:url('/_layouts/15/images/sitepagethumbnail.png');"></div>
+          </div>
+          <div class="valo-faq__item__info">
+            <p class="valo-faq__item__title"></p>
+            <div class="valo-faq__item__meta"></div>
+            <div class="valo-faq__item__abstract"></div>
+            <div class="valo-faq__item__social"></div>
+            <div class="valo-faq__item__tags"></div>
+          </div>
+        </div>
+      </div>
+      {{/repeat}}
+    </div>
+  </div>
+</content>

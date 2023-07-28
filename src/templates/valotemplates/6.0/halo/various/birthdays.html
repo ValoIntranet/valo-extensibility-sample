@@ -1,0 +1,51 @@
+<content id="metadata" type="x-handlebars-metadata">
+  {
+    "fields": ["PreferredName", "Path", "WorkEmail", "PictureURL", "JobTitle", "Department", "WorkPhone", "BaseOfficeLocation", "OfficeNumber", "Manager", "AccountName", "Firstname", "Lastname", "ValoBirthday"],
+    "query": "ValoBirthday:{birthdays_show_upcoming_days}:6",
+    "sorting": "ValoBirthday:ascending",
+    "sourceId": "B09A7990-05EA-4AF9-81EF-EDFAB16C4E31",
+    "totalResults": 1,
+    "selectedPagingOption": 1,
+    "skipResults": 0,
+    "hidePagingOptions": false,
+    "parameters": [
+      {
+        "name": "BirthdayPicturelUrl",
+        "value": "",
+        "description": "universalBirthdayImageUrl"
+      },
+      {
+        "name": "UpcomingBirthdayPicturelUrl",
+        "value": "",
+        "description": "universalUpcomingBirthdayImageUrl"
+      },
+      {
+        "name": "NoBirthdayPicturelUrl",
+        "value": "",
+        "description": "universalNoBirthdayImageUrl"
+      }
+    ]
+  }
+</content>
+
+<content id="template" type="x-handlebars-template">
+  <valo-birthday-cards ds-data="{{ json dsData }}" 
+    birthday-image="{{@root.parameters.BirthdayPicturelUrl}}" 
+    upcoming-birthday-image="{{@root.parameters.UpcomingBirthdayPicturelUrl}}" 
+    no-birthday-image="{{@root.parameters.NoBirthdayPicturelUrl}}" />
+</content>
+
+
+<content id="placeholder" type="x-handlebars-template">
+  <div class="ms-Grid valo-birthdays__background">
+    <div class="valo-birthdays__current-wrapper">
+        <div class="valo-birthdays__date-area">
+          <div class="valo-birthdays__event-date valo-classic-spfxcontrols-color">
+            <div class="valo-birthdays__event-date__month"></div>
+            <div class="valo-birthdays__event-date__day"></div>
+            <div class="valo-birthdays__event-date__time"></div>
+          </div>
+        </div>
+    </div>
+  </div>
+</content>

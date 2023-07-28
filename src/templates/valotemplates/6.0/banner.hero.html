@@ -1,0 +1,245 @@
+<content id="metadata" type="x-handlebars-metadata">
+  {
+  "fields": ["Path", "Title", "FirstPublishedDate", "BannerImageUrlOWSURLH", "PictureThumbnailURL", "Description", "SPWebUrl", "ListID", "ListItemID", "UniqueId", "AuthorOWSUSER", "EditorOWSUSER", "ValoCommentingTypeOWSCHCS", "ValoYammerThreadIdOWSTEXT", "LayoutWebpartsContentOWSHTML","ValoNewsPublishDate", "ValoOfficeLocation", "owstaxIdValoOfficeLocation", "ValoNewsTeamsCommentingConfiguration"],
+  "query": "PromotedState:2 AND NOT(ValoNewsPublishDate&gt;{Today}) AND NOT(ValoExpirationDate&lt;{Today})",
+  "sorting": "ValoNewsPublishDate:descending",
+  "totalResults": 5,
+  "skipResults": 0,
+  "resources": [
+  {
+  "key": "title",
+  "values": {
+  "default": "Title:",
+  "nl-nl": "Titel:"
+  }
+  }
+  ],
+  "parameters": [
+  {
+  "name": "UseThumbnailImages",
+  "value": "false",
+  "options": ["true","false"],
+  "description": "universalBannerUseThumbnailImagesDesc"
+  },
+  {
+  "name": "CustomImageWidth",
+  "value": "1920",
+  "description": "universalBannerCustomImageWidth"
+  }
+  ],
+  "hidePagingOptions": true,
+  "universalPagingOptions": [
+  {
+  "key": "false",
+  "label": "templateWpPagingNone"
+  },
+  {
+  "key": "true",
+  "label": "PagingFieldLabelOn"
+  }
+  ]
+  }
+</content>
+
+<content id="template" type="x-handlebars-template">
+  <style>
+  </style>
+
+  <script src="https://unpkg.com/@valo/carousel@1.0.16/dist/carousel.min.js"></script>
+  <script>
+    (function () {
+      var itemsLength = "{{length dsData.items}}";
+      if (parseInt(itemsLength) > 0) {
+        // Initializing Siema slideshow
+        var slideshow = new carousel({
+          duration: 200,
+          threshold: 50,
+          loop: true,
+          loopDelay: 12000,
+          addDots: true
+        });
+
+        if (slideshow.config.loop) {
+          slideshow.resetTimeout();
+        }
+
+        // onClick event handlers
+        var compId = "{{componentId}}";
+        var prevBtn = document.querySelector("#" + compId + " .valo-banner-prevBtn");
+        if (prevBtn) {
+          prevBtn.addEventListener('click', function () {
+            slideshow.prev();
+            slideshow.resetTimeout();
+          });
+        }
+        var nextBtn = document.querySelector("#" + compId + " .valo-banner-nextBtn");
+        if (nextBtn) {
+          nextBtn.addEventListener('click', function () {
+            slideshow.next();
+            slideshow.resetTimeout();
+          });
+        }
+
+        var pause = document.querySelector("#pauseButton");
+        if (pause) {
+          pause.addEventListener('click', function () {
+            var paused = slideshow.togglePause()
+            if (paused) {
+              this.classList.add("paused");
+              this.setAttribute("aria-label", "Off");
+            }
+            else {
+              this.classList.remove("paused");
+              this.setAttribute("aria-label", "On");
+            }
+          });
+        }
+      }
+
+      // Add class for portrait images
+      var banner;
+
+      for (var i = 0; banner = document.getElementById('valobanner-bg-' + i); i++) {
+        if (typeof (banner) != 'undefined' && banner != null) {
+          var bgimg = banner.style.backgroundImage.replace(/url\((['"])?(.*?)\1\)/gi, '$2').split(',')[0];
+
+          var image = new Image();
+          image.src = bgimg;
+          var width = image.width,
+            height = image.height;
+
+          if (width < height) {
+            banner.parentNode.classList.add('portrait');
+          }
+        }
+      }
+    })();
+  </script>
+
+  <!-- Initialize batched PageImageInfo requests-->
+  {{prepareBatchPageImageInfoPromises dsData.items}}
+
+  <div class="valo-banner hero lux">
+    <button class="valo-banner__pause-button" id="pauseButton" type="button" aria-hidden="true">
+      <!--<i class="valo-banner__pause-button-icon ms-Icon ms-Icon--BoxPlaySolid" aria-hidden="true"></i>-->
+      <svg version="1.1" class="valo-banner__pause-button-icon" xmlns="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 41.999 41.999" style=""
+        xml:space="preserve">
+        <path fill="#fff" d="M36.068,20.176l-29-20C6.761-0.035,6.363-0.057,6.035,0.114C5.706,0.287,5.5,0.627,5.5,0.999v40
+          c0,0.372,0.206,0.713,0.535,0.886c0.146,0.076,0.306,0.114,0.465,0.114c0.199,0,0.397-0.06,0.568-0.177l29-20
+          c0.271-0.187,0.432-0.494,0.432-0.823S36.338,20.363,36.068,20.176z" />
+      </svg>
+    </button>
+    {{#gt (length dsData.items) 1}}
+    {{#if paging}}
+    <button id="prev" class="valo-banner__pagination-link valo-banner-prevBtn"><i
+        class="valo-banner__pagination-icon ms-Icon ms-Icon--ChevronLeft" aria-hidden="true"></i></button>
+    <button id="next" class="valo-banner__pagination-link valo-banner-nextBtn"><i
+        class="valo-banner__pagination-icon ms-Icon ms-Icon--ChevronRight" aria-hidden="true"></i></button>
+    {{/if}}
+    {{#eq universalPagingOption "true"}}
+    <button id="prev" class="valo-banner__pagination-link valo-banner-prevBtn"><i
+        class="valo-banner__pagination-icon ms-Icon ms-Icon--ChevronLeft" aria-hidden="true"></i></button>
+    <button id="next" class="valo-banner__pagination-link valo-banner-nextBtn"><i
+        class="valo-banner__pagination-icon ms-Icon ms-Icon--ChevronRight" aria-hidden="true"></i></button>
+    {{/eq}}
+    {{/gt}}
+
+    <div class="siema">
+      {{#each dsData.items}}
+      <div class="valo-banner__item showTransition">
+        {{#if PictureThumbnailURL}}
+        <valo-image-focal-point css-names="valo-banner__item__image parallax"
+          img-url="{{imageResolution PictureThumbnailURL 4 null null ../parameters.UseThumbnailImages ../parameters.CustomImageWidth}}"
+          item-id="{{ListItemID}}" list-id="{{ListID}}" site-url="{{SPWebUrl}}"
+          layout-content="{{LayoutWebpartsContentOWSHTML}}" observer-support="{{@root.canUseIntersectionObserver}}">
+        </valo-image-focal-point>
+        {{else}}
+        <valo-image-focal-point css-names="valo-banner__item__image parallax"
+          img-url="{{imageResolution BannerImageUrlOWSURLH 4 null null ../parameters.UseThumbnailImages}}"
+          item-id="{{ListItemID}}" list-id="{{ListID}}" site-url="{{SPWebUrl}}"
+          layout-content="{{LayoutWebpartsContentOWSHTML}}" observer-support="{{@root.canUseIntersectionObserver}}">
+        </valo-image-focal-point>
+        {{/if}}
+        <div class="valo-banner__item__overlay"></div>
+
+        <a class="valo-banner__item__link" href="{{Path}}" title="{{Title}}">
+          <span class="valo-banner__item__title">{{Title}}</span>
+          <div class="valo-banner__item__description">{{ellipsis Description 180}}</div>
+          <div class="valo-banner__item__social">
+            <span class="valo-banner__item__social__meta">
+              {{ dateAgoFormat ValoNewsPublishDate }} {{resourceLabel "generalByLabel"}}
+
+              {{#if AuthorOWSUSER}}
+              <span class="valo-banner__item__social__meta__editor">{{splitSPUser AuthorOWSUSER 'displayName'}}</span>
+              {{else}}
+              <span class="valo-banner__item__social__meta__editor">{{splitSPUser EditorOWSUSER 'displayName'}}</span>
+              {{/if}}
+            </span>
+            <span class="valo-banner__item__social__separator"></span>
+            <span class="valo-banner__item__social__comments">
+              <valo-social-reactions item-id="{{ListItemID}}" list-id="{{ListID}}" site-url="{{SPWebUrl}}" intranet-teams-commenting-value="{{ValoNewsTeamsCommentingConfiguration}}" commenting-type="{{ValoCommentingTypeOWSCHCS}}" yammer-Thread-Id="{{ValoYammerThreadIdOWSTEXT}}" unique-Id="{{UniqueId}}"></valo-social-reactions>
+            </span>
+            {{#or ValoLocationOWSTEXT ValoOfficeLocation owstaxIdValoOfficeLocation ValoTags owstaxIdValoTags}}
+            <span class="valo-banner__item__social__separator"></span>
+            {{/or}}
+            <span class="valo-banner__item__social__tags">
+              {{#if ValoOfficeLocation }}
+              {{#each (translateTerms ValoOfficeLocation SPWebUrl)}}
+              <span class="valo-banner__item__social__tags__location">
+                <i class="valo-banner__item__social-icon ms-Icon ms-Icon--POI" aria-hidden="true"></i> {{this}}
+              </span>
+              {{/each}}
+              {{else if owstaxIdValoOfficeLocation }}
+              {{#each (translateTerms owstaxIdValoOfficeLocation SPWebUrl)}}
+              <span class="valo-banner__item__social__tags__location">
+                <i class="valo-banner__item__social-icon ms-Icon ms-Icon--POI" aria-hidden="true"></i> {{this}}
+              </span>
+              {{/each}}
+              {{else}}
+              {{#if ValoLocationOWSTEXT}}
+              <span class="valo-banner__item__social__tags__location">
+                <i class="valo-banner__item__social-icon ms-Icon ms-Icon--POI" aria-hidden="true"></i>
+                {{ValoLocationOWSTEXT}}
+              </span>
+              {{/if}}
+              {{/if}}
+              {{#if ValoTags}}
+              {{#each (translateTerms ValoTags SPWebUrl)}}
+              <span class="valo-banner__item__social__tags__tag">
+                <i class="valo-banner__item__social-icon ms-Icon ms-Icon--Tag" aria-hidden="true"></i>{{this}}
+              </span>
+              {{/each}}
+              {{else if owstaxIdValoTags}}
+              {{#each (translateTerms owstaxIdValoTags SPWebUrl)}}
+              <span class="valo-banner__item__social__tags__tag">
+                <i class="valo-banner__item__social-icon ms-Icon ms-Icon--Tag" aria-hidden="true"></i>{{this}}
+              </span>
+              {{/each}}
+              {{/if}}
+            </span>
+          </div>
+        </a>
+      </div>
+      {{/each}}
+    </div>
+  </div>
+</content>
+
+
+<content id="placeholder" type="x-handlebars-template">
+  <div class="valo-banner hero placeholder">
+    <div class="valo-banner__item">
+      <div class="valo-banner__item__image" style="background-image:url('/_layouts/15/images/sitepagethumbnail.png');">
+      </div>
+      <div class="valo-banner__item__link">
+        <span class="valo-banner__item__title"></span>
+        <div class="valo-banner__item__description"></div>
+        <div class="valo-banner__item__description"></div>
+        <div class="valo-banner__item__description"></div>
+        <div class="valo-banner__item__social"></div>
+        <span class="valo-banner__item__social__meta"></span>
+      </div>
+    </div>
+  </div>
+</content>

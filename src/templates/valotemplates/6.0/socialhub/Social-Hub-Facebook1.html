@@ -1,0 +1,83 @@
+<content id="metadata" type="x-handlebars-metadata">
+  {
+    "parameters": [
+      {
+        "name": "FacebookHandle",
+        "value": "valointranet"
+      },
+      {
+        "name": "Height",
+        "value": "500"
+      }
+    ]
+  }
+</content>
+
+<content id="template" type="x-handlebars-template">
+  <style>
+    #facebook_iframe {
+      transform-origin: 0 0;
+      -webkit-transform-origin: 0px 0px;
+      -moz-transform-origin: 0px 0px;
+    }
+
+    .fb-page,
+    .fb-page span,
+    .fb-page span iframe[style] {
+        max-width: 100% !important;
+    }
+  </style>
+
+  <script>
+    function setupFBframe(frame) {
+
+        if(frame.src) return; // already set up
+
+        // get parent container dimensions to use in src attrib
+        var container = frame.parentNode;
+
+        var containerWidth = container.offsetWidth;
+        var containerHeight = container.offsetHeight;
+
+        frame.height = '{{parameters.Height}}';
+
+        if((containerWidth) === 0) {
+          // check if insider tabs
+          var tabs = frame.closest(".valo-tabs__container");
+          if(tabs){
+            frame.width = tabs.offsetWidth;
+          }
+          else{
+            frame.width = 300;
+          }
+        } else{
+          frame.width = containerWidth;
+        }
+
+        var src = 'https://www.facebook.com/plugins/page.php' +
+                '?href=https%3A%2F%2Fwww.facebook.com%2F' + frame.id + '%2F' +
+                '&tabs=timeline' +
+                '&width=' + frame.width +
+                '&height={{parameters.Height}}' +
+                '&small_header=false' +
+                '&adapt_container_width=true' +
+                '&hide_cover=false' +
+                '&hide_cta=true' +
+                '&show_facepile=true' +
+                '&appId';
+
+        frame.src = src;
+    }
+  </script>
+
+  <div>
+    <iframe id="{{parameters.FacebookHandle}}" loading="lazy" frameborder="0" height="0" width="0" onload="var _this = this; window.setTimeout(function(){ setupFBframe(_this); }, 500 /* let dom settle before eval parent dimensions */ );"></iframe>
+
+  </div>
+</content><html xmlns:mso="urn:schemas-microsoft-com:office:office" xmlns:msdt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882"><head>
+<!--[if gte mso 9]><xml>
+<mso:CustomDocumentProperties>
+<mso:TemplateTitle msdt:dt="string">Social Hub - Facebook</mso:TemplateTitle>
+</mso:CustomDocumentProperties>
+</xml><![endif]-->
+</head>

@@ -1,0 +1,80 @@
+<content id="metadata" type="x-handlebars-metadata">
+  {
+  "parameters": []
+  }
+</content>
+
+<content id="template" type="x-handlebars-template">
+  <style>
+    .valo-jobposting-metadata p {
+      display: inline;
+    }
+
+    .valo-jobposting-metadata {
+      padding: 2px;
+    }
+    .ms-Icon--Tag {
+      position: initial;
+    }
+  </style>
+
+  <div class="valo-jobposting">
+    {{#if dsData.ValoJobPostingEmploymentStatus}}
+    <div class="valo-jobposting-metadata">
+      <i class="ms-Icon ms-Icon--Calendar" aria-hidden="true" title="{{resourceLabel 'jpEmploymentStatus'}}"></i>
+      {{dsData.ValoJobPostingEmploymentStatus}}
+    </div>
+    {{/if}}
+    {{#if dsData.ValoJobPostingFTE}}
+    <div class="valo-jobposting-metadata">
+      <i class="ms-Icon ms-Icon--Recent" aria-hidden="true" title="{{resourceLabel 'jpHoursPerWeek'}}"></i>
+      {{resourceLabel "jpLabelFullTime"}}
+    </div>
+    {{else if dsData.ValoJobPostingEmploymentHours}}
+    <div class="valo-jobposting-metadata">
+      <i class="ms-Icon ms-Icon--Recent" aria-hidden="true" title="{{resourceLabel 'jpHoursPerWeek'}}"></i>
+      {{hours dsData.ValoJobPostingEmploymentHours}}
+    </div>
+    {{/if}}
+    {{#if dsData.ValoJobPostingApplyBy}}
+    <div class="valo-jobposting-metadata">
+      <i class="ms-Icon ms-Icon--GotoToday" aria-hidden="true" title="{{resourceLabel 'jpApplyBy'}}"></i>
+      {{ wrapWithHtmlElementAsync "p" (formatUtcToZonedTimeAsync dsData.ValoJobPostingApplyBy SPWebUrl "PP") }}
+    </div>
+    {{/if}}
+    {{#if dsData.ValoOfficeLocation.TermGuid}}
+    <div class="valo-jobposting-metadata">
+      <i class="ms-Icon ms-Icon--MapPin" aria-hidden="true" title="{{resourceLabel 'jpOfficeLocation'}}"></i>
+      <p id="ValoOfficeLocation-{{dsData.ValoOfficeLocation.TermGuid}}">
+        {{getTermById dsData.ValoOfficeLocation.TermGuid 'ValoOfficeLocation'}}</p>
+    </div>
+    {{/if}}
+    {{#if dsData.ValoBusinessArea.TermGuid}}
+    <div class="valo-jobposting-metadata">
+      <i class="ms-Icon ms-Icon--Work" aria-hidden="true" title="{{resourceLabel 'jpBusinessArea'}}"></i>
+      <p id="ValoBusinessArea-{{dsData.ValoBusinessArea.TermGuid}}">
+        {{getTermById dsData.ValoBusinessArea.TermGuid 'ValoBusinessArea'}}</p>
+    </div>
+    {{/if}}
+    {{#if dsData.ValoTags}}
+    <div class="valo-jobposting-metadata-tags">
+      {{#each dsData.ValoTags}}
+      <div class="valo-jobposting-metadata-tag">
+        <i class="ms-Icon ms-Icon--Tag tooltip" aria-hidden="true" title="{{resourceLabel 'jpTags'}}"></i>
+        <p id="ValoTags-{{this.TermGuid}}">
+          {{getTermById this.TermGuid 'ValoTags'}}
+        </p>
+      </div>
+      {{/each}}
+    </div>
+    {{/if}}
+    {{#if dsData.ValoJobPostingHiringManagerId}}
+    <div class="valo-apply-button-container">
+      <button class="valo-apply-button">
+        <a id="valoMailTo-{{dsData.ValoJobPostingHiringManagerId}}"
+          href="{{profilePropertyByUserId dsData.ValoJobPostingHiringManagerId 'WorkEmail' 'href' (append 'valoMailTo-' dsData.ValoJobPostingHiringManagerId) 'mailto:'}}">{{resourceLabel 'jpApply'}}</a>
+      </button>
+    </div>
+    {{/if}}
+  </div>
+</content>

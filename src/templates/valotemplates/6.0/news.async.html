@@ -1,0 +1,246 @@
+<content id="metadata" type="x-handlebars-metadata">
+  {
+  "fields": ["Path", "AuthorOWSUSER", "Title", "EditorOWSUSER", "BannerImageUrlOWSURLH", "PictureThumbnailURL", "Description", "ListID", "ListItemID", "UniqueId", "SPWebUrl", "ValoLocationOWSTEXT", "owstaxIdValoOfficeLocation", "ValoOfficeLocation", "ValoTagsTaxonomy", "owstaxIdValoTags", "ValoTags", "ValoHighlightOWSBOOL", "ValoCommentingTypeOWSCHCS", "ValoYammerThreadIdOWSTEXT", "LayoutWebpartsContentOWSHTML","ValoNewsPublishDate", "ValoNewsTeamsCommentingConfiguration", "CreatedBy", "DepartmentId", "ValoMustRead", "ValoMustReadBefore", "NormUniqueId", "Audiences", "ValoAuthorByLine"],
+  "query": "(ContentTypeId:0x0101009D1CB255DA76424F860D91F20E6C41180065789619A4EFB44992AF42CEEBB13C9A02* OR (PromotedState:1 OR PromotedState:2)) AND -ValoHighlightOWSBOOL:1 AND NOT(ValoExpirationDate&lt;{Today})",
+  "refinementFilters": "ValoNewsPublishDate:range(min,{Now},to=\"le\")",
+  "sorting": "ValoNewsPublishDate:descending",
+  "totalResults": 3,
+  "mobileResults": 1,
+  "skipResults": 0,
+
+  "resources": [
+  {
+  "key": "title",
+  "values": {
+  "default": "Title:",
+  "nl-nl": "Titel:"
+  }
+  }
+  ],
+  "parameters": [
+      {
+        "name": "ShowMoreTitle",
+        "value": "Read more",
+        "description": "Title for show more link"
+      },
+      {
+        "name": "ShowMoreUrl",
+        "value": "",
+        "description": "Url for show more link"
+      },
+      {
+        "name": "ShowMoreTarget",
+        "value": "_blank",
+        "description": "Target for show more link"
+      },
+      {
+        "name": "UseThumbnailImages",
+        "value": "false",
+        "options": ["true","false"],
+        "description": "universalBannerUseThumbnailImagesDesc"
+      },
+      {
+        "name": "CustomImageWidth",
+        "value": "1920",
+        "description": "universalBannerCustomImageWidth"
+      },
+      {
+        "name": "UseImageLazyLoading",
+        "value": "true",
+        "options": ["true","false"],
+        "description": "universalBannerUseImageLazyLoadingDesc"
+      },
+      {
+        "name": "UseMultilingualTerms",
+        "value": "true",
+        "options": ["true","false"],
+        "description": "universalUseMultilingualTerms"
+      }
+    ]
+  }
+</content>
+
+<content id="template" type="x-handlebars-template">
+  <style>
+    a.vm-Card.valo-news__item:hover,
+    a.vm-Card.valo-news__item:visited {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    a.vm-Card.valo-news__item {
+      display: block;
+      text-decoration: none;
+    }
+    .send_to_teams__svg_icon_styles{
+      width: 12px;
+      height: 12px;
+      fill:  rgb(182, 182, 182);
+
+    }
+    .sendtoteams_asyncNews {
+      height: 20px;
+      vertical-align: middle;
+      padding-bottom: 7px;
+      margin-left: 0px;
+    }
+    .ms-Icon--Tag {
+       position: initial
+    }
+    .valo-news__item__banner {
+      cursor: pointer;
+    }
+    .valo-news__item__title {
+      cursor: pointer;
+    }
+    .sendtoteams_asyncNews:hover {
+      background-color: transparent;
+    }
+    .sendtoteams_asyncNews:active {
+      background-color: transparent;
+    }
+     .send_to_teams__svg_icon_styles{
+
+      fill: '#ffffff';
+
+    }
+  </style>
+
+  <!-- Initialize batched Likes/Comments requests-->
+  {{prepareBatchSocialInfoPromises dsData.items}}
+  <!-- Initialize batched terms requests-->
+  {{#if parameters.UseMultilingualTerms}}
+    {{prepareBatchTermsPromises dsData.items language}}
+  {{/if}}
+
+  <!-- Initialize batched PageImageInfo requests-->
+  {{prepareBatchPageImageInfoPromises dsData.items}}
+
+  <div class="valo-news ms-Grid vm-Grid">
+    {{setVariable "id" (randomId "news")}}
+    {{setVariable "canUseIntersectionObserver" (useIntersectionObserver parameters.UseImageLazyLoading) }}
+    <div class="valo-news__list ms-Grid-row vm-Cards vm-Grid-row" id="{{@root.id}}">
+    {{#if dsData.items}}
+      {{#each dsData.items}}
+        {{setVariable "elementId" (generateId)}}
+        {{#if ValoAuthorByLine}}
+          {{setVariable "author" ValoAuthorByLine}}
+        {{else}}
+          {{setVariable "author" AuthorOWSUSER}}
+        {{/if}}
+        <div class="valo-news__item vm-Card showTransition">
+          <div class="valo-news__item__wrapper">
+            <valo-link   unique-id="banner-id-{{@root.elementId}}" page-url="{{Path}}" panel-localization="{{json (getValoOpenLinkPanelLocalization)}}"
+              document-acknowledgment-info="{{ json (getValoDocumentAcknowledgmentInfo this) }}" title="{{Title}}" img-url="{{PictureThumbnailURL}}" published-date="{{ValoNewsPublishDate}}" author="{{@root.author}}" message="{{Description}}"
+            ></valo-link>
+            <div class="valo-news__item__banner" id="banner-id-{{@root.elementId}}">
+              {{#if PictureThumbnailURL}}
+                <valo-image-focal-point css-names="valo-news__item__banner__parallax parallax parallaxSlow" img-url="{{imageResolution PictureThumbnailURL 4 null null ../parameters.UseThumbnailImages ../parameters.CustomImageWidth}}" item-id="{{ListItemID}}" list-id="{{ListID}}" site-url="{{SPWebUrl}}" layout-content="{{LayoutWebpartsContentOWSHTML}}" observer-support="{{@root.canUseIntersectionObserver}}"></valo-image-focal-point>
+              {{else}}
+                <valo-image-focal-point css-names="valo-news__item__banner__parallax parallax parallaxSlow" img-url="{{imageResolution BannerImageUrlOWSURLH 4 null null ../parameters.UseThumbnailImages ../parameters.CustomImageWidth}}" item-id="{{ListItemID}}" list-id="{{ListID}}" site-url="{{SPWebUrl}}" layout-content="{{LayoutWebpartsContentOWSHTML}}" observer-support="{{@root.canUseIntersectionObserver}}"></valo-image-focal-point>
+              {{/if}}
+            </div>
+
+            <div class="valo-news__item__info">
+              <valo-acknowledgement-label unique-id="{{NormUniqueId}}" valo-must-read-before="{{ValoMustReadBefore}}" department-id="{{DepartmentId}}" web-url="{{SPWebUrl}}" path="{{Path}}" valo-must-read="{{ValoMustRead}}" audience-ids="{{Audiences}}"></valo-acknowledgement-label>
+              <valo-link   unique-id="id-{{@root.elementId}}" page-url="{{Path}}" panel-localization="{{json (getValoOpenLinkPanelLocalization)}}"
+                document-acknowledgment-info="{{ json (getValoDocumentAcknowledgmentInfo this) }}" title="{{Title}}" img-url="{{PictureThumbnailURL}}" published-date="{{ValoNewsPublishDate}}" author="{{@root.author}}" message="{{Description}}"
+              ></valo-link>
+              <div role="heading" aria-level="3" class="valo-news__item__title" id="id-{{@root.elementId}}">
+                {{ellipsis Title 120}}
+              </div>
+
+              <div class="valo-news__item__meta">
+                {{dateAgoFormat ValoNewsPublishDate}} -
+                {{#if ValoAuthorByLine}}
+                  <span class="valo-news__item__meta__editor">
+                    {{splitSPUser ValoAuthorByLine 'displayName'}}
+                    {{wrapWithHtmlElementAsync 'span' (wrapAsyncValue (getProfilePropertyValue (splitSPUser ValoAuthorByLine 'email') 'Department') "/ ") }}
+                  </span>
+                {{else}}
+                  <span class="valo-news__item__meta__editor">
+                    {{splitSPUser AuthorOWSUSER 'displayName'}}
+                    {{wrapWithHtmlElementAsync 'span' (wrapAsyncValue (getProfilePropertyValue (splitSPUser AuthorOWSUSER 'email') 'Department') "/ ") }}
+                  </span>
+                {{/if}}
+              </div>
+              <div class="valo-news__item__abstract">{{ellipsis Description 100}}</div>
+              <div class="valo-news__item__social">
+                  <span class="valo-news__item__social__comments">
+                      <valo-social-reactions item-id="{{ListItemID}}" list-id="{{ListID}}" site-url="{{SPWebUrl}}" intranet-teams-commenting-value="{{ValoNewsTeamsCommentingConfiguration}}" commenting-type="{{ValoCommentingTypeOWSCHCS}}" yammer-Thread-Id="{{ValoYammerThreadIdOWSTEXT}}" unique-Id="{{UniqueId}}"></valo-social-reactions>
+                      <send-to-teams  class-name="sendtoteams_asyncNews" title="{{Title}}" img-url="{{PictureThumbnailURL}}" published-date="{{ValoNewsPublishDate}}" author="{{@root.author}}" link-url="{{Path}}" message="{{Description}}" ></send-to-teams>
+                  </span>
+
+              </div>
+              <div class="valo-news__item__tags">
+                {{#or owstaxIdValoOfficeLocation ValoOfficeLocation}}
+                  <valo-terms term-value="{{#if owstaxIdValoOfficeLocation}}{{owstaxIdValoOfficeLocation}}{{else if ValoOfficeLocation }}{{ValoOfficeLocation}}{{/if}}"
+                              web-url="{{SPWebUrl}}"
+                              multilingual="{{@root.parameters.UseMultilingualTerms}}"
+                              css-span="valo-news__item__tags__location valo-news__item__tags__tag"
+                              css-icon="valo-news__item__tag-icon ms-Icon ms-Icon--POI">
+                  </valo-terms>
+                {{else}}
+                  {{#if ValoLocationOWSTEXT}}
+                    <span class="valo-news__item__tags__location valo-news__item__tags__tag">
+                      <i class="valo-news__item__tag-icon ms-Icon ms-Icon--POI" aria-label="Tag"></i>
+                      {{ValoLocationOWSTEXT}}
+                    </span>
+                  {{/if}}
+                {{/or}}
+
+                {{#or ValoTagsTaxonomy owstaxIdValoTags ValoTags}}
+                  <valo-terms term-value="{{#if ValoTagsTaxonomy}}{{ValoTagsTaxonomy}}{{else if owstaxIdValoTags }}{{owstaxIdValoTags}}{{else if ValoTags}}{{ValoTags}}{{/if}}"
+                              web-url="{{SPWebUrl}}"
+                              multilingual="{{@root.parameters.UseMultilingualTerms}}"
+                              css-span="valo-news__item__tags__tag"
+                              css-icon="valo-news__item__tag-icon ms-Icon ms-Icon--Tag"
+                              css-more="valo-news__item__tags__more"
+                              show-more-tag="true">
+                  </valo-terms>
+                {{/or}}
+              </div>
+            </div>
+          </div>
+        </div>
+      {{/each}}
+    {{else}}
+      {{resourceLabel "NoResultsFound"}}
+    {{/if}}
+    </div>
+  </div>
+  {{#if parameters.ShowMoreUrl}}
+  <div class="valo-showMore">
+    {{#ifCond parameters.ShowMoreTarget "==" "_blank"}}
+      <a href="{{parameters.ShowMoreUrl}}" target="{{parameters.ShowMoreTarget}}" data-interception="off">{{parameters.ShowMoreTitle}}</a>
+    {{else}}
+      <a href="{{parameters.ShowMoreUrl}}" target="{{parameters.ShowMoreTarget}}">{{parameters.ShowMoreTitle}}</a>
+    {{/ifCond}}
+  </div>
+  {{/if}}
+
+</content>
+
+
+<content id="placeholder" type="x-handlebars-template">
+  <div class="valo-news ms-Grid vm-Grid">
+    <div class="valo-news__list ms-Grid-row vm-Cards vm-Grid-row placeholder">
+      {{#repeat nrOfResults}}
+      <div class="valo-news__item ms-sm4 vm-Card">
+        <div class="valo-news__item__wrapper">
+          <div class="valo-news__item__banner">
+            <div style="background-image:url('/_layouts/15/images/sitepagethumbnail.png');"></div>
+          </div>
+          <div class="valo-news__item__info">
+            <p class="valo-news__item__title"></p>
+            <div class="valo-news__item__meta"></div>
+            <div class="valo-news__item__abstract"></div>
+            <div class="valo-news__item__social"></div>
+            <div class="valo-news__item__tags"></div>
+          </div>
+        </div>
+      </div>
+      {{/repeat}}
+    </div>
+  </div>
+</content>

@@ -1,0 +1,129 @@
+<content id="metadata" type="x-handlebars-metadata">
+    {
+      "fields": ["Path", "LastModifiedTime", "Title", "EditorOWSUSER", "Author", "BannerImageUrlOWSURLH", "PictureThumbnailURL", "Description", "ValoPeoplePositionOWSTEXT", "ValoPeopleLinkedInUrlOWSTEXT", "ValoPeopleFacebookUrlOWSTEXT", "ValoPeopleTwitterUrlOWSTEXT", "ValoPeopleWebsiteUrlOWSTEXT", "LayoutWebpartsContentOWSHTML"],
+      "query": "ContentTypeId:0x0101009D1CB255DA76424F860D91F20E6C411800A984D1BDCA108B4D8E13AD19CD120C28*",
+      "sorting": "Created:descending",
+      "totalResults": 3,
+      "parameters": [
+        {
+          "name": "ShowMoreTitle",
+          "value": "Read more",
+          "description": "Title for show more link"
+        },
+        {
+          "name": "ShowMoreUrl",
+          "value": "",
+          "description": "Url for show more link"
+        },
+        {
+          "name": "ShowMoreTarget",
+          "value": "_blank",
+          "description": "Target for show more link"
+        },
+        {
+          "name": "UseThumbnailImages",
+          "value": "false",
+          "options": ["true","false"],
+          "description": "universalBannerUseThumbnailImagesDesc"
+        },
+        {
+          "name": "UseImageLazyLoading",
+          "value": "true",
+          "options": ["true","false"],
+          "description": "universalBannerUseImageLazyLoadingDesc"
+          }
+      ]
+    }
+  </content>
+
+   <!-- Initialize batched PageImageInfo requests-->
+  {{prepareBatchPageImageInfoPromises dsData.items}}
+
+  <content id="template" type="x-handlebars-template">
+    <style>
+      .valo-our-people-compact__item-link {
+        cursor: pointer;
+      }
+    </style>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <div class="ms-Grid vm-Grid">
+      {{setVariable "id" (randomId "ourPeopleCompact")}}
+      {{setVariable "canUseIntersectionObserver" (useIntersectionObserver parameters.UseImageLazyLoading) }}
+      <div class="ms-Grid-row vm-Compact valo-our-people-compact__list vm-Grid-row" id="{{@root.id}}">
+        {{#each dsData.items}}
+          {{setVariable "elementId" (generateId)}}
+          <div class="ms-sm2 valo-our-people-compact__item">
+                <valo-link   unique-id="id-{{@root.elementId}}" page-url="{{Path}}" localization="{{json (getValoOpenLinkLocalization)}}"></valo-link>
+                <div class="valo-our-people-compact__item-link" id="id-{{@root.elementId}}">
+                  {{#if PictureThumbnailURL}}
+                    <valo-image-focal-point css-names="valo-our-people-compact__item__image-container" img-url="{{imageResolution PictureThumbnailURL 4 null null ../parameters.UseThumbnailImages}}" item-id="{{ListItemID}}" list-id="{{ListID}}" site-url="{{SPWebUrl}}" layout-content="{{LayoutWebpartsContentOWSHTML}}" observer-support="{{@root.canUseIntersectionObserver}}"></valo-image-focal-point>
+                  {{else}}
+                    <valo-image-focal-point css-names="valo-our-people-compact__item__image-container" img-url="{{imageResolution BannerImageUrlOWSURLH 4 null null ../parameters.UseThumbnailImages}}" item-id="{{ListItemID}}" list-id="{{ListID}}" site-url="{{SPWebUrl}}" layout-content="{{LayoutWebpartsContentOWSHTML}}" observer-support="{{@root.canUseIntersectionObserver}}"></valo-image-focal-point>
+                  {{/if}}
+
+                  <span role="heading" aria-level="3" class="valo-our-people-compact__item__name">{{Title}}</span>
+                  <span class="valo-our-people-compact__item__position">{{ValoPeoplePositionOWSTEXT}}</span>
+                </div>
+                <div class="valo-our-people-compact__item__info-links">
+                  {{#if ValoPeopleFacebookUrlOWSTEXT}}
+                    <a href="{{ValoPeopleFacebookUrlOWSTEXT}}" aria-label="facebook" class="fa fa-facebook valo-our-people-compact__item__info-link"></a>
+                  {{/if}}
+                  {{#if ValoPeopleTwitterUrlOWSTEXT}}
+                    <a href="{{ValoPeopleTwitterUrlOWSTEXT}}" aria-label="Twitter" class="fa fa-twitter valo-our-people-compact__item__info-link"></a>
+                  {{/if}}
+                  {{#if ValoPeopleLinkedInUrlOWSTEXT}}
+                    <a href="{{ValoPeopleLinkedInUrlOWSTEXT}}" aria-label="Linkedin" class="fa fa-linkedin valo-our-people-compact__item__info-link"></a>
+                  {{/if}}
+                  {{#if ValoPeopleWebsiteUrlOWSTEXT}}
+                    <a href="{{ValoPeopleWebsiteUrlOWSTEXT}}" aria-label="Website" class="fa fa-globe valo-our-people-compact__item__info-link"></a>
+                  {{/if}}
+                </div>
+          </div>
+        {{/each}}
+      </div>
+    </div>
+    {{#if parameters.ShowMoreUrl}}
+      <div class="valo-showMore">
+        <a href="{{parameters.ShowMoreUrl}}" target="{{parameters.ShowMoreTarget}}">{{parameters.ShowMoreTitle}}</a>
+      </div>
+    {{/if}}
+  </content>
+
+
+  <content id="placeholder" type="x-handlebars-template">
+    <div class="ms-Grid">
+      <div class="ms-Grid-row vm-Compact valo-our-people-compact__list placeholder">
+        <div class="valo-our-people-compact__item">
+          <div class="valo-our-people-compact__item-link">
+            <span class="valo-our-people-compact__item__image-container" style="background-image:url('/_layouts/15/images/sitepagethumbnail.png');"></span>
+            <span class="person-name"></span>
+            <span class="person-position"></span>
+          </div>
+          <div class="valo-our-people-compact__item__info-links">
+          </div>
+        </div>
+        <div class="valo-our-people-compact__item">
+          <div class="valo-our-people-compact__item-link">
+            <span class="valo-our-people-compact__item__image-container" style="background-image:url('/_layouts/15/images/sitepagethumbnail.png');"></span>
+            <span class="person-name"></span>
+            <span class="person-position"></span>
+          </div>
+          <div class="valo-our-people-compact__item__info-links">
+          </div>
+        </div>
+        <div class="valo-our-people-compact__item">
+          <div class="valo-our-people-compact__item-link">
+            <span class="valo-our-people-compact__item__image-container" style="background-image:url('/_layouts/15/images/sitepagethumbnail.png');"></span>
+            <span class="person-name"></span>
+            <span class="person-position"></span>
+          </div>
+          <div class="valo-our-people-compact__item__info-links">
+          </div>
+        </div>
+      </div>
+    </div>
+  </content>
+
+  <head><title>{{resourceLabel "LabelOurPeople"}}</title></head>

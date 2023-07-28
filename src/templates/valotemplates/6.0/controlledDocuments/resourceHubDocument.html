@@ -1,0 +1,89 @@
+<content id="metadata" type="x-handlebars-metadata">
+  {
+    "fields": ["Title", "FileName","SiteName", "SiteTitle", "HitHighlightedSummary", "ModifiedBy", "ModifiedById", "ModifiedOWSDATE", "ServerRedirectedPreviewURL", "BannerImageUrlOWSURLH", "PictureThumbnailURL", "FileExtension", "Path", "LayoutWebpartsContentOWSHTML", "ValoTitle", "Description", "ContentType", "ValoBusinessArea", "ValoOfficeLocation", "ViewsLifeTime", "AuthorOWSUSER", "EditorOWSUSER"],
+    "query": "IsDocument:1",
+    "totalResults": 12,
+    "sorting": "ViewsLifeTime:descending",
+    "pagingType": 3,
+    "parameters": [
+        {
+          "name": "ShowMoreTitle",
+          "value": "Read more",
+          "description": "Title for show more link"
+        },
+        {
+          "name": "ShowMoreUrl",
+          "value": "",
+          "description": "Url for show more link"
+        },
+        {
+          "name": "ShowMoreTarget",
+          "value": "_blank",
+          "description": "Target for show more link"
+        },
+        {
+          "name": "UseMultilingualTerms",
+          "value": "true",
+          "options": ["true","false"],
+          "description": "universalUseMultilingualTerms"
+        },
+        {
+          "name": "ShowEmptyPropertyValues",
+          "value": "true",
+          "options": ["true","false"],
+          "description": "showEmptyPropertyValues"
+        }
+      ]
+  }
+</content>
+
+<content id="template" type="x-handlebars-template">
+  {{#if dsData.items}}
+    <div class="halo-cardTilesContainer">
+      {{#each dsData.items}}
+        {{setVariable "elementId" (generateId)}}
+
+        <div id="id-{{@root.elementId}}">
+          <valo-document-card
+            showEmptyPropertyValues="{{@root.parameters.ShowEmptyPropertyValues}}"
+            item="{{ json this }}"
+            main-properties="AuthorOWSUSER:Author:person,Created:Created:date,LastModifiedTime:Last modified:date,EditorOWSUSER:Editor:person,ValoBusinessArea:Business Area:taxonomy,ValoOfficeLocation:Office Location:taxonomy"
+            expanded-properties="ContentType:Content type:contenttype,FileName:File name"
+          >
+          </valo-document-card>
+        </div>
+      {{/each}}
+    </div>
+    {{#if parameters.ShowMoreUrl}}
+      <div class="halo-showMore">
+        {{#ifCond parameters.ShowMoreTarget "==" "_blank"}}
+          <a href="{{parameters.ShowMoreUrl}}" target="{{parameters.ShowMoreTarget}}" data-interception="off">{{parameters.ShowMoreTitle}}</a>
+        {{else}}
+          <a href="{{parameters.ShowMoreUrl}}" target="{{parameters.ShowMoreTarget}}">{{parameters.ShowMoreTitle}}</a>
+        {{/ifCond}}
+      </div>
+    {{/if}}
+  {{/if}}
+</content>
+
+<content id="placeholder" type="x-handlebars-template">
+  <div class="valo-news compact ms-Grid vm-Grid">
+    <div class="valo-news__list ms-Grid-row vm-Grid-row vm-Cards placeholder compact">
+      {{#repeat 3}}
+        <div class="valo-news__item ms-sm4 vm-Card">
+          <div>
+            <div class="valo-news__item__banner">
+              <div style="background-image:url('/_layouts/15/images/sitepagethumbnail.png');"></div>
+            </div>
+            <div class="valo-news__item__info">
+              <p class="valo-news__item__title"></p>
+              <div class="valo-news__item__meta"></div>
+              <div class="valo-news__item__abstract"></div>
+              <div class="valo-news__item__social"></div>
+            </div>
+          </div>
+        </div>
+      {{/repeat}}
+    </div>
+  </div>
+</content>

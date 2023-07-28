@@ -1,0 +1,60 @@
+<content id="template" type="x-handlebars-template">
+
+  <script>
+    function toggleActive(e) {
+      if (document.querySelector('#videoList .valo-videos__item.active') !== null) {
+        document.querySelector('#videoList .valo-videos__item.active').classList.remove('active');
+      }
+      e.target.classList.toggle("active");
+    }
+
+    function toggleExpand(i) {
+      var el = document.getElementById('video'+ i);
+      var container = document.getElementById('videoList');
+      var aspectRatio = (container.offsetWidth * 0.5625)
+      el.classList.toggle("expanded");
+      container.setAttribute("style", "min-height:" +aspectRatio+ "px");
+    }
+  </script>
+
+  <div class="valo-videos ms-Grid">
+    <div class="valo-wp__wp-title-bar">
+      {{#if dsData.title}}
+        <span class="valo-wp__wp-title-bar__title">{{dsData.title}}</span>
+      {{/if}}
+    </div>
+    <div class="ms-Grid-row vm-Cards valo-videos__items" id="videoList" onclick="toggleActive(event)">
+      {{#each dsData.items}}
+        {{#if @index}}
+          <div class="valo-videos__item" id="video{{@index}}">
+              <iframe class="valo-videos__iframe" loading="lazy" src='/portals/hub/_layouts/15/VideoEmbedHost.aspx?chId={{siteID}}&amp;vId={{uniqueId}}&amp;width=640&amp;height=360&amp;autoPlay=false&amp;showInfo=true' allowfullscreen></iframe>
+              <div class="valo-videos__expandButton" id="expandButton" onclick="toggleExpand({{@index}})">
+                  <i class="ms-Icon ms-Icon--MiniExpand" aria-hidden="true"></i>
+              </div>
+          </div>
+        {{else}}
+          <div class="valo-videos__item first active" id="video{{@index}}">
+              <iframe class="valo-videos__iframe" loading="lazy" src='/portals/hub/_layouts/15/VideoEmbedHost.aspx?chId={{siteID}}&amp;vId={{uniqueId}}&amp;width=640&amp;height=360&amp;autoPlay=false&amp;showInfo=true' allowfullscreen></iframe>
+              <div class="valo-videos__expandButton" id="expandButton" onclick="toggleExpand({{@index}})">
+                  <i class="ms-Icon ms-Icon--MiniExpand" aria-hidden="true"></i>
+              </div>
+          </div>
+        {{/if}}
+    {{/each}}
+
+    </div>
+  </div>
+
+  {{#if paging}}
+    {{#gt (length items) 1}}
+      <nav class="valo-wp-pagination" aria-label="pagination">
+        <a class="valo-wp-pagination__page-step valoPaginationFirstPage" href="javascript:;" aria-label="first page"><i class="ms-Icon ms-Icon--DoubleChevronLeft" aria-hidden="true"></i></a>
+        <a class="valo-wp-pagination__page-step valoPaginationPrevPage" href="javascript:;" aria-label="{{resourceLabel 'myToolsPagingPreviousTitle'}}"><i class="ms-Icon ms-Icon--ChevronLeft" aria-hidden="true"></i></a>
+        {{#each pageNumbers}}
+          <a class="valo-wp-pagination__page-number valoPaginationPageNumber" href="javascript:;" aria-label="{{resourceLabel 'toolboxContentCreationPage'}} {{this}}">{{this}}</a>
+        {{/each}}
+        <a class="valo-wp-pagination__page-step valoPaginationNextPage" href="javascript:;" aria-label="{{resourceLabel 'myToolsPagingNextTitle'}}"><i class="ms-Icon ms-Icon--ChevronRight" aria-hidden="true"></i></a>
+      </nav>
+    {{/gt}}
+  {{/if}}
+</content>

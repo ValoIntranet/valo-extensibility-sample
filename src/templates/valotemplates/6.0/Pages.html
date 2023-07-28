@@ -1,0 +1,144 @@
+<content id="metadata" type="x-handlebars-metadata">
+  {
+    "fields": ["Path", "LastModifiedTime", "Title", "AuthorOWSUSER", "EditorOWSUSER", "Author", "BannerImageUrlOWSURLH", "PictureThumbnailURL", "Description", "ListID", "ListItemID", "SPWebUrl", "ValoLocationOWSTEXT", "owstaxIdValoTags", "LayoutWebpartsContentOWSHTML"],
+    "query": "Path:{site} AND PromotedState:0",
+    "sorting": "ViewsLifeTime:descending",
+    "totalResults": 6,
+    "parameters": [
+      {
+        "name": "ShowMoreTitle",
+        "value": "Read more",
+        "description": "Title for show more link"
+      },
+      {
+        "name": "ShowMoreUrl",
+        "value": "",
+        "description": "Url for show more link"
+      },
+      {
+        "name": "ShowMoreTarget",
+        "value": "_blank",
+        "description": "Target for show more link"
+      },
+      {
+        "name": "UseThumbnailImages",
+        "value": "false",
+        "options": ["true","false"],
+        "description": "universalBannerUseThumbnailImagesDesc"
+      },
+      {
+        "name": "UseImageLazyLoading",
+        "value": "true",
+        "options": ["true","false"],
+        "description": "universalBannerUseImageLazyLoadingDesc"
+        }
+
+    ]
+  }
+</content>
+
+<content id="template" type="x-handlebars-template">
+  <style>
+    a.vm-Card.valo-news__item:hover,
+    a.vm-Card.valo-news__item:visited {
+        color: inherit;
+        text-decoration: none;
+    }
+
+    a.vm-Card.valo-news__item {
+        display: block;
+        text-decoration: none;
+    }
+  </style>
+
+   <!-- Initialize batched PageImageInfo requests-->
+ {{prepareBatchPageImageInfoPromises dsData.items}}
+ 
+  <div class="ms-Grid vm-Grid">
+    {{setVariable "id" (randomId "pages")}}
+    {{setVariable "canUseIntersectionObserver" (useIntersectionObserver parameters.UseImageLazyLoading) }}
+    <div class="valo-news__list ms-Grid-row vm-Cards vm-Grid-row" id="{{@root.id}}">
+      {{#each items}}
+        <a class="valo-news__item ms-sm4 vm-Card showTransition" href="{{Path}}" title="{{Title}}">
+          <div class="valo-news__item__wrapper">
+            <div class="valo-news__item__banner">
+              {{#if PictureThumbnailURL}}
+                <valo-image-focal-point css-names="valo-news__item__banner__parallax parallax parallaxSlow" img-url="{{imageResolution PictureThumbnailURL 4 null null ../parameters.UseThumbnailImages}}" item-id="{{ListItemID}}" list-id="{{ListID}}" site-url="{{SPWebUrl}}" layout-content="{{LayoutWebpartsContentOWSHTML}}" observer-support="{{@root.canUseIntersectionObserver}}"></valo-image-focal-point>
+              {{else}}
+                <valo-image-focal-point css-names="valo-news__item__banner__parallax parallax parallaxSlow" img-url="{{imageResolution BannerImageUrlOWSURLH 4 null null ../parameters.UseThumbnailImages}}" item-id="{{ListItemID}}" list-id="{{ListID}}" site-url="{{SPWebUrl}}" layout-content="{{LayoutWebpartsContentOWSHTML}}" observer-support="{{@root.canUseIntersectionObserver}}"></valo-image-focal-point>
+              {{/if}}
+            </div>
+            <div class="valo-news__item__info">
+              <p role="heading" aria-level="3" class="valo-news__item__title">
+                {{Title}}
+              </p>
+              <div class="valo-news__item__meta">
+                <span>{{dateAgoFormat ValoNewsPublishDate}} by</span>
+                
+                {{#if AuthorOWSUSER}}
+                  <span class="valo-news__item__meta__editor">{{splitSPUser AuthorOWSUSER 'displayName'}}</span>
+                {{else}}
+                  <span class="valo-news__item__meta__editor">{{splitSPUser EditorOWSUSER 'displayName'}}</span>
+                {{/if}}
+              </div>
+              <div class="valo-news__item__abstract">{{ellipsis Description 200}}</div>
+            </div>
+          </div>
+        </a>
+      {{/each}}
+    </div>
+  </div>
+  {{#if parameters.ShowMoreUrl}}
+  <div class="valo-showMore">
+    {{#ifCond parameters.ShowMoreTarget "==" "_blank"}}
+      <a href="{{parameters.ShowMoreUrl}}" target="{{parameters.ShowMoreTarget}}" data-interception="off">{{parameters.ShowMoreTitle}}</a>
+    {{else}}
+      <a href="{{parameters.ShowMoreUrl}}" target="{{parameters.ShowMoreTarget}}">{{parameters.ShowMoreTitle}}</a>
+    {{/ifCond}}
+  </div>
+  {{/if}}
+</content>
+
+
+<content id="placeholder" type="x-handlebars-template">
+  <div class="ms-Grid vm-Grid">
+    <div class="valo-news__list ms-Grid-row vm-Cards vm-Grid-row placeholder">
+      <div class="valo-news__item ms-sm4 vm-Card">
+        <div class="valo-news__item__wrapper">
+          <div class="valo-news__item__banner">
+            <div style="background-image:url('/_layouts/15/images/sitepagethumbnail.png');"></div>
+          </div>
+          <div class="valo-news__item__info">
+            <p class="valo-news__item__title"></p>
+            <div class="valo-news__item__meta"></div>
+            <div class="valo-news__item__abstract"></div>
+          </div>
+        </div>
+      </div>
+      <div class="valo-news__item ms-sm4 vm-Card">
+        <div class="valo-news__item__wrapper">
+          <div class="valo-news__item__banner">
+            <div style="background-image:url('/_layouts/15/images/sitepagethumbnail.png');"></div>
+          </div>
+          <div class="valo-news__item__info">
+            <p class="valo-news__item__title"></p>
+            <div class="valo-news__item__meta"></div>
+            <div class="valo-news__item__abstract"></div>
+          </div>
+        </div>
+      </div>
+      <div class="valo-news__item ms-sm4 vm-Card">
+        <div class="valo-news__item__wrapper">
+          <div class="valo-news__item__banner">
+            <div style="background-image:url('/_layouts/15/images/sitepagethumbnail.png');"></div>
+          </div>
+          <div class="valo-news__item__info">
+            <p class="valo-news__item__title"></p>
+            <div class="valo-news__item__meta"></div>
+            <div class="valo-news__item__abstract"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</content>
